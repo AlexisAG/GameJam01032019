@@ -105,15 +105,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f369d9620ffb2374a9fff4e2c18647da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BasePrefab: {fileID: 3521235819244971288, guid: 5ddda28bacc430949869699e169795cf,
+  BasePrefab: {fileID: 7641442050855423574, guid: 4f3cd9a7bbc57ca4485ea4bb218d1eec,
     type: 3}
-  MinePrefab: {fileID: 5995792678471902103, guid: f11afd7738225cc42aed29e4b69d60e0,
+  MinePrefab: {fileID: 1732381903405346695, guid: 2a2dd2770fee0bb4ca6bb7d8730557fd,
     type: 3}
-  RessourcePrefab: {fileID: 4517281388453328488, guid: 0d841a1a798848c418687154115bbe79,
-    type: 3}
+  RessourcePrefab: {fileID: 21766501, guid: 7248ffe17c590e74b9ec196dc46e4b3f, type: 3}
   PlayerPrefab: {fileID: 4258710157398469677, guid: 074b6ee6fcf200f4fa913d32df4f7df9,
     type: 3}
-  EnemyPrefab: {fileID: 9059999712705886712, guid: e7613a614a511834c82420c6371936d5,
+  EnemyPrefab: {fileID: 4153199980268997449, guid: 27b2b5449b1fd114ca65432a1afc6cf3,
     type: 3}
   NbRessource: 10
   StartEnemySpawnFrequency: 10
