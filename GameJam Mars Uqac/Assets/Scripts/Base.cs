@@ -21,7 +21,7 @@ public class Base : MonoBehaviour
         m_TimeAddForOneRessource = 10;
         m_LifeTime = 300; // Match to 60 seconds of LifeTime
         m_LoseLifeMultiplicator = 3; // With this scale 1 seconds match to 3 seconds
-        m_ScaleFactorByLifeTime = 1f / 100f;// If 1/6 that say one minute of lifetime match to 10 scale factor
+        m_ScaleFactorByLifeTime = 1f / 50f;// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
         m_PosInRangeOfDome = new List<Vector2>();
         UpdateSphereSize();
@@ -44,7 +44,7 @@ public class Base : MonoBehaviour
     private void UpdateSphereSize()
     {
         float l_NewScale = (m_BaseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
-        l_NewScale = Mathf.Clamp(l_NewScale, 0, 3);
+        l_NewScale = Mathf.Clamp(l_NewScale, 0, 5);
         transform.localScale = new Vector3(l_NewScale, l_NewScale, m_BaseScale.z);
         if(m_PreviousRayon != Mathf.CeilToInt(transform.localScale.x))
         {
