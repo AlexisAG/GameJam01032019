@@ -90,7 +90,7 @@ public class Player : MonoBehaviour {
         l_controllerAxis.Normalize();
 
         //Movement vector
-        Vector3 l_movement = new Vector3(l_controllerAxis.x * Time.deltaTime * m_walkSpeed, 0.0f, l_controllerAxis.y * Time.deltaTime * m_walkSpeed);
+        Vector3 l_movement = new Vector3((l_controllerAxis.x * m_walkSpeed) * Time.deltaTime, 0.0f, (l_controllerAxis.y * m_walkSpeed) * Time.deltaTime);
 
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
