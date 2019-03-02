@@ -123,5 +123,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_name: 
   m_health: 0
-  m_walkSpeed: 0
+  m_walkSpeed: 5
   m_joystickNumber: 0
+  carriedMine: {fileID: 0}

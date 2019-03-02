@@ -66,7 +66,7 @@ public class Map : MonoBehaviour
 
         //player 1
         m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, 1, 3), Quaternion.identity, gameObject.transform);
-        m_player1.GetComponent<PlayerController>().m_joystickNumber = 0;
+        m_player1.GetComponent<Player>().m_joystickNumber = 0;
 
         //base 2
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
@@ -74,9 +74,7 @@ public class Map : MonoBehaviour
 
         //player 2
         m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
-        m_player2.GetComponent<PlayerController>().m_joystickNumber = 1;
-
-
+        m_player2.GetComponent<Player>().m_joystickNumber = 1;
     }
 
     // Create all the ressources of the map

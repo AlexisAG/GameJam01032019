@@ -44,21 +44,18 @@ public class Player : MonoBehaviour {
     void Update()
     {
         m_moveWithController(m_joystickNumber);
-            
     }
 
     public void m_moveWithController(float p_joystickNumber)
     {
         m_rb = GetComponent<Rigidbody>();
 
-        //Input on X (Horizontal) for controller
-        float l_controllerHAxis = Input.GetAxis("LeftJoystickX_P" + p_joystickNumber);
+        //get controller axis
+        Vector2 l_controllerAxis = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber), -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber));
+        l_controllerAxis.Normalize();
 
-        //Input on Z (Vertical) for controller
-        float l_controllerVAxis = -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber);
-        
         //Movement vector
-        Vector3 l_movement = new Vector3(l_controllerHAxis * m_walkSpeed * Time.deltaTime, 0, l_controllerVAxis * m_walkSpeed * Time.deltaTime);
+        Vector3 l_movement = new Vector3(l_controllerAxis.x * m_walkSpeed * Time.deltaTime, 0.0f, l_controllerAxis.y * m_walkSpeed * Time.deltaTime);
 
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
@@ -73,12 +70,16 @@ public class Player : MonoBehaviour {
         if (l_newPos.z <= 0f)
             l_newPos.z = 0f;
 
+
         //Move player to the new position
         m_rb.MovePosition(l_newPos);
+
+        if (Input.GetAxis("LeftJoystickX_P" + m_joystickNumber) != 0 || Input.GetAxis("LeftJoystickY_P" + m_joystickNumber) != 0)
+            Debug.Log("X : " + l_controllerAxis.x + " // Y : " + l_controllerAxis.y);//Debug.Log("X : " + Input.GetAxis("LeftJoystickX_P" + m_joystickNumber) + " // Y : " + Input.GetAxis("LeftJoystickY_P" + m_joystickNumber));
     }
 
     public void underMined() {
-        if (m_isCarryingMine == true) {
+        if (m_isCarryingMine == true && Input.GetAxis("A_P" + m_joystickNumber) != 0) {
             carriedMine = Instantiate(carriedMine, this.transform.position, Quaternion.identity); ;
         }
     }
