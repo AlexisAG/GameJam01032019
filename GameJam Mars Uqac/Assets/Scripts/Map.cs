@@ -8,12 +8,14 @@ public class Map : MonoBehaviour
     public GameObject BasePrefab;
     public GameObject MinePrefab;
     public GameObject RessourcePrefab;
+    public GameObject PlayerPrefab;
     public int NbRessource = 10;
 
     private List<GameObject> m_bases = new List<GameObject>();
     private List<GameObject> m_mines = new List<GameObject>();
     private List<GameObject> m_ressources = new List<GameObject>();
     private List<GameObject> m_powerups = new List<GameObject>();
+    private GameObject m_player1, m_player2; 
     private GameObject[,] m_grid;
     private int m_indexGridX, m_indexGridZ;
 
@@ -46,9 +48,16 @@ public class Map : MonoBehaviour
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform));
         AddGameObjectOnTheGrid(0, 0, m_bases[0]);
 
+        //player 1
+        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-4, 0, 3), Quaternion.identity, gameObject.transform);
+
         //base 2
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
         AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1]);
+
+        //player 2
+        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-4, 0, 3), Quaternion.identity, gameObject.transform);
+
 
     }
 
