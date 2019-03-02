@@ -65,7 +65,7 @@ public class Map : MonoBehaviour
         AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_None);
 
         //player 1
-        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, 1, 3), Quaternion.identity, gameObject.transform);
+        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, PlayerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
         m_player1.GetComponent<PlayerController>().m_joystickNumber = 0;
 
         //base 2
@@ -73,7 +73,7 @@ public class Map : MonoBehaviour
         AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1], TypeObject.e_None);
 
         //player 2
-        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
+        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), PlayerPrefab.transform.localScale.y / 2, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
         m_player2.GetComponent<PlayerController>().m_joystickNumber = 1;
 
 
