@@ -49,14 +49,14 @@ public class Map : MonoBehaviour
         AddGameObjectOnTheGrid(0, 0, m_bases[0]);
 
         //player 1
-        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-4, 0, 3), Quaternion.identity, gameObject.transform);
+        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, 1, 3), Quaternion.identity, gameObject.transform);
 
         //base 2
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
         AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1]);
 
         //player 2
-        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-4, 0, 3), Quaternion.identity, gameObject.transform);
+        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), 1, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
 
 
     }
