@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7766801e5c047f94bbfd30e88da31f77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,10 +111,10 @@ MonoBehaviour:
     type: 3}
   RessourcePrefab: {fileID: 4517281388453328488, guid: 0d841a1a798848c418687154115bbe79,
     type: 3}
-  PlayerPrefab: {fileID: 5996420521481749853, guid: 074b6ee6fcf200f4fa913d32df4f7df9,
+  PlayerPrefab: {fileID: 4258710157398469677, guid: 074b6ee6fcf200f4fa913d32df4f7df9,
     type: 3}
   EnemyPrefab: {fileID: 9059999712705886712, guid: e7613a614a511834c82420c6371936d5,
     type: 3}
   NbRessource: 10
-  EnemySpawnFrequency: 20
+  StartEnemySpawnFrequency: 10
   TimeOfFirstSpawnEnemy: 10
