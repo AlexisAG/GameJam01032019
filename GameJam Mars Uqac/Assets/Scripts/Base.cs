@@ -29,6 +29,7 @@ public class Base : MonoBehaviour
         {
             TakeOfLifeTime(Time.deltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
             UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
+            Debug.Log(GetComponent<MeshRenderer>().bounds.size.x);
             CheckLifetime(); // Check if base is dead
         }
         
