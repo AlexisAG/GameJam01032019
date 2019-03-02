@@ -1,28 +1,26 @@
 fileFormatVersion: 2
-guid: 00b39fa7756d431439f1906a37d68bc8
+guid: be106ef192069ea4383eb0520c6cc4c4
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: CharacterOpaque__Albedo
-    2100002: CharacterCasqe__Albedo
+    2100000: Base
+    2100002: Laser
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Character
-    7400000: Default Take
-    9500000: //RootNode
+    4300000: Base
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: CharacterCasqe__Albedo
-    second: {fileID: 2100000, guid: b60f82c43bb080d4984a82cbf5c5f062, type: 2}
+      name: Base
+    second: {fileID: 2100000, guid: fd3270f2eb5e5064680101f57d42c246, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: CharacterOpaque__Albedo
-    second: {fileID: 2100000, guid: e4c57cd4593dfe84c9b80e8af703b626, type: 2}
+      name: Laser
+    second: {fileID: 2100000, guid: 9d3b992afe7f64b4283d022a99534257, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -75,7 +73,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -102,7 +100,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
