@@ -56,7 +56,7 @@ public class Map : MonoBehaviour
 
             Debug.Log("x : " + x + " z : " + z);
 
-            Instantiate<GameObject>(RessourcePrefab, new Vector3(l_startCoordX - x, 1f, l_startCoordZ + z), Quaternion.identity, gameObject.transform); // test
+            Instantiate<GameObject>(RessourcePrefab, new Vector3(l_startCoordX - x, 0f, l_startCoordZ + z), Quaternion.identity, gameObject.transform); // test
 
         }
 
