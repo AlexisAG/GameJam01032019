@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Powerup : MonoBehaviour
+public abstract class Powerup : MonoBehaviour, Pickup
 {
+    public abstract void Activate();
+    public abstract void IsPick();
+    public abstract void Respawn();
+
     // Start is called before the first frame update
     void Start()
     {

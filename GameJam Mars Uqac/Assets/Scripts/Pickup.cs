@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public interface Pickup
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // called when is pciked by a player
+    void IsPick();
+
+    // called when the item need to be activate
+    void Activate();
+
+    // called when the item need to respawn on the map
+    void Respawn();
+
 }
