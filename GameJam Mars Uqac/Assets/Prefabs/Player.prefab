@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1936611639057937823}
   - component: {fileID: 1072623139532577662}
   - component: {fileID: 7070438403724737557}
-  - component: {fileID: 4258710157398469678}
   - component: {fileID: 4258710157398469679}
   m_Layer: 0
   m_Name: Player
@@ -106,24 +105,10 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &4258710157398469678
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4258710157398469677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8ecc102dc294644ad9f005614c72c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_walkSpeed: 5
-  m_joystickNumber: 1
 --- !u!114 &4258710157398469679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,3 +123,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_name: 
   m_health: 0
+  m_walkSpeed: 0
+  m_joystickNumber: 0
