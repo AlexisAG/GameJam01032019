@@ -24,7 +24,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Map", LoadSceneMode.Additive);
+        SceneManager.LoadScene("Map", LoadSceneMode.Single);
     }
 
     public void GoToInstructions(bool value)
