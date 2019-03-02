@@ -5,6 +5,7 @@ using UnityEngine;
 public class Base : MonoBehaviour
 {
     public Vector3 m_BaseScale; // Basic sphere scale without timeLife 
+    public float m_maxLife = 180;
 
     private float m_TimeAddForOneRessource; // Time in second add for ine ressource when it's drop in base 
     private float m_ScaleFactorByLifeTime; 
@@ -19,9 +20,9 @@ public class Base : MonoBehaviour
     {
         m_PreviousRayon = -1;
         m_TimeAddForOneRessource = 10;
-        m_LifeTime = 300; // Match to 60 seconds of LifeTime
-        m_LoseLifeMultiplicator = 3; // With this scale 1 seconds match to 3 seconds
-        m_ScaleFactorByLifeTime = 1f / 50f;// If 1/6 that say one minute of lifetime match to 10 scale factor
+        m_LifeTime = m_maxLife; // Match to 60 seconds of LifeTime
+        m_LoseLifeMultiplicator = 1; // With this scale 1 seconds match to 3 seconds
+        m_ScaleFactorByLifeTime = 1f / (float)(m_maxLife/5f);// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
         m_PosInRangeOfDome = new List<Vector2>();
         UpdateSphereSize();
@@ -34,16 +35,18 @@ public class Base : MonoBehaviour
     {
         if(!m_IsGameFinish)
         {
-            TakeOfLifeTime(Time.deltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
+            TakeOfLifeTime(Time.fixedDeltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
             UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
             CheckLifetime(); // Check if base is dead
         }
+        
         
     }
 
     private void UpdateSphereSize()
     {
         float l_NewScale = (m_BaseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
+       
         l_NewScale = Mathf.Clamp(l_NewScale, 0, 5);
         transform.localScale = new Vector3(l_NewScale, l_NewScale, m_BaseScale.z);
         if(m_PreviousRayon != Mathf.CeilToInt(transform.localScale.x))
