@@ -8,17 +8,26 @@ public class Map : MonoBehaviour
     {
         e_None,
         e_Mine,
-        e_Ressource
+        e_Ressource,
+        e_PowerUp
     }
     public GameObject BasePrefab;
     public GameObject MinePrefab;
     public GameObject RessourcePrefab;
     public GameObject PlayerPrefab;
     public GameObject EnemyPrefab;
+    public GameObject LurePrefab;
+    public GameObject SlowPrefab;
+    public GameObject SpeedBoostPrefab;
+    public GameObject ShieldBreakPrefab;
     public int NbRessource = 10;
     public float StartEnemySpawnFrequency = 10; // Time in seconds between two spawns
     public float TimeOfFirstSpawnEnemy = 5; // Time in seconds when spawn the first enemy
+    public float PowerUpSpawnFrequency = 10; //Time in seconds between powerup spawns
+    public float PowerUpDeletionTime = 5; //Time to get the powerups before they disappear
 
+    private float m_powerupSpawnTimer;
+    private float m_powerupDeleteTimer;
     private List<GameObject> m_bases = new List<GameObject>();
     private List<GameObject> m_mines = new List<GameObject>();
     private List<GameObject> m_ressources = new List<GameObject>();
@@ -42,6 +51,8 @@ public class Map : MonoBehaviour
         m_nbPlayers = 2;
         m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency,1,300);
 
+        m_powerupSpawnTimer = PowerUpSpawnFrequency;
+        m_powerupDeleteTimer = PowerUpDeletionTime;
 
         InitBase();
         InitRessources();
@@ -54,6 +65,16 @@ public class Map : MonoBehaviour
 
         if (m_ressources.Count < NbRessource)
             SpawnARessource();
+
+        //powerUps Timer
+        m_powerupSpawnTimer -= Time.deltaTime;
+        if (m_powerupSpawnTimer <= 0)
+        {
+            m_powerupSpawnTimer = 2*PowerUpSpawnFrequency;
+            SpawnPowerups();
+            m_powerupDeleteTimer = PowerUpDeletionTime;
+        }
+        CheckIfDeletePowerups();
     }
 
     void InitBase()
@@ -64,20 +85,29 @@ public class Map : MonoBehaviour
         /* Instantiate Base 1 & Base 2 */
 
         // base 1
-        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform));
+        GameObject l_base1 = Instantiate<GameObject>(BasePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform);
+        l_base1.tag = "Player 0";
+        m_bases.Add(l_base1);
         AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_None);
+        
+        
+        
 
         //player 1
         m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, PlayerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
         m_player1.GetComponent<Player>().m_joystickNumber = 0;
+        m_player1.tag = "Player 0";
 
         //base 2
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
         AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1], TypeObject.e_None);
+        m_bases[1].tag = "Player 1";
 
         //player 2
         m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), PlayerPrefab.transform.localScale.y / 2, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
         m_player2.GetComponent<Player>().m_joystickNumber = 1;
+        m_player2.tag = "Player 1";
+
     }
 
     // Create all the ressources of the map
@@ -110,7 +140,64 @@ public class Map : MonoBehaviour
 
     void SpawnPowerups()
     {
+        Vector3 l_leftSpawnPosition = new Vector3(-11, 0, 10);
+        Vector3 l_rightSpawnPosition = new Vector3(-9, 0, 10);
+        Vector3 l_remainingPosition;
+        int l_remainingIndex;
 
+        bool l_lurePos = (Random.value > 0.5f);
+        if (l_lurePos)
+        {
+            GameObject lurePowerUp = Instantiate<GameObject>(LurePrefab, l_leftSpawnPosition,Quaternion.identity);
+            AddGameObjectOnTheGrid(m_indexGridX / 2 - 1, m_indexGridZ / 2, lurePowerUp, TypeObject.e_PowerUp);
+            l_remainingPosition = l_rightSpawnPosition;
+            l_remainingIndex = m_indexGridX / 2 + 1;
+        }
+        else
+        {
+            GameObject lurePowerUp = Instantiate<GameObject>(LurePrefab, l_rightSpawnPosition, Quaternion.identity);
+            AddGameObjectOnTheGrid(m_indexGridX / 2 + 1, m_indexGridZ / 2, lurePowerUp, TypeObject.e_PowerUp);
+            l_remainingPosition = l_leftSpawnPosition;
+            l_remainingIndex = m_indexGridX / 2 - 1;
+        }
+
+        int l_PowerUpType = Random.Range(0, 2);
+
+        switch (l_PowerUpType)
+        {
+            case 0:
+                GameObject slowPowerUp = Instantiate<GameObject>(LurePrefab, l_remainingPosition, Quaternion.identity);
+                AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, slowPowerUp, TypeObject.e_PowerUp);
+                break;
+
+            case 1:
+                GameObject speedBoostPowerUp = Instantiate<GameObject>(LurePrefab, l_remainingPosition, Quaternion.identity);
+                AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, speedBoostPowerUp, TypeObject.e_PowerUp);
+                break;
+
+            case 2:
+                GameObject shieldBreakPowerUp = Instantiate<GameObject>(LurePrefab, l_remainingPosition, Quaternion.identity);
+                AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, shieldBreakPowerUp, TypeObject.e_PowerUp);
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+    private void CheckIfDeletePowerups()
+    {
+        m_powerupDeleteTimer -= Time.deltaTime;
+        if (m_powerupDeleteTimer <= 0)
+        {
+            RemoveGameObjectOnTheGrid(m_indexGridX / 2 - 1, m_indexGridZ / 2, TypeObject.e_PowerUp);
+            RemoveGameObjectOnTheGrid(m_indexGridX / 2 + 1, m_indexGridZ / 2, TypeObject.e_PowerUp);
+
+            m_powerupDeleteTimer = 2*PowerUpSpawnFrequency;
+            m_powerupSpawnTimer = PowerUpSpawnFrequency;
+        }
+        
     }
 
     private void CheckSpawnEnemys()

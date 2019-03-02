@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1376879065983331425}
   - component: {fileID: 7070438403724737557}
   - component: {fileID: 4258710157398469679}
+  - component: {fileID: 4747590686460722722}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -61,12 +62,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c5d78220291ec40a4dfb7dcdb9e438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_name: 
   m_health: 0
   m_walkSpeed: 15
+  m_CooldDownMineMax: 5
   m_joystickNumber: 0
-  MinePrefab: {fileID: 5995792678471902103, guid: f11afd7738225cc42aed29e4b69d60e0,
+  MinePrefab: {fileID: 1732381903405346695, guid: 2a2dd2770fee0bb4ca6bb7d8730557fd,
     type: 3}
+--- !u!136 &4747590686460722722
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4258710157398469677}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 1.5
+  m_Height: 10
+  m_Direction: 1
+  m_Center: {x: 0, y: 5, z: 0}
 --- !u!1001 &2039922559711013032
 PrefabInstance:
   m_ObjectHideFlags: 0

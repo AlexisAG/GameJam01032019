@@ -40,17 +40,30 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
+        Debug.LogWarning(other.name);
+
         if (other.gameObject.GetComponent<Base>() != null)
         {
             m_colider = other;
             m_isMoving = false;
             GetComponent<Animator>().SetBool("isGonaExplose", true);
         }
+        else if(other.gameObject.GetComponent<Mine>() != null)
+        {
+            Debug.LogWarning("Mine dected");
+            m_isMoving = false;
+            GetComponent<Animator>().SetBool("isGonaExplose", true);
+            Destroy(other.gameObject);
+            
+        }
     }
 
     public void ExplosionFinish()
     {
-        m_colider.gameObject.GetComponent<Base>().TakeOfLifeTime(3.0f);
+        if(m_colider)
+            m_colider.gameObject.GetComponent<Base>().TakeOfLifeTime(3.0f);
+
         Destroy(this.gameObject);
     }
 }

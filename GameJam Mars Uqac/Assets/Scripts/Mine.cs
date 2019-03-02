@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Mine : MonoBehaviour
 {
+    public string m_PlayerTag;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +18,4 @@ public class Mine : MonoBehaviour
         
     }
 
-    public Mine() {
-
-    }
 }

@@ -24,12 +24,12 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Map", LoadSceneMode.Additive);
+        SceneManager.LoadScene("Map", LoadSceneMode.Single);
     }
 
     public void GoToInstructions(bool value)
     {
-        m_instructionsCanvas.enabled = value;
-        //m_mainMenuCanvas.SetActive(value);
+        m_instructionsCanvas.gameObject.SetActive(value);
+        m_mainMenuCanvas.gameObject.SetActive(!value);
     }
 }
