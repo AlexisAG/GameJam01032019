@@ -82,4 +82,5 @@ public class Player : MonoBehaviour {
             carriedMine = Instantiate(carriedMine, this.transform.position, Quaternion.identity); ;
         }
     }
+
 }

@@ -12,16 +12,21 @@ public class Base : MonoBehaviour
     private float m_LoseLifeMultiplicator; // Scale apply to time to decrease life time
     private bool m_IsGameFinish; // boolean to check if game is finish
     private List<Vector2> m_PosInRangeOfDome; // All pos in range of dome
+    private int m_PreviousRayon;
 
     // Start is called before the first frame update
     void Start()
     {
+        m_PreviousRayon = -1;
         m_TimeAddForOneRessource = 10;
-        m_LifeTime = 60; // Match to 60 seconds of LifeTime
+        m_LifeTime = 300; // Match to 60 seconds of LifeTime
         m_LoseLifeMultiplicator = 3; // With this scale 1 seconds match to 3 seconds
-        m_ScaleFactorByLifeTime = 1f / 12f;// If 1/6 that say one minute of lifetime match to 10 scale factor
+        m_ScaleFactorByLifeTime = 1f / 100f;// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
         m_PosInRangeOfDome = new List<Vector2>();
+        UpdateSphereSize();
+        UpdatePosInRange();
+        m_PreviousRayon = Mathf.CeilToInt(transform.localScale.x);
     }
 
     // Update is called once per frame
@@ -31,7 +36,6 @@ public class Base : MonoBehaviour
         {
             TakeOfLifeTime(Time.deltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
             UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
-            
             CheckLifetime(); // Check if base is dead
         }
         
@@ -40,8 +44,13 @@ public class Base : MonoBehaviour
     private void UpdateSphereSize()
     {
         float l_NewScale = (m_BaseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
-        Mathf.Clamp(l_NewScale, 0, 3);
+        l_NewScale = Mathf.Clamp(l_NewScale, 0, 3);
         transform.localScale = new Vector3(l_NewScale, l_NewScale, m_BaseScale.z);
+        if(m_PreviousRayon != Mathf.CeilToInt(transform.localScale.x))
+        {
+            m_PreviousRayon = Mathf.CeilToInt(transform.localScale.x);
+            UpdatePosInRange();
+        }
     }
 
     private void CheckLifetime()
@@ -55,7 +64,52 @@ public class Base : MonoBehaviour
 
     private void UpdatePosInRange()
     {
-        //GetComponent<MeshRenderer>().bounds.size.x
+        Map l_map = GameObject.Find("Map_Plane").GetComponent<Map>();
+        List<Vector2>  l_CurrentPosInRangeOfDome = new List<Vector2>();
+        for (int i=0; i<= GetComponent<MeshRenderer>().bounds.size.x;i++)
+        {
+            for (int j=0; j<= GetComponent<MeshRenderer>().bounds.size.x;j++)
+            {
+                Vector2 l_TestPositionR = new Vector2(transform.parent.position.x + (int)((float)i - (float)GetComponent<MeshRenderer>().bounds.size.x / 2f), transform.parent.position.z + (int)((float)j - (float)GetComponent<MeshRenderer>().bounds.size.x / 2f));
+                if (!(l_TestPositionR.x == transform.parent.position.x && l_TestPositionR.y == transform.parent.position.z))
+                {
+                    l_CurrentPosInRangeOfDome.Add(l_TestPositionR);
+                }
+            }
+            
+        }
+
+        foreach(Vector2 l_vec in l_CurrentPosInRangeOfDome)
+        {
+            if (!m_PosInRangeOfDome.Contains(l_vec))
+            {
+                m_PosInRangeOfDome.Add(l_vec);
+                if (l_map)
+                {
+                    l_map.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject(), Map.TypeObject.e_None);
+                }
+            }
+        }
+
+        List<Vector2> l_PosToRemove = new List<Vector2>();
+
+        foreach (Vector2 l_vec in m_PosInRangeOfDome)
+        {
+            
+            if (!l_CurrentPosInRangeOfDome.Contains(l_vec))
+            {
+                l_PosToRemove.Add(l_vec);
+            }
+        }
+
+        foreach(Vector2 l_vec in l_PosToRemove)
+        {
+            m_PosInRangeOfDome.Remove(l_vec);
+            if (l_map)
+            {
+                l_map.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, Map.TypeObject.e_None);
+            }
+        }
     }
 
     public void AddRessourceToBase(int p_NbRessources)
