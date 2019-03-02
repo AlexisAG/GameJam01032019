@@ -61,11 +61,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c5d78220291ec40a4dfb7dcdb9e438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_name: 
   m_health: 0
   m_walkSpeed: 15
+  m_CooldDownMineMax: 5
   m_joystickNumber: 0
-  MinePrefab: {fileID: 5995792678471902103, guid: f11afd7738225cc42aed29e4b69d60e0,
+  MinePrefab: {fileID: 1732381903405346695, guid: 2a2dd2770fee0bb4ca6bb7d8730557fd,
     type: 3}
 --- !u!1001 &2039922559711013032
 PrefabInstance:

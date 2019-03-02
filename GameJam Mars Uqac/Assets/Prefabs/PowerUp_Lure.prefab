@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1732381903405346695
+--- !u!1 &6930467623156951726
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5606116115653567801}
-  - component: {fileID: 6204022479319721600}
-  - component: {fileID: 3486519485139179431}
-  - component: {fileID: 2224800614068687605}
-  - component: {fileID: 6557548681370931125}
+  - component: {fileID: 1830292282765401654}
+  - component: {fileID: 5386331916853052283}
+  - component: {fileID: 1126737203146139944}
+  - component: {fileID: 7031697970534412713}
+  - component: {fileID: 5483612789738722887}
   m_Layer: 0
-  m_Name: Mine
+  m_Name: PowerUp_Lure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5606116115653567801
+--- !u!4 &1830292282765401654
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732381903405346695}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 200}
+  m_GameObject: {fileID: 6930467623156951726}
+  m_LocalRotation: {x: 0.000000008052992, y: -0.9296429, z: -0.00000002031799, w: 0.36846197}
+  m_LocalPosition: {x: 2.9333732, y: 0.020115912, z: -2.1405904}
+  m_LocalScale: {x: 25, y: 25, z: 25}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6204022479319721600
+  m_LocalEulerAnglesHint: {x: 0, y: -136.75801, z: 0}
+--- !u!33 &5386331916853052283
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732381903405346695}
-  m_Mesh: {fileID: 4300000, guid: 08cd708b142137b45af2042ef1abbb29, type: 3}
---- !u!23 &3486519485139179431
+  m_GameObject: {fileID: 6930467623156951726}
+  m_Mesh: {fileID: 4300000, guid: c4468a79637ffa04a844af716e658291, type: 3}
+--- !u!23 &1126737203146139944
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732381903405346695}
+  m_GameObject: {fileID: 6930467623156951726}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 28823b613735cef4bb6b4ad6ebf3f85b, type: 2}
+  - {fileID: 2100000, guid: b4ddde7ddf3428c4197d30d1fbd45d63, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,28 +79,28 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2224800614068687605
+--- !u!114 &7031697970534412713
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732381903405346695}
+  m_GameObject: {fileID: 6930467623156951726}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c467168e3c994549a18a3be59758b53, type: 3}
+  m_Script: {fileID: 11500000, guid: 967252d7bdf2975458209d9ebb230f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &6557548681370931125
+--- !u!65 &5483612789738722887
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732381903405346695}
+  m_GameObject: {fileID: 6930467623156951726}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0054807896, y: 0.005480791, z: 0.0025511947}
-  m_Center: {x: 0, y: 0, z: 0.00027434286}
+  m_Size: {x: 0.025000013, y: 0.004, z: 0.025000013}
+  m_Center: {x: 6.3907656e-18, y: 0.0017988406, z: -1.9172296e-17}
