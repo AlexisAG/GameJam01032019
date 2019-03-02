@@ -275,6 +275,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map_Plane
       objectReference: {fileID: 0}
+    - target: {fileID: 678744340, guid: d3bd428a764c0d847a6a59a2c2963bc0, type: 3}
+      propertyPath: EnemyPrefab
+      value: 
+      objectReference: {fileID: 4153199980268997449, guid: 27b2b5449b1fd114ca65432a1afc6cf3,
+        type: 3}
     - target: {fileID: 8276557465923217222, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -330,7 +335,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 678744340, guid: d3bd428a764c0d847a6a59a2c2963bc0, type: 3}
+    - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
+        type: 3}
       propertyPath: EnemyPrefab
       value: 
       objectReference: {fileID: 4153199980268997449, guid: 27b2b5449b1fd114ca65432a1afc6cf3,
