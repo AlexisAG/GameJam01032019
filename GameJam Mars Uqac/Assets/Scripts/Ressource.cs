@@ -37,6 +37,7 @@ public class Ressource : MonoBehaviour, Pickup
     {
         m_map = GameObject.Find("Map_Plane").GetComponent<Map>();
         m_position = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+
     }
 
     // Update is called once per frame
@@ -47,15 +48,14 @@ public class Ressource : MonoBehaviour, Pickup
 
     void OnTriggerEnter(Collider other)
     {
+        
 
-        Debug.Log(other.name);
-
-        if(other.GetComponent<Base>() != null)
+        if (other.GetComponent<Base>() != null)
         {
             Respawn();
             m_map.RemoveGameObjectOnTheGrid(-m_position.x, m_position.y, Map.TypeObject.e_Ressource);
-
         }
 
     }
+
 }
