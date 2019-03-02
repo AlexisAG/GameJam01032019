@@ -7,21 +7,20 @@ public class PlayerController : MonoBehaviour {
     //walking speed
     public float m_walkSpeed;
     public float m_joystickNumber;
-    private const float MAX_POS = 10.0f; //use grid size getter
-    private const float MIN_POS = -10.0f; //use grid size getter
     private Rigidbody m_rb;
+    private Map m_map;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_map = GameObject.Find("Map_Plane")?.GetComponent<Map>();
+        m_rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
         m_moveWithController(m_joystickNumber);
-        Debug.Log("Player position : " + m_rb.transform.position.z);
     }
 
     public void m_moveWithController(float p_joystickNumber) {
@@ -37,17 +36,18 @@ public class PlayerController : MonoBehaviour {
         Vector3 l_movement = new Vector3(l_controllerHAxis * m_walkSpeed * Time.deltaTime, 0, l_controllerVAxis * m_walkSpeed * Time.deltaTime);
         
         //New position
-        Vector3 l_newPos = transform.position + l_movement;
+        Vector3 l_newPos = m_rb.position + l_movement;
+        Debug.Log("Transform.position : " + transform.position);
 
         //Check if player is in bounds
-        if (l_newPos.x >= MAX_POS)
-            l_newPos.x = MAX_POS;
-        if (l_newPos.x <= MIN_POS)
-            l_newPos.x = MIN_POS;
-        if (l_newPos.z >= MAX_POS)
-            l_newPos.z = MAX_POS;
-        if (l_newPos.z <= MIN_POS)
-            l_newPos.z = MIN_POS;
+        if (l_newPos.x >= (float)m_map.GetGridSize()[0])
+            l_newPos.x = (float)m_map.GetGridSize()[0];
+        if (l_newPos.x <= -(float)m_map.GetGridSize()[0])
+            l_newPos.x = -(float)m_map.GetGridSize()[0];
+        if (l_newPos.z >= (float)m_map.GetGridSize()[1])
+            l_newPos.z = (float)m_map.GetGridSize()[1];
+        if (l_newPos.z <= 0f)
+            l_newPos.z = 0f;
 
         //Move player to the new position
         m_rb.MovePosition(l_newPos);
