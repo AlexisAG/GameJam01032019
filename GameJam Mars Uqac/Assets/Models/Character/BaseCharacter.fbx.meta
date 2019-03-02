@@ -15,12 +15,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: CharacterCasqe
-    second: {fileID: 2100000, guid: b60f82c43bb080d4984a82cbf5c5f062, type: 2}
+    second: {fileID: 2100000, guid: 2114251c532576443a914354128d2b31, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: CharacterOpaque
-    second: {fileID: 2100000, guid: e4c57cd4593dfe84c9b80e8af703b626, type: 2}
+    second: {fileID: 2100000, guid: 864466b51dce3dc4cb49bdaa3cd10668, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
