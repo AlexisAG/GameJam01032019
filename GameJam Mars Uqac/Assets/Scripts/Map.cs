@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    public enum typeObject {
-        e_Mine,
-        e_Ressource,
-        e_
-    }
+
     public GameObject BasePrefab;
     public GameObject MinePrefab;
     public GameObject RessourcePrefab;
@@ -28,7 +24,7 @@ public class Map : MonoBehaviour
 
         m_indexGridX = m_grid.Length / (int)GetComponent<Renderer>().bounds.size.x;
         m_indexGridZ = m_grid.Length / (int)GetComponent<Renderer>().bounds.size.z;
-
+        
         InitBase();
         InitRessources();
     }
@@ -107,4 +103,10 @@ public class Map : MonoBehaviour
     {
         Destroy(m_grid[x, z]);
     }
+
+    public int[] GetGridSize()
+    {
+        return new int[2] { m_indexGridX, m_indexGridZ };
+    }
+
 }
