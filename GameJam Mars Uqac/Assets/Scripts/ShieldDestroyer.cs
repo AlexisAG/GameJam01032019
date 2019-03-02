@@ -12,12 +12,12 @@ public class ShieldDestroyer : Powerup
     {
         switch (m_picker.tag.Substring(m_picker.tag.Length, -1))
         {
-            case "1":
-                GameObject.FindWithTag("Base_2").GetComponent<Base>().TakeOfLifeTime(shieldDamage);
+            case "0":
+                GameObject.FindWithTag("Base_1").GetComponent<Base>().TakeOfLifeTime(shieldDamage);
                 break;
 
-            case "2":
-                GameObject.FindWithTag("Base_1").GetComponent<Base>().TakeOfLifeTime(shieldDamage);
+            case "1":
+                GameObject.FindWithTag("Base_0").GetComponent<Base>().TakeOfLifeTime(shieldDamage);
                 break;
         }
     }

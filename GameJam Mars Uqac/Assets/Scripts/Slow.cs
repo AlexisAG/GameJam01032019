@@ -11,12 +11,12 @@ public class Slow : Powerup
     public override void Activate()
     {
         switch (m_picker.tag.Substring(m_picker.tag.Length, -1)) {
-            case "1" :
-                //GameObject.FindWithTag("Player_2").GetComponent<Player>().setWalkSpeed(x);
+            case "0" :
+                //GameObject.FindWithTag("Player_1").GetComponent<Player>().setWalkSpeed(x);
                 break;
 
-            case "2" :
-                //GameObject.FindWithTag("Player_1").GetComponent<Player>().setWalkSpeed(x);
+            case "1" :
+                //GameObject.FindWithTag("Player_0").GetComponent<Player>().setWalkSpeed(x);
                 break;
         }
     }
