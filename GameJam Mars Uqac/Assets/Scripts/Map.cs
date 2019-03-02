@@ -23,7 +23,7 @@ public class Map : MonoBehaviour
     private List<GameObject> m_mines = new List<GameObject>();
     private List<GameObject> m_ressources = new List<GameObject>();
     private List<GameObject> m_powerups = new List<GameObject>();
-    private GameObject m_player1, m_player2; 
+    private GameObject m_player1, m_player2;
     private GameObject[,] m_grid;
     private int m_indexGridX, m_indexGridZ;
     private float m_nextTimeEnemySpawn;
@@ -65,18 +65,16 @@ public class Map : MonoBehaviour
         AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_None);
 
         //player 1
-        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, PlayerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
-        m_player1.GetComponent<PlayerController>().m_joystickNumber = 0;
+        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, 1, 3), Quaternion.identity, gameObject.transform);
+        m_player1.GetComponent<Player>().m_joystickNumber = 0;
 
         //base 2
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
         AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1], TypeObject.e_None);
 
         //player 2
-        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), PlayerPrefab.transform.localScale.y / 2, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
-        m_player2.GetComponent<PlayerController>().m_joystickNumber = 1;
-
-
+        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
+        m_player2.GetComponent<Player>().m_joystickNumber = 1;
     }
 
     // Create all the ressources of the map
@@ -100,7 +98,7 @@ public class Map : MonoBehaviour
 
     void SpawnPowerups()
     {
-        
+
     }
 
     private void CheckSpawnEnemys()

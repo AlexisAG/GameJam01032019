@@ -15,4 +15,8 @@ public class Mine : MonoBehaviour
     {
         
     }
+
+    public Mine() {
+
+    }
 }
