@@ -51,6 +51,9 @@ public class Map : MonoBehaviour
     void Update()
     {
         CheckSpawnEnemys();
+
+        if (m_ressources.Count < NbRessource)
+            SpawnARessource();
     }
 
     void InitBase()
@@ -65,7 +68,7 @@ public class Map : MonoBehaviour
         AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_None);
 
         //player 1
-        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, 1, 3), Quaternion.identity, gameObject.transform);
+        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, PlayerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
         m_player1.GetComponent<Player>().m_joystickNumber = 0;
 
         //base 2
@@ -73,7 +76,7 @@ public class Map : MonoBehaviour
         AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1], TypeObject.e_None);
 
         //player 2
-        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
+        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), PlayerPrefab.transform.localScale.y / 2, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
         m_player2.GetComponent<Player>().m_joystickNumber = 1;
     }
 
@@ -94,6 +97,15 @@ public class Map : MonoBehaviour
             AddGameObjectOnTheGrid(pos.x, pos.y, ressource, TypeObject.e_Ressource);
         }
 
+    }
+
+    void SpawnARessource()
+    {
+        Vector2Int pos = GetRandomFreePosition();
+
+        // add the ressource to the List m_ressources
+        GameObject ressource = Instantiate<GameObject>(RessourcePrefab, new Vector3(-pos.x, 0f, pos.y), Quaternion.identity, gameObject.transform);
+        AddGameObjectOnTheGrid(pos.x, pos.y, ressource, TypeObject.e_Ressource);
     }
 
     void SpawnPowerups()
@@ -138,8 +150,24 @@ public class Map : MonoBehaviour
     {
 
         if (m_grid[x, z] != null)
-            RemoveGameObjectOnTheGrid(x, z, type);
+        {
+            Debug.Log(m_grid[x, z].name);
 
+            switch (m_grid[x, z].name)
+            {
+                case "Ressource(Clone)":
+                    RemoveGameObjectOnTheGrid(x, z, TypeObject.e_Ressource);
+                    break;
+
+                case "Mine(Clone)":
+                    RemoveGameObjectOnTheGrid(x, z, TypeObject.e_Mine);
+                    break;
+
+                default:
+
+                    break;
+            }
+        }
         m_grid[x, z] = obj;
 
         switch (type)
