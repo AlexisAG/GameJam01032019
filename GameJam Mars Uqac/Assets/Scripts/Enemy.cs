@@ -17,8 +17,7 @@ public class Enemy : MonoBehaviour
 
         m_boxCollider = GetComponent<BoxCollider>();
         m_boxCollider.isTrigger = true;
-        m_walkingDirection = transform.forward;
-        m_walkingDirection = Quaternion.AngleAxis(90, Vector3.up) * m_walkingDirection;
+        m_walkingDirection = transform.right;
         StartMoving();
     }
 
@@ -41,7 +40,8 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.GetComponent<Base>() != null)
         {
-            Debug.Log("C'est la mort");
+            other.gameObject.GetComponent<Base>().TakeOfLifeTime(3.0f);
+            Destroy(this.gameObject);
         }
     }
 }
