@@ -47,12 +47,12 @@ public class Map : MonoBehaviour
         /* Instantiate Base 1 & Base 2 */
 
         // base 1
-        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(0, 0, 0), Quaternion.identity, gameObject.transform));
+        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform));
         AddGameObjectOnTheGrid(0, 0, m_bases[0]);
 
         //base 2
-        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 1), 0, (m_indexGridZ - 1)), Quaternion.identity, gameObject.transform));
-        AddGameObjectOnTheGrid(m_indexGridX - 1, m_indexGridZ - 1, m_bases[1]);
+        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
+        AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1]);
 
     }
 
@@ -76,11 +76,12 @@ public class Map : MonoBehaviour
                x = Random.Range(0, m_indexGridX);
                z = Random.Range(0, m_indexGridZ);
 
-            } while (m_grid[x,z] != null); 
+            } while (m_grid[x,z] != null);
 
             // add the ressource to the List m_ressources
-            m_ressources.Add(Instantiate<GameObject>(RessourcePrefab, new Vector3(-x, 0f, z), Quaternion.identity, gameObject.transform));
-
+            GameObject ressource = Instantiate<GameObject>(RessourcePrefab, new Vector3(-x, 0f, z), Quaternion.identity, gameObject.transform);
+            m_ressources.Add(ressource);
+            AddGameObjectOnTheGrid(x, z, ressource);
         }
 
     }
