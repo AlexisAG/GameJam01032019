@@ -341,5 +341,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4153199980268997449, guid: 27b2b5449b1fd114ca65432a1afc6cf3,
         type: 3}
+    - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
+        type: 3}
+      propertyPath: RessourcePrefab
+      value: 
+      objectReference: {fileID: 21766501, guid: 7248ffe17c590e74b9ec196dc46e4b3f,
+        type: 3}
+    - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
+        type: 3}
+      propertyPath: MinePrefab
+      value: 
+      objectReference: {fileID: 1732381903405346695, guid: 2a2dd2770fee0bb4ca6bb7d8730557fd,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44aea50cb71f5194fb3ff5d4c1a415cc, type: 3}
