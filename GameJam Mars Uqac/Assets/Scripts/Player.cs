@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
     public double m_health;
     public float m_walkSpeed = 5, m_CooldDownMineMax, m_joystickNumber;
     public GameObject MinePrefab;
+    public Base m_PlayerBase;
 
     private Rigidbody m_rb;
     private Map m_map;
@@ -15,7 +16,7 @@ public class Player : MonoBehaviour {
     private int m_resourcesCount;
     private bool m_isCarryingMine;
     private GameObject m_mine;
-    private Base m_PlayerBase;
+    
 
 
     // Start is called before the first frame update
@@ -54,6 +55,17 @@ public class Player : MonoBehaviour {
                     l_RessourceChild.RecreateRessource();
                 }
                 m_resourcesCount = 0;
+            }
+        } else if (other.GetComponent<Mine>() != null)
+        {
+            if(other.GetComponent<Mine>().m_PlayerTag != tag)
+            {
+                foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
+                {
+                    l_RessourceChild.RecreateRessource();
+                }
+                m_resourcesCount = 0;
+                Destroy(other.gameObject);
             }
         }
     }
@@ -120,6 +132,7 @@ public class Player : MonoBehaviour {
 
             m_mine = Instantiate<GameObject>(MinePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), m_map.transform);
             m_map.AddGameObjectOnTheGrid(-(int) Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z), m_mine, Map.TypeObject.e_Mine);
+            m_mine.GetComponent<Mine>().m_PlayerTag = tag;
             m_isCarryingMine = false;
         }
 
