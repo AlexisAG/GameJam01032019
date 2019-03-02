@@ -16,6 +16,7 @@ public class Ressource : MonoBehaviour, Pickup
 
     public void IsPick()
     {
+        gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<Renderer>().enabled = false;
     }
 

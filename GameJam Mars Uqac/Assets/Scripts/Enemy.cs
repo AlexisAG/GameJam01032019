@@ -9,11 +9,13 @@ public class Enemy : MonoBehaviour
     private BoxCollider m_boxCollider;
     private Vector3 m_walkingDirection;
     private bool m_isMoving;
+    private Collider m_colider;
 
     // Start is called before the first frame update
     void Start()
     {
         m_isMoving = false;
+        GetComponent<Animator>().SetBool("isGonaExplose", false);
 
         m_boxCollider = GetComponent<BoxCollider>();
         m_boxCollider.isTrigger = true;
@@ -40,8 +42,15 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.GetComponent<Base>() != null)
         {
-            other.gameObject.GetComponent<Base>().TakeOfLifeTime(3.0f);
-            Destroy(this.gameObject);
+            m_colider = other;
+            m_isMoving = false;
+            GetComponent<Animator>().SetBool("isGonaExplose", true);
         }
+    }
+
+    public void ExplosionFinish()
+    {
+        m_colider.gameObject.GetComponent<Base>().TakeOfLifeTime(3.0f);
+        Destroy(this.gameObject);
     }
 }
