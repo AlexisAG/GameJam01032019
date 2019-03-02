@@ -51,8 +51,8 @@ public class Map : MonoBehaviour
         AddGameObjectOnTheGrid(0, 0, m_bases[0]);
 
         //base 2
-        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 4), 0, (m_indexGridZ - 4)), Quaternion.identity, gameObject.transform));
-        AddGameObjectOnTheGrid((m_indexGridX - 4), (m_indexGridZ - 4), m_bases[1]);
+        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
+        AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1]);
 
     }
 
