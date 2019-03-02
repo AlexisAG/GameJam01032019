@@ -88,7 +88,7 @@ public class Base : MonoBehaviour
                 Debug.Log(l_vec);
                 if (l_map)
                 {
-                    l_map.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject());
+                    l_map.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject(), Map.TypeObject.e_None);
                 }
             }
         }
@@ -110,7 +110,7 @@ public class Base : MonoBehaviour
             Debug.Log(l_vec);
             if (l_map)
             {
-                l_map.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y);
+                l_map.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, Map.TypeObject.e_None);
             }
         }
     }
