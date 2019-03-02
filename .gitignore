@@ -34,3 +34,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+*.blend
+*.blend1
+*.fbx
+*.png
