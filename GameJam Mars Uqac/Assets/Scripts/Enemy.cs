@@ -39,6 +39,9 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.GetComponent<Base>() != null)
+        {
+            Debug.Log("C'est la mort");
+        }
     }
 }
