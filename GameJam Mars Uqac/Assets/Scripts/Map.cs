@@ -64,8 +64,13 @@ public class Map : MonoBehaviour
         /* Instantiate Base 1 & Base 2 */
 
         // base 1
-        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform));
+        GameObject l_base1 = Instantiate<GameObject>(BasePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform);
+        l_base1.tag = "Player 0";
+        m_bases.Add(l_base1);
         AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_None);
+        
+        
+        
 
         //player 1
         m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, PlayerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
@@ -75,6 +80,7 @@ public class Map : MonoBehaviour
         //base 2
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
         AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1], TypeObject.e_None);
+        m_bases[1].tag = "Player 1";
 
         //player 2
         m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), PlayerPrefab.transform.localScale.y / 2, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);

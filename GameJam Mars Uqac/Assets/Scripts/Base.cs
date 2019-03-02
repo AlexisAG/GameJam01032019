@@ -6,6 +6,7 @@ public class Base : MonoBehaviour
 {
     public Vector3 m_BaseScale; // Basic sphere scale without timeLife 
     public float m_maxLife = 180;
+    public string m_PlayerTag;
 
     private float m_TimeAddForOneRessource; // Time in second add for ine ressource when it's drop in base 
     private float m_ScaleFactorByLifeTime; 
@@ -19,9 +20,9 @@ public class Base : MonoBehaviour
     void Start()
     {
         m_PreviousRayon = -1;
-        m_TimeAddForOneRessource = 10;
+        m_TimeAddForOneRessource = 8;
         m_LifeTime = m_maxLife; // Match to 60 seconds of LifeTime
-        m_LoseLifeMultiplicator = 1; // With this scale 1 seconds match to 3 seconds
+        m_LoseLifeMultiplicator = 3; // With this scale 1 seconds match to 3 seconds
         m_ScaleFactorByLifeTime = 1f / (float)(m_maxLife/5f);// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
         m_PosInRangeOfDome = new List<Vector2>();

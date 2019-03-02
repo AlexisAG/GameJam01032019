@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Player : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour {
     private int m_resourcesCount;
     private bool m_isCarryingMine;
     private GameObject m_mine;
+    private Base m_PlayerBase;
 
 
     // Start is called before the first frame update
@@ -29,15 +31,31 @@ public class Player : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.GetComponent<Ressource>() != null) {
-
-            if (m_resourcesCount <= 5) {
+        if (other.GetComponent<Ressource>() != null)
+        {
+            if (!other.GetComponent<Ressource>().m_isUsed && m_resourcesCount < 5)
+            {
                 m_resourcesCount++;
                 other.GetComponent<Ressource>().IsPick();
+                other.gameObject.transform.SetParent(transform);
             }
-
         }
-
+        else if (other.GetComponent<Base>() != null)
+        {
+            if(m_PlayerBase == null)
+            {
+                m_PlayerBase = other.GetComponent<Base>();
+            }
+            if(other.GetComponent<Base>() == m_PlayerBase)
+            {
+                other.GetComponent<Base>().AddRessourceToBase(m_resourcesCount);
+                foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
+                {
+                    l_RessourceChild.RecreateRessource();
+                }
+                m_resourcesCount = 0;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -45,7 +63,7 @@ public class Player : MonoBehaviour {
     {
         m_moveWithController(m_joystickNumber);
 
-        Debug.Log(gameObject.tag);
+        //Debug.Log(gameObject.tag);
 
         if (Input.GetButton("Fire_P" + m_joystickNumber) && gameObject.tag == "Player " + m_joystickNumber)
             PutTheMine();

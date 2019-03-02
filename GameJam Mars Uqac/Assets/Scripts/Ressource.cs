@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Ressource : MonoBehaviour, Pickup
 {
+    public bool m_isUsed;
+
 
     private Map m_map;
     private Vector2Int m_position;
@@ -16,8 +18,9 @@ public class Ressource : MonoBehaviour, Pickup
 
     public void IsPick()
     {
-        gameObject.GetComponent<Collider>().enabled = false;
-        gameObject.GetComponent<Renderer>().enabled = false;
+        m_isUsed = true;
+        Debug.Log("Ressource is pick");
+        gameObject.GetComponent<Animator>().SetBool("IsPickup", true);
     }
 
     public void Respawn()
@@ -36,8 +39,10 @@ public class Ressource : MonoBehaviour, Pickup
     // Start is called before the first frame update
     void Start()
     {
+        m_isUsed = false;
         m_map = GameObject.Find("Map_Plane").GetComponent<Map>();
         m_position = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        gameObject.GetComponent<Animator>().SetBool("IsPickup", false);
 
     }
 
@@ -47,16 +52,16 @@ public class Ressource : MonoBehaviour, Pickup
         
     }
 
-    void OnTriggerEnter(Collider other)
+    public void RecreateRessource()
     {
-        
+        Respawn();
+        m_map.RemoveGameObjectOnTheGrid(-m_position.x, m_position.y, Map.TypeObject.e_Ressource);
+    }
 
-        if (other.GetComponent<Base>() != null)
-        {
-            Respawn();
-            m_map.RemoveGameObjectOnTheGrid(-m_position.x, m_position.y, Map.TypeObject.e_Ressource);
-        }
-
+    public void PickupFinish()
+    {
+        gameObject.GetComponent<Animator>().enabled = false;
+        gameObject.GetComponent<Animator>().transform.localScale = new Vector3(0, 0, 0);
     }
 
 }
