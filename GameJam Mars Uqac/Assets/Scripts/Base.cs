@@ -19,9 +19,9 @@ public class Base : MonoBehaviour
     {
         m_PreviousRayon = -1;
         m_TimeAddForOneRessource = 10;
-        m_LifeTime = 60; // Match to 60 seconds of LifeTime
+        m_LifeTime = 300; // Match to 60 seconds of LifeTime
         m_LoseLifeMultiplicator = 3; // With this scale 1 seconds match to 3 seconds
-        m_ScaleFactorByLifeTime = 1f / 12f;// If 1/6 that say one minute of lifetime match to 10 scale factor
+        m_ScaleFactorByLifeTime = 1f / 100f;// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
         m_PosInRangeOfDome = new List<Vector2>();
         UpdateSphereSize();
@@ -44,7 +44,7 @@ public class Base : MonoBehaviour
     private void UpdateSphereSize()
     {
         float l_NewScale = (m_BaseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
-        Mathf.Clamp(l_NewScale, 0, 3);
+        l_NewScale = Mathf.Clamp(l_NewScale, 0, 3);
         transform.localScale = new Vector3(l_NewScale, l_NewScale, m_BaseScale.z);
         if(m_PreviousRayon != Mathf.CeilToInt(transform.localScale.x))
         {
@@ -84,8 +84,6 @@ public class Base : MonoBehaviour
             if (!m_PosInRangeOfDome.Contains(l_vec))
             {
                 m_PosInRangeOfDome.Add(l_vec);
-                
-                Debug.Log(l_vec);
                 if (l_map)
                 {
                     l_map.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject(), Map.TypeObject.e_None);
@@ -107,7 +105,6 @@ public class Base : MonoBehaviour
         foreach(Vector2 l_vec in l_PosToRemove)
         {
             m_PosInRangeOfDome.Remove(l_vec);
-            Debug.Log(l_vec);
             if (l_map)
             {
                 l_map.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, Map.TypeObject.e_None);

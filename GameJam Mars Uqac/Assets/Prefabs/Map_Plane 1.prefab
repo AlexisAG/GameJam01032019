@@ -113,4 +113,8 @@ MonoBehaviour:
     type: 3}
   PlayerPrefab: {fileID: 4258710157398469677, guid: 074b6ee6fcf200f4fa913d32df4f7df9,
     type: 3}
+  EnemyPrefab: {fileID: 9059999712705886712, guid: e7613a614a511834c82420c6371936d5,
+    type: 3}
   NbRessource: 10
+  EnemySpawnFrequency: 20
+  TimeOfFirstSpawnEnemy: 10
