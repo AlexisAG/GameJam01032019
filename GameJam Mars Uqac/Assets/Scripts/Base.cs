@@ -11,6 +11,7 @@ public class Base : MonoBehaviour
     private float m_LifeTime; // Current life of the base decrease with time
     private float m_LoseLifeMultiplicator; // Scale apply to time to decrease life time
     private bool m_IsGameFinish; // boolean to check if game is finish
+    private List<Vector2> m_PosInRangeOfDome; // All pos in range of dome
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,7 @@ public class Base : MonoBehaviour
         m_LoseLifeMultiplicator = 3; // With this scale 1 seconds match to 3 seconds
         m_ScaleFactorByLifeTime = 1f / 12f;// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
+        m_PosInRangeOfDome = new List<Vector2>();
     }
 
     // Update is called once per frame
@@ -29,7 +31,7 @@ public class Base : MonoBehaviour
         {
             TakeOfLifeTime(Time.deltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
             UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
-            Debug.Log(GetComponent<MeshRenderer>().bounds.size.x);
+            
             CheckLifetime(); // Check if base is dead
         }
         
@@ -49,6 +51,11 @@ public class Base : MonoBehaviour
             m_IsGameFinish = true;
             Debug.Log("Game is finished");
         }
+    }
+
+    private void UpdatePosInRange()
+    {
+        //GetComponent<MeshRenderer>().bounds.size.x
     }
 
     public void AddRessourceToBase(int p_NbRessources)
