@@ -47,7 +47,9 @@ public class Ressource : MonoBehaviour, Pickup
 
     void OnTriggerEnter(Collider other)
     {
-       
+
+        Debug.Log(other.name);
+
         if(other.GetComponent<Base>() != null)
         {
             Respawn();
