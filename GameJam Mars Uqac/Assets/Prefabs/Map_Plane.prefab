@@ -114,6 +114,16 @@ MonoBehaviour:
     type: 3}
   EnemyPrefab: {fileID: 4153199980268997449, guid: 27b2b5449b1fd114ca65432a1afc6cf3,
     type: 3}
+  LurePrefab: {fileID: 6930467623156951726, guid: 2f8f7795df3acad439d35d1d92691987,
+    type: 3}
+  SlowPrefab: {fileID: 6930467623156951726, guid: a221500b49a3086489d8bccae169d25b,
+    type: 3}
+  SpeedBoostPrefab: {fileID: 6930467623156951726, guid: 178cb5d1ce2640c4d93776443db28198,
+    type: 3}
+  ShieldBreakPrefab: {fileID: 6930467623156951726, guid: 7becc9d3f966e4f479bcfafcc2a0535d,
+    type: 3}
   NbRessource: 10
   StartEnemySpawnFrequency: 10
   TimeOfFirstSpawnEnemy: 10
+  PowerUpSpawnFrequency: 10
+  PowerUpDeletionTime: 5
