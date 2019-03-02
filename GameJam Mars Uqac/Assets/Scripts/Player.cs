@@ -72,7 +72,7 @@ public class Player : MonoBehaviour {
         l_controllerAxis.Normalize();
 
         //Movement vector
-        Vector3 l_movement = new Vector3(l_controllerAxis.x * m_walkSpeed * Time.deltaTime, 0.0f, l_controllerAxis.y * m_walkSpeed * Time.deltaTime);
+        Vector3 l_movement = new Vector3(l_controllerAxis.x * Time.deltaTime * m_walkSpeed, 0.0f, l_controllerAxis.y * Time.deltaTime * m_walkSpeed);
 
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
@@ -101,7 +101,6 @@ public class Player : MonoBehaviour {
                 Destroy(m_mine);
 
             m_mine = Instantiate<GameObject>(MinePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), m_map.transform);
-            Debug.Log(m_mine.transform.position.x);
             m_map.AddGameObjectOnTheGrid(-(int) Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z), m_mine, Map.TypeObject.e_Mine);
             m_isCarryingMine = false;
         }
