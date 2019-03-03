@@ -21,12 +21,11 @@ public class Mine : MonoBehaviour
 
     public void MakeExplosionEffect()
     {
-        Instantiate<GameObject>(m_ExplosionEffect, transform);
-    }
-
-    void OnDestroy()
-    {
-
+        Debug.Log("Explosion effect");
+        GameObject l_Explosion = Instantiate(m_ExplosionEffect, transform.position, Quaternion.identity );
+        
+        ParticleSystem.EmissionModule em1 = l_Explosion.GetComponent<ParticleSystem>().emission;
+        em1.enabled = true;
     }
 
 }
