@@ -34,7 +34,7 @@ public class O2_Display : MonoBehaviour
         o2_P2 = m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].GetNbOfRessources();
 
         //Update UI values
-        o2Text_P1.text = "O² : " + o2_P1.ToString();
-        o2Text_P2.text = "O² : " + o2_P2.ToString();
+        o2Text_P1.text = o2_P1.ToString() + "/5";
+        o2Text_P2.text = o2_P2.ToString() + "/5";
     }
 }
