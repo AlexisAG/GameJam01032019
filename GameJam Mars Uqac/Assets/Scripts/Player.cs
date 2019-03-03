@@ -51,6 +51,7 @@ public class Player : MonoBehaviour {
             {
                 m_resourcesCount++;
                 other.GetComponent<Ressource>().IsPick();
+                GameObject.Find("ResourcesSE").GetComponent<AudioSource>().Play();
                 other.gameObject.transform.SetParent(transform);
             }
         }
@@ -64,6 +65,8 @@ public class Player : MonoBehaviour {
             if(other.GetComponent<Base>() == m_PlayerBase)
             {
                 other.GetComponent<Base>().AddRessourceToBase(m_resourcesCount);
+                if(m_resourcesCount>0)
+                    GameObject.Find("BaseSE").GetComponent<AudioSource>().Play();
                 foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
                 {
                     l_RessourceChild.RecreateRessource();
@@ -79,6 +82,7 @@ public class Player : MonoBehaviour {
                     l_RessourceChild.RecreateRessource();
                 }
                 m_resourcesCount = 0;
+                GameObject.Find("PlayerSE").GetComponent<AudioSource>().Play();
                 Destroy(other.gameObject);
             }
         }
