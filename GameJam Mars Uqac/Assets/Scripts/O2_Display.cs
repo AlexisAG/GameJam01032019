@@ -26,8 +26,18 @@ public class O2_Display : MonoBehaviour
         o2_P2 = m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].GetNbOfRessources();
         mine_P1 = m_players.Where<Player>(p => p.tag == "Player 0").ToArray<Player>()[0].HaveMine() ? "Mine disponible" : "Mine indisponible";
         mine_P2 = m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].HaveMine() ? "Mine disponible" : "Mine indisponible";
-        int l_Base1Life = (int)Mathf.Clamp(m_players.Where<Player>(p => p.tag == "Player 0").ToArray<Player>()[0].m_PlayerBase.GetCurrentLife(),0,1000000);
-        int l_Base2Life = (int)Mathf.Clamp(m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].m_PlayerBase.GetCurrentLife(),0,1000000);
+
+        Base b1 = m_players.Where<Player>(p => p.tag == "Player 0").ToArray<Player>()[0].m_PlayerBase;
+        Base b2 = m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].m_PlayerBase;
+
+        int l_Base1Life = 0, l_Base2Life = 0;
+
+        if (b1)
+            l_Base1Life = (int)Mathf.Clamp(b1.GetCurrentLife(),0,1000000);
+        if(b2)
+            l_Base2Life = (int)Mathf.Clamp(b2.GetCurrentLife(), 0, 1000000);
+
+
         baseP1.text = "Vie restante : " + l_Base1Life.ToString()+" %";
         baseP2.text = "Vie restante : " + l_Base2Life.ToString()+" %";
 
