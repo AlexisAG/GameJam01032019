@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Base : MonoBehaviour
 {
     public Vector3 m_BaseScale; // Basic sphere scale without timeLife 
     public float m_maxLife = 180;
     public string m_PlayerTag;
+
 
     private float m_TimeAddForOneRessource; // Time in second add for ine ressource when it's drop in base 
     private float m_ScaleFactorByLifeTime; 
@@ -62,7 +64,7 @@ public class Base : MonoBehaviour
         if(m_LifeTime<=0)
         {
             m_IsGameFinish = true;
-            Debug.Log("Game is finished");
+            FinishGame();
         }
     }
 
@@ -134,5 +136,24 @@ public class Base : MonoBehaviour
     public void TakeOfPourcentOfLifeTime(float p_Pourcent = 25)
     {
         m_LifeTime -= (p_Pourcent / 100) * m_LifeTime;
+    }
+
+    private void FinishGame()
+    {
+        string l_WinnerName = "Le vainqueur est : \n";
+        switch(m_PlayerTag)
+        {
+            case "Player 0":
+                l_WinnerName += "Player 1";
+                break;
+            case "Player 1":
+                l_WinnerName += "Player 0";
+                break;
+        }
+        GameObject.Find("EndScreen").GetComponentInChildren<Text>().text = l_WinnerName;
+        GameObject.Find("EndScreen").transform.GetChild(1).gameObject.SetActive(true);
+        GameObject.Find("EndScreen").transform.GetChild(1).gameObject.GetComponent<Button>().Select();
+        Time.timeScale = 0;
+
     }
 }

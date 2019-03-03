@@ -46,6 +46,7 @@ public class Player : MonoBehaviour {
             if(m_PlayerBase == null)
             {
                 m_PlayerBase = other.GetComponent<Base>();
+                m_PlayerBase.m_PlayerTag = tag;
             }
             if(other.GetComponent<Base>() == m_PlayerBase)
             {
@@ -91,6 +92,12 @@ public class Player : MonoBehaviour {
             }
         }
 
+    }
+
+
+    public int GetNbOfRessources()
+    {
+        return m_resourcesCount;
     }
 
     public void m_moveWithController(float p_joystickNumber)
