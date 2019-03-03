@@ -153,7 +153,8 @@ public class Base : MonoBehaviour
         }
         GameObject.Find("EndScreen").GetComponentInChildren<Text>().text = l_WinnerName;
         GameObject.Find("EndScreen").transform.GetChild(1).gameObject.SetActive(true);
-        GameObject.Find("EndScreen").transform.GetChild(1).gameObject.GetComponent<Button>().Select();
+        GameObject.Find("EndScreen").transform.GetChild(2).gameObject.SetActive(true);
+        GameObject.Find("EndScreen").transform.GetChild(2).gameObject.GetComponent<Button>().Select();
         Time.timeScale = 0;
 
     }
