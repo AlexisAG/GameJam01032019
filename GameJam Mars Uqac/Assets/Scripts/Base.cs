@@ -168,4 +168,9 @@ public class Base : MonoBehaviour
             Time.timeScale = 0;
         }
     }
+
+    public float GetCurrentLife()
+    {
+        return (m_LifeTime/m_maxLife)*100f;
+    }
 }
