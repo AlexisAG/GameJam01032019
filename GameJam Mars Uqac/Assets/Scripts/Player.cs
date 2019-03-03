@@ -108,7 +108,7 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        m_moveWithController(m_joystickNumber);
+        //m_moveWithController(m_joystickNumber);
 
         //Debug.Log(gameObject.tag);
 
@@ -172,6 +172,11 @@ public class Player : MonoBehaviour {
         return m_resourcesCount;
     }
 
+    private void FixedUpdate()
+    {
+        m_moveWithController(m_joystickNumber);
+    }
+
     public void m_moveWithController(float p_joystickNumber)
     {
         m_rb = GetComponent<Rigidbody>();
@@ -185,7 +190,7 @@ public class Player : MonoBehaviour {
 
 
         //Movement vector
-        Vector3 l_movement = new Vector3((l_controllerAxis.x * m_walkSpeed) * Time.deltaTime, 0.0f, (l_controllerAxis.y * m_walkSpeed) * Time.deltaTime);
+        Vector3 l_movement = new Vector3((l_controllerAxis.x * m_walkSpeed)*Time.fixedDeltaTime, 0.0f, (l_controllerAxis.y * m_walkSpeed)* Time.fixedDeltaTime);
 
         
 
@@ -204,6 +209,7 @@ public class Player : MonoBehaviour {
 
 
         //Move player to the new position
+
         m_rb.MovePosition(l_newPos);
 
         if(l_movement.x != 0 && l_movement.z != 0)
