@@ -145,10 +145,10 @@ public class Base : MonoBehaviour
         switch(m_PlayerTag)
         {
             case "Player 0":
-                l_WinnerName += "Player 1";
+                l_WinnerName += "Player 2";
                 break;
             case "Player 1":
-                l_WinnerName += "Player 0";
+                l_WinnerName += "Player 1";
                 break;
         }
         GameObject.Find("EndScreen").GetComponentInChildren<Text>().text = l_WinnerName;
