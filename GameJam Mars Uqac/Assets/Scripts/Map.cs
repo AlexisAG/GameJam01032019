@@ -43,8 +43,6 @@ public class Map : MonoBehaviour
     void Start()
     {
 
-        Cursor.visible = false;
-
         m_grid = new GameObject[(int)GetComponent<Renderer>().bounds.size.x, (int)GetComponent<Renderer>().bounds.size.z]; // init the capacity with scale of plane
 
         m_indexGridX = m_grid.Length / (int)GetComponent<Renderer>().bounds.size.x;
