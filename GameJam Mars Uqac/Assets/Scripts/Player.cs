@@ -99,7 +99,6 @@ public class Player : MonoBehaviour {
 
     public void HitBySlime()
     {
-        Debug.LogWarning("Le slime te déglingue");
         foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
         {
             l_RessourceChild.RecreateRessource();
@@ -194,8 +193,6 @@ public class Player : MonoBehaviour {
 
         //Movement vector
         Vector3 l_movement = new Vector3((l_controllerAxis.x * m_walkSpeed)*Time.fixedDeltaTime, 0.0f, (l_controllerAxis.y * m_walkSpeed)* Time.fixedDeltaTime);
-        Debug.Log(l_movement);
-
 
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
