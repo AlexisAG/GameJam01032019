@@ -48,6 +48,7 @@ public class Enemy : MonoBehaviour
             m_colider = other;
             m_isMoving = false;
             GetComponent<Animator>().SetBool("isGonaExplose", true);
+            GameObject.Find("SlimeSE").GetComponent<AudioSource>().Play();
         }
         else if(other.gameObject.GetComponent<Mine>() != null)
         {
@@ -55,7 +56,8 @@ public class Enemy : MonoBehaviour
             m_isMoving = false;
             GetComponent<Animator>().SetBool("isGonaExplose", true);
             Destroy(other.gameObject);
-            
+            GameObject.Find("MineSE").GetComponent<AudioSource>().Play();
+
         }
     }
 
