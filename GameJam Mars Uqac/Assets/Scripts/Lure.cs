@@ -37,7 +37,9 @@ public class Lure : Powerup
     {
         if (other.gameObject.GetComponent<Player>() != null)
         {
+            Debug.Log("LEURRE !!!");
             IsPick();
+            GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
         }
     }
 }
