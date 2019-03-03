@@ -58,7 +58,15 @@ public class Player : MonoBehaviour {
             }
         } else if (other.GetComponent<Mine>() != null)
         {
-
+            if(other.GetComponent<Mine>().m_PlayerTag != tag)
+            {
+                foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
+                {
+                    l_RessourceChild.RecreateRessource();
+                }
+                m_resourcesCount = 0;
+                Destroy(other.gameObject);
+            }
         }
     }
 
