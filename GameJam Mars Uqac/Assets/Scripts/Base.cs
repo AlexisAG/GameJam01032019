@@ -39,7 +39,7 @@ public class Base : MonoBehaviour
     {
         if(GetEventManager() != null && !GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish && Time.timeScale != 0)
         {
-            TakeOfLifeTime(Time.fixedDeltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
+            TakeOfLifeTime(Time.deltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
             UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
             CheckLifetime(); // Check if base is dead
         }
@@ -134,6 +134,7 @@ public class Base : MonoBehaviour
     public void AddLifeTime(float p_Value = 10)
     {
         m_LifeTime += p_Value;
+        m_LifeTime = Mathf.Clamp(m_LifeTime, 0, m_maxLife);
     }
 
     public void TakeOfLifeTime(float p_Value = 10)
