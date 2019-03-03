@@ -158,16 +158,23 @@ public class Base : MonoBehaviour
         {
             GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish = true;
             string l_WinnerName = "Le vainqueur est : \n";
+            Color col = new Color();
+
             switch (m_PlayerTag)
             {
                 case "Player 0":
                     l_WinnerName += "Player 2";
+                    col = Color.cyan;
                     break;
                 case "Player 1":
                     l_WinnerName += "Player 1";
+                    col = Color.magenta;
                     break;
             }
+
+
             GameObject.Find("EndScreen").GetComponentInChildren<Text>().text = l_WinnerName;
+            GameObject.Find("EndScreen").GetComponentInChildren<Text>().color = col;
             GameObject.Find("EndScreen").transform.GetChild(1).gameObject.SetActive(true);
             GameObject.Find("EndScreen").transform.GetChild(2).gameObject.SetActive(true);
             GameObject.Find("EndScreen").transform.GetChild(2).gameObject.GetComponent<Button>().Select();
