@@ -74,9 +74,9 @@ public class Player : MonoBehaviour {
                 m_resourcesCount = 0;
             }
             //WARNING : UNFINISHED
-        } else if (other.GetComponent<Mine>() != null || other.GetComponent<Enemy>() != null)
+        } else if (other.GetComponent<Mine>() != null)
         {
-            if( (other.GetComponent<Mine>().m_PlayerTag != tag && other.GetComponent<Mine>() != null) || (other.GetComponent<Mine>() == null && other.GetComponent<Enemy>() != null))
+            if( (other.GetComponent<Mine>().m_PlayerTag != tag && other.GetComponent<Mine>() != null) )
             {
                 foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
                 {
@@ -87,6 +87,21 @@ public class Player : MonoBehaviour {
                 Destroy(other.gameObject);
             }
         }
+        else if(other.GetComponent<Enemy>() != null)
+        {
+            HitBySlime();
+        }
+    }
+
+    public void HitBySlime()
+    {
+        Debug.LogWarning("Le slime te déglingue");
+        foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
+        {
+            l_RessourceChild.RecreateRessource();
+        }
+        m_resourcesCount = 0;
+        GameObject.Find("PlayerSE").GetComponent<AudioSource>().Play();
     }
 
     // Update is called once per frame
