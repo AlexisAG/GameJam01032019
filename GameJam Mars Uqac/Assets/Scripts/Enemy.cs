@@ -41,8 +41,6 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        Debug.LogWarning(other.name);
-
         if (other.gameObject.GetComponent<Base>() != null)
         {
             m_colider = other;
