@@ -16,9 +16,6 @@ public class O2_Display : MonoBehaviour
     private void Awake() {
         
 
-        //"catch" the Text component of each UI element who will be updated
-        o2Text_P1 = GameObject.Find("CountBase_P1")?.GetComponent<Text>();
-        o2Text_P2 = GameObject.Find("CountBase_P2")?.GetComponent<Text>();
 
         Debug.Log(o2Text_P2.text);
     }
