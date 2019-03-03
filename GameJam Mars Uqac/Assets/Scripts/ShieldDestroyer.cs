@@ -45,9 +45,10 @@ public class ShieldDestroyer : Powerup
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Player>() != null)
+        if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().m_powerUpCooldown)
         {
             m_picker = other.gameObject;
+            m_picker.GetComponent<Player>().m_powerUpCooldown = true;
             IsPick();
             GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
         }

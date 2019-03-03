@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Slow : Powerup
 {
+    public float SlowMultiplier = 3;
+
+
     private BoxCollider m_boxCollider;
     private GameObject m_picker;
 
@@ -12,11 +15,11 @@ public class Slow : Powerup
     { 
         switch (m_picker.tag.Substring(m_picker.tag.Length - 1, 1)) {
             case "0" :
-                GameObject.FindWithTag("Player 1").GetComponent<Player>().m_walkSpeed=3;
+                GameObject.FindWithTag("Player 1").GetComponent<Player>().m_walkSpeed= SlowMultiplier;
                 break;
 
             case "1" :
-                GameObject.FindWithTag("Player 0").GetComponent<Player>().m_walkSpeed = 3;
+                GameObject.FindWithTag("Player 0").GetComponent<Player>().m_walkSpeed = SlowMultiplier;
                 break;
         }
     }
@@ -44,9 +47,10 @@ public class Slow : Powerup
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Player>() != null)
+        if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().m_powerUpCooldown)
         {
             m_picker = other.gameObject;
+            m_picker.GetComponent<Player>().m_powerUpCooldown = true;
             IsPick();
             GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
         }
