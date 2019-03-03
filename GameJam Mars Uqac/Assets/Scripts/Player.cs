@@ -73,9 +73,10 @@ public class Player : MonoBehaviour {
                 }
                 m_resourcesCount = 0;
             }
-        } else if (other.GetComponent<Mine>() != null)
+            //WARNING : UNFINISHED
+        } else if (other.GetComponent<Mine>() != null || other.GetComponent<Enemy>() != null)
         {
-            if(other.GetComponent<Mine>().m_PlayerTag != tag)
+            if( (other.GetComponent<Mine>().m_PlayerTag != tag && other.GetComponent<Mine>() != null) || (other.GetComponent<Mine>() == null && other.GetComponent<Enemy>() != null))
             {
                 foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
                 {
