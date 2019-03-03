@@ -22,18 +22,21 @@ public class Player : MonoBehaviour {
     private GameObject m_mine;
     private float m_SpeedRestTimer, m_PowerUpcooldownTimer;
     private ParticleSystem m_SpeedEffect;
+    private float m_AverageSpeed;
     
 
 
     // Start is called before the first frame update
     void Start()
     {
+        m_AverageSpeed = 5;
         m_rb = GetComponent<Rigidbody>();
         m_map = GameObject.Find("Map_Plane")?.GetComponent<Map>();
         m_isCarryingMine = true;
         m_resourcesCount = 0;
         m_coolDownMine = 0f;
         m_SpeedRestTimer = 5;
+        m_walkSpeed = m_AverageSpeed;
         m_PowerUpcooldownTimer = 5;
         transform.GetChild(1).gameObject.SetActive(true);
         transform.GetChild(2).gameObject.SetActive(true);
@@ -130,10 +133,10 @@ public class Player : MonoBehaviour {
 
 
         //reset speed if changed with powerup
-        if (m_walkSpeed != 15)
+        if (m_walkSpeed != m_AverageSpeed)
         {
             m_SpeedRestTimer -= Time.deltaTime;
-            if (m_walkSpeed < 15)
+            if (m_walkSpeed < m_AverageSpeed)
             {
                 ParticleSystem.EmissionModule em = transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().emission;
                 em.enabled = true;
@@ -150,7 +153,7 @@ public class Player : MonoBehaviour {
             em.enabled = false;
             ParticleSystem.EmissionModule em1 = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().emission;
             em1.enabled = false;
-            m_walkSpeed = 15;
+            m_walkSpeed = m_AverageSpeed;
             m_SpeedRestTimer = 5;
         }
 

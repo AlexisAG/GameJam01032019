@@ -25,7 +25,7 @@ public class Base : MonoBehaviour
         m_PreviousRayon = -1;
         m_TimeAddForOneRessource = 8;
         m_LifeTime = m_maxLife*2f/3f; // Match to 60 seconds of LifeTime
-        m_LoseLifeMultiplicator = 3; // With this scale 1 seconds match to 3 seconds
+        m_LoseLifeMultiplicator = 6; // With this scale 1 seconds match to 3 seconds
         m_ScaleFactorByLifeTime = 1f / (float)(m_maxLife/5f);// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
         m_PosInRangeOfDome = new List<Vector2>();
@@ -37,9 +37,14 @@ public class Base : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GetEventManager() != null && !GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish && Time.timeScale != 0)
+        
+    }
+
+    void FixedUpdate()
+    {
+        if (GetEventManager() != null && !GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish && Time.timeScale != 0)
         {
-            TakeOfLifeTime(Time.deltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
+            TakeOfLifeTime(Time.fixedDeltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
             UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
             CheckLifetime(); // Check if base is dead
         }
