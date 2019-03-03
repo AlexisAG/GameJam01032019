@@ -17,6 +17,7 @@ public class Base : MonoBehaviour
     private bool m_IsGameFinish; // boolean to check if game is finish
     private List<Vector2> m_PosInRangeOfDome; // All pos in range of dome
     private int m_PreviousRayon;
+    private GameObject m_EventManager;
 
     // Start is called before the first frame update
     void Start()
@@ -36,14 +37,12 @@ public class Base : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!m_IsGameFinish && Time.timeScale != 0)
+        if(GetEventManager() != null && !GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish && Time.timeScale != 0)
         {
             TakeOfLifeTime(Time.fixedDeltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
             UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
             CheckLifetime(); // Check if base is dead
         }
-        
-        
     }
 
     private void UpdateSphereSize()
@@ -64,9 +63,17 @@ public class Base : MonoBehaviour
         if(m_LifeTime<=0)
         {
             Debug.Log("Fin de Game");
-            m_IsGameFinish = true;
             FinishGame();
         }
+    }
+
+    GameObject GetEventManager()
+    {
+        if(m_EventManager == null)
+        {
+            m_EventManager = GameObject.Find("EventSystem");
+        }
+        return m_EventManager;
     }
 
     private void UpdatePosInRange()
@@ -141,21 +148,24 @@ public class Base : MonoBehaviour
 
     private void FinishGame()
     {
-        string l_WinnerName = "Le vainqueur est : \n";
-        switch(m_PlayerTag)
+        if(!GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish)
         {
-            case "Player 0":
-                l_WinnerName += "Player 2";
-                break;
-            case "Player 1":
-                l_WinnerName += "Player 1";
-                break;
+            GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish = true;
+            string l_WinnerName = "Le vainqueur est : \n";
+            switch (m_PlayerTag)
+            {
+                case "Player 0":
+                    l_WinnerName += "Player 2";
+                    break;
+                case "Player 1":
+                    l_WinnerName += "Player 1";
+                    break;
+            }
+            GameObject.Find("EndScreen").GetComponentInChildren<Text>().text = l_WinnerName;
+            GameObject.Find("EndScreen").transform.GetChild(1).gameObject.SetActive(true);
+            GameObject.Find("EndScreen").transform.GetChild(2).gameObject.SetActive(true);
+            GameObject.Find("EndScreen").transform.GetChild(2).gameObject.GetComponent<Button>().Select();
+            Time.timeScale = 0;
         }
-        GameObject.Find("EndScreen").GetComponentInChildren<Text>().text = l_WinnerName;
-        GameObject.Find("EndScreen").transform.GetChild(1).gameObject.SetActive(true);
-        GameObject.Find("EndScreen").transform.GetChild(2).gameObject.SetActive(true);
-        GameObject.Find("EndScreen").transform.GetChild(2).gameObject.GetComponent<Button>().Select();
-        Time.timeScale = 0;
-
     }
 }

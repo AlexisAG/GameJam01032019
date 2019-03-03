@@ -26,7 +26,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7c571d3e0363140b99e3a2709189e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BaseScale: {x: 1, y: 1, z: 8}
+  m_BaseScale: {x: 1, y: 1, z: 15}
   m_maxLife: 150
   m_PlayerTag: 
 --- !u!1 &7641442050855423574
@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bc02fd24a0f74af48a4bf39f8d3a37d7, type: 3}
       propertyPath: m_LocalScale.z
-      value: 8
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc02fd24a0f74af48a4bf39f8d3a37d7, type: 3}
