@@ -181,6 +181,11 @@ public class Player : MonoBehaviour {
 
     }
 
+    public bool HaveMine()
+    {
+        return m_isCarryingMine;
+    }
+
     public void PutTheMine() {
 
         if (m_isCarryingMine && gameObject.tag == "Player " + m_joystickNumber) {
