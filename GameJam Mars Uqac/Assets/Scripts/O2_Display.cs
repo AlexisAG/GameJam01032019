@@ -31,7 +31,7 @@ public class O2_Display : MonoBehaviour
         o2Text_P1.text = "Oxygen " + o2_P1.ToString() + "/5";
         o2Text_P2.text = "Oxygen " + o2_P2.ToString() + "/5";
 
-        mineP1.text = "Mine " + o2_P1.ToString() + "/5";
-        mineP2.text = "Mine " + o2_P2.ToString() + "/5";
+        mineP1.text = mine_P1;
+        mineP2.text = mine_P2;
     }
 }
