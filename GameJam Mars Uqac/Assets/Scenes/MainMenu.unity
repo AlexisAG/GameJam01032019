@@ -527,6 +527,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mainMenuCanvas: {fileID: 490469524}
   m_instructionsCanvas: {fileID: 1115072290}
+  m_Play: {fileID: 2064684307}
+  m_Back: {fileID: 1333398193}
 --- !u!114 &787240125
 MonoBehaviour:
   m_ObjectHideFlags: 0
