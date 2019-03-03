@@ -99,6 +99,7 @@ public class Map : MonoBehaviour
         m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, PlayerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
         m_player1.GetComponent<Player>().m_joystickNumber = 0;
         m_player1.tag = "Player 0";
+        m_player1.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.magenta;
 
         //base 2
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
@@ -109,6 +110,7 @@ public class Map : MonoBehaviour
         m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), PlayerPrefab.transform.localScale.y / 2, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
         m_player2.GetComponent<Player>().m_joystickNumber = 1;
         m_player2.tag = "Player 1";
+        m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);
 
     }
 

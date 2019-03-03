@@ -24,6 +24,7 @@ public class O2_Display : MonoBehaviour
         //link the resources number of each player to respective variable
         o2_P1 = m_players.Where<Player>(p => p.tag == "Player 0").ToArray<Player>()[0].GetNbOfRessources();
         o2_P2 = m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].GetNbOfRessources();
+
         mine_P1 = m_players.Where<Player>(p => p.tag == "Player 0").ToArray<Player>()[0].HaveMine() ? "Mine disponible" : "Mine indisponible";
         mine_P2 = m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].HaveMine() ? "Mine disponible" : "Mine indisponible";
 
