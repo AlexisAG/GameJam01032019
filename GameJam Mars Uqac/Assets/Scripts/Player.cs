@@ -184,15 +184,15 @@ public class Player : MonoBehaviour {
         //get controller axis
         Vector2 l_controllerAxis = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber), -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber));
         l_controllerAxis.Normalize();
-        Debug.Log(l_controllerAxis);
+        
 
         
 
 
         //Movement vector
         Vector3 l_movement = new Vector3((l_controllerAxis.x * m_walkSpeed)*Time.fixedDeltaTime, 0.0f, (l_controllerAxis.y * m_walkSpeed)* Time.fixedDeltaTime);
+        Debug.Log(l_movement);
 
-        
 
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
