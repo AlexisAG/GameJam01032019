@@ -36,7 +36,7 @@ public class Base : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!m_IsGameFinish)
+        if(!m_IsGameFinish && Time.timeScale != 0)
         {
             TakeOfLifeTime(Time.fixedDeltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
             UpdateSphereSize(); // Update the scale of the sphere with remaining life time 

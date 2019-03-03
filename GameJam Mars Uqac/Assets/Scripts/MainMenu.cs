@@ -7,7 +7,6 @@ public class MainMenu : MonoBehaviour
 {
 
     public Canvas m_mainMenuCanvas;
-
     public Canvas m_instructionsCanvas;
 
     // Start is called before the first frame update
