@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class SpeedBoost : Powerup
 {
+    public float SpeedMultiplier = 20;
+
     private BoxCollider m_boxCollider;
     private GameObject m_picker;
 
     public override void Activate()
     {
-        m_picker.GetComponent<Player>().m_walkSpeed = 20;
+        m_picker.GetComponent<Player>().m_walkSpeed = SpeedMultiplier;
     }
 
     public override void IsPick()
@@ -36,10 +38,10 @@ public class SpeedBoost : Powerup
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Player>() != null)
+        if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().m_powerUpCooldown)
         {
-            Debug.Log("SPEED BOOST !!!");
             m_picker = other.gameObject;
+            m_picker.GetComponent<Player>().m_powerUpCooldown = true;
             IsPick();
             GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
 

@@ -47,9 +47,10 @@ public class Map : MonoBehaviour
         m_indexGridX = m_grid.Length / (int)GetComponent<Renderer>().bounds.size.x;
         m_indexGridZ = m_grid.Length / (int)GetComponent<Renderer>().bounds.size.z;
 
-        m_nextTimeEnemySpawn = 0;
+        
         m_nbPlayers = 2;
         m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency,1,300);
+        m_nextTimeEnemySpawn = Time.fixedTime + TimeOfFirstSpawnEnemy;
 
         m_powerupSpawnTimer = PowerUpSpawnFrequency;
         m_powerupDeleteTimer = PowerUpDeletionTime;
@@ -161,8 +162,8 @@ public class Map : MonoBehaviour
             l_remainingIndex = (int)-l_remainingPosition.x;
         }
 
-        //int l_PowerUpType = Random.Range(0, 2);
-        int l_PowerUpType = 2;
+        int l_PowerUpType = Random.Range(0, 2);
+
         switch (l_PowerUpType)
         {
             case 0:
@@ -202,12 +203,7 @@ public class Map : MonoBehaviour
 
     private void CheckSpawnEnemys()
     {
-        if (m_nextTimeEnemySpawn == 0 && Time.fixedTime >= TimeOfFirstSpawnEnemy)
-        {
-            SpawnEnemy();
-            m_nextTimeEnemySpawn = Time.fixedTime + m_enemySpawnFrequency;
-            m_enemySpawnFrequency = Mathf.Clamp(m_enemySpawnFrequency*0.8f, 1, 300);
-        } else if(m_nextTimeEnemySpawn != 0 && Time.fixedTime >= m_nextTimeEnemySpawn)
+        if(Time.fixedTime >= m_nextTimeEnemySpawn)
         {
             SpawnEnemy();
             if(m_enemySpawnFrequency > 1)

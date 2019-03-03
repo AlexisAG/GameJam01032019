@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
     public float m_walkSpeed = 5, m_CooldDownMineMax, m_joystickNumber;
     public GameObject MinePrefab;
     public Base m_PlayerBase;
+    public bool m_powerUpCooldown = false;
 
     private Rigidbody m_rb;
     private Map m_map;
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour {
     private int m_resourcesCount;
     private bool m_isCarryingMine;
     private GameObject m_mine;
+    private float m_SpeedRestTimer, m_PowerUpcooldownTimer;
     
 
 
@@ -27,6 +29,8 @@ public class Player : MonoBehaviour {
         m_isCarryingMine = true;
         m_resourcesCount = 0;
         m_coolDownMine = 0f;
+        m_SpeedRestTimer = 5;
+        m_PowerUpcooldownTimer = 5;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,6 +96,27 @@ public class Player : MonoBehaviour {
             }
         }
 
+        //reset speed if changed with powerup
+        if (m_walkSpeed != 15)
+        {
+            m_SpeedRestTimer -= Time.deltaTime;
+        }
+        if (m_SpeedRestTimer <= 0)
+        {
+            m_walkSpeed = 15;
+            m_SpeedRestTimer = 5;
+        }
+
+        //manage pickup cooldown
+        if (m_powerUpCooldown)
+        {
+            m_PowerUpcooldownTimer -= Time.deltaTime;
+        }
+        if (m_PowerUpcooldownTimer <= 0)
+        {
+            m_PowerUpcooldownTimer = 5;
+            m_powerUpCooldown = false;
+        }
     }
 
 
