@@ -108,7 +108,7 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        m_moveWithController(m_joystickNumber);
+        //m_moveWithController(m_joystickNumber);
 
         //Debug.Log(gameObject.tag);
 
@@ -172,6 +172,11 @@ public class Player : MonoBehaviour {
         return m_resourcesCount;
     }
 
+    private void FixedUpdate()
+    {
+        m_moveWithController(m_joystickNumber);
+    }
+
     public void m_moveWithController(float p_joystickNumber)
     {
         m_rb = GetComponent<Rigidbody>();
@@ -179,9 +184,15 @@ public class Player : MonoBehaviour {
         //get controller axis
         Vector2 l_controllerAxis = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber), -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber));
         l_controllerAxis.Normalize();
+        
+
+        
+
 
         //Movement vector
-        Vector3 l_movement = new Vector3((l_controllerAxis.x * m_walkSpeed) * Time.deltaTime, 0.0f, (l_controllerAxis.y * m_walkSpeed) * Time.deltaTime);
+        Vector3 l_movement = new Vector3((l_controllerAxis.x * m_walkSpeed)*Time.fixedDeltaTime, 0.0f, (l_controllerAxis.y * m_walkSpeed)* Time.fixedDeltaTime);
+        Debug.Log(l_movement);
+
 
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
@@ -198,7 +209,16 @@ public class Player : MonoBehaviour {
 
 
         //Move player to the new position
+
         m_rb.MovePosition(l_newPos);
+
+        if(l_movement.x != 0 && l_movement.z != 0)
+        {
+            float radius = Mathf.Atan2(l_movement.x, l_movement.z);
+            radius = (radius * 180f) / 3.141592f;
+            m_rb.MoveRotation(Quaternion.Euler(0, radius, 0));
+        }
+            
 
     }
 
