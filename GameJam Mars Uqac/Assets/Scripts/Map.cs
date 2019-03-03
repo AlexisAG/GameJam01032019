@@ -161,8 +161,8 @@ public class Map : MonoBehaviour
             l_remainingIndex = (int)-l_remainingPosition.x;
         }
 
-        //int l_PowerUpType = Random.Range(0, 2);
-        int l_PowerUpType = 2;
+        int l_PowerUpType = Random.Range(0, 2);
+
         switch (l_PowerUpType)
         {
             case 0:

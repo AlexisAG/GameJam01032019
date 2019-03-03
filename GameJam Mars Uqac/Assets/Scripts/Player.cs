@@ -16,6 +16,7 @@ public class Player : MonoBehaviour {
     private int m_resourcesCount;
     private bool m_isCarryingMine;
     private GameObject m_mine;
+    private float m_SpeedRestTimer = 5;
     
 
 
@@ -92,6 +93,16 @@ public class Player : MonoBehaviour {
             }
         }
 
+        //reset speed if changed with powerup
+        if (m_walkSpeed != 15)
+        {
+            m_SpeedRestTimer -= Time.deltaTime;
+        }
+        if (m_SpeedRestTimer <= 0)
+        {
+            m_walkSpeed = 15;
+            m_SpeedRestTimer = 15;
+        }
     }
 
 

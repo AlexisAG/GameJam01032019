@@ -46,7 +46,6 @@ public class Slow : Powerup
     {
         if (other.gameObject.GetComponent<Player>() != null)
         {
-            Debug.Log("SPEED DOWN !!!");
             m_picker = other.gameObject;
             IsPick();
             GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
