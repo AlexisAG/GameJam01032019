@@ -11,6 +11,9 @@ public class Player : MonoBehaviour {
     public Base m_PlayerBase;
     public bool m_powerUpCooldown = false;
 
+    public ParticleSystem SlowEffect;
+    public ParticleSystem SpeedEffect;
+
     private Rigidbody m_rb;
     private Map m_map;
     private float m_coolDownMine;
@@ -18,6 +21,7 @@ public class Player : MonoBehaviour {
     private bool m_isCarryingMine;
     private GameObject m_mine;
     private float m_SpeedRestTimer, m_PowerUpcooldownTimer;
+    private ParticleSystem m_SpeedEffect;
     
 
 
@@ -31,11 +35,16 @@ public class Player : MonoBehaviour {
         m_coolDownMine = 0f;
         m_SpeedRestTimer = 5;
         m_PowerUpcooldownTimer = 5;
+        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(2).gameObject.SetActive(true);
+        ParticleSystem.EmissionModule em = transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().emission;
+        em.enabled = false;
+        ParticleSystem.EmissionModule em1 = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().emission;
+        em1.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.GetComponent<Ressource>() != null)
         {
             if (!other.GetComponent<Ressource>().m_isUsed && m_resourcesCount < 5)
@@ -99,14 +108,31 @@ public class Player : MonoBehaviour {
                 m_coolDownMine = 0f;
             }
         }
+        
+
+
 
         //reset speed if changed with powerup
         if (m_walkSpeed != 15)
         {
             m_SpeedRestTimer -= Time.deltaTime;
+            if (m_walkSpeed < 15)
+            {
+                ParticleSystem.EmissionModule em = transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().emission;
+                em.enabled = true;
+            } else
+            {
+                ParticleSystem.EmissionModule em = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().emission;
+                em.enabled = true;
+            }
         }
         if (m_SpeedRestTimer <= 0)
         {
+            m_SpeedEffect = null;
+            ParticleSystem.EmissionModule em = transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().emission;
+            em.enabled = false;
+            ParticleSystem.EmissionModule em1 = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().emission;
+            em1.enabled = false;
             m_walkSpeed = 15;
             m_SpeedRestTimer = 5;
         }
@@ -157,6 +183,11 @@ public class Player : MonoBehaviour {
         //Move player to the new position
         m_rb.MovePosition(l_newPos);
 
+    }
+
+    public bool HaveMine()
+    {
+        return m_isCarryingMine;
     }
 
     public void PutTheMine() {
