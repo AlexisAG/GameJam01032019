@@ -53,6 +53,7 @@ public class Enemy : MonoBehaviour
             Debug.LogWarning("Mine dected");
             m_isMoving = false;
             GetComponent<Animator>().SetBool("isGonaExplose", true);
+            other.GetComponent<Mine>().MakeExplosionEffect();
             Destroy(other.gameObject);
             GameObject.Find("MineSE").GetComponent<AudioSource>().Play();
 

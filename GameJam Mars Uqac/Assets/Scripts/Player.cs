@@ -83,6 +83,7 @@ public class Player : MonoBehaviour {
                     l_RessourceChild.RecreateRessource();
                 }
                 m_resourcesCount = 0;
+                other.GetComponent<Mine>().MakeExplosionEffect();
                 GameObject.Find("PlayerSE").GetComponent<AudioSource>().Play();
                 Destroy(other.gameObject);
             }
