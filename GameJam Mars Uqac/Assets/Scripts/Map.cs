@@ -86,7 +86,7 @@ public class Map : MonoBehaviour
 
         // base 1
         GameObject l_base1 = Instantiate<GameObject>(BasePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform);
-        l_base1.tag = "Player 0";
+        //l_base1.tag = "Player 0";
         m_bases.Add(l_base1);
         AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_None);
         
@@ -101,7 +101,7 @@ public class Map : MonoBehaviour
         //base 2
         m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
         AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1], TypeObject.e_None);
-        m_bases[1].tag = "Player 1";
+        //m_bases[1].tag = "Player 1";
 
         //player 2
         m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), PlayerPrefab.transform.localScale.y / 2, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
@@ -148,35 +148,35 @@ public class Map : MonoBehaviour
         bool l_lurePos = (Random.value > 0.5f);
         if (l_lurePos)
         {
-            GameObject lurePowerUp = Instantiate<GameObject>(LurePrefab, l_leftSpawnPosition,Quaternion.identity);
-            AddGameObjectOnTheGrid(m_indexGridX / 2 - 1, m_indexGridZ / 2, lurePowerUp, TypeObject.e_PowerUp);
+            GameObject lurePowerUp = Instantiate<GameObject>(LurePrefab, l_leftSpawnPosition,Quaternion.identity, transform);
+            AddGameObjectOnTheGrid((int)-l_leftSpawnPosition.x, m_indexGridZ / 2, lurePowerUp, TypeObject.e_PowerUp);
             l_remainingPosition = l_rightSpawnPosition;
-            l_remainingIndex = m_indexGridX / 2 + 1;
+            l_remainingIndex = (int)-l_remainingPosition.x;
         }
         else
         {
-            GameObject lurePowerUp = Instantiate<GameObject>(LurePrefab, l_rightSpawnPosition, Quaternion.identity);
-            AddGameObjectOnTheGrid(m_indexGridX / 2 + 1, m_indexGridZ / 2, lurePowerUp, TypeObject.e_PowerUp);
+            GameObject lurePowerUp = Instantiate<GameObject>(LurePrefab, l_rightSpawnPosition, Quaternion.identity, transform);
+            AddGameObjectOnTheGrid((int)-l_rightSpawnPosition.x, m_indexGridZ / 2, lurePowerUp, TypeObject.e_PowerUp);
             l_remainingPosition = l_leftSpawnPosition;
-            l_remainingIndex = m_indexGridX / 2 - 1;
+            l_remainingIndex = (int)-l_remainingPosition.x;
         }
 
-        int l_PowerUpType = Random.Range(0, 2);
-
+        //int l_PowerUpType = Random.Range(0, 2);
+        int l_PowerUpType = 2;
         switch (l_PowerUpType)
         {
             case 0:
-                GameObject slowPowerUp = Instantiate<GameObject>(LurePrefab, l_remainingPosition, Quaternion.identity);
+                GameObject slowPowerUp = Instantiate<GameObject>(SlowPrefab, l_remainingPosition, Quaternion.identity, transform);
                 AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, slowPowerUp, TypeObject.e_PowerUp);
                 break;
 
             case 1:
-                GameObject speedBoostPowerUp = Instantiate<GameObject>(LurePrefab, l_remainingPosition, Quaternion.identity);
+                GameObject speedBoostPowerUp = Instantiate<GameObject>(SpeedBoostPrefab, l_remainingPosition, Quaternion.identity, transform);
                 AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, speedBoostPowerUp, TypeObject.e_PowerUp);
                 break;
 
             case 2:
-                GameObject shieldBreakPowerUp = Instantiate<GameObject>(LurePrefab, l_remainingPosition, Quaternion.identity);
+                GameObject shieldBreakPowerUp = Instantiate<GameObject>(ShieldBreakPrefab, l_remainingPosition, Quaternion.identity, transform);
                 AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, shieldBreakPowerUp, TypeObject.e_PowerUp);
                 break;
 
@@ -191,8 +191,8 @@ public class Map : MonoBehaviour
         m_powerupDeleteTimer -= Time.deltaTime;
         if (m_powerupDeleteTimer <= 0)
         {
-            RemoveGameObjectOnTheGrid(m_indexGridX / 2 - 1, m_indexGridZ / 2, TypeObject.e_PowerUp);
-            RemoveGameObjectOnTheGrid(m_indexGridX / 2 + 1, m_indexGridZ / 2, TypeObject.e_PowerUp);
+            RemoveGameObjectOnTheGrid(11, m_indexGridZ / 2, TypeObject.e_PowerUp);
+            RemoveGameObjectOnTheGrid(9, m_indexGridZ / 2, TypeObject.e_PowerUp);
 
             m_powerupDeleteTimer = 2*PowerUpSpawnFrequency;
             m_powerupSpawnTimer = PowerUpSpawnFrequency;

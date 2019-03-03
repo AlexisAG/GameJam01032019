@@ -10,14 +10,14 @@ public class ShieldDestroyer : Powerup
 
     public override void Activate()
     {
-        switch (m_picker.tag.Substring(m_picker.tag.Length, -1))
+        switch (m_picker.tag.Substring(m_picker.tag.Length - 1, 1))
         {
             case "0":
-                GameObject.FindWithTag("Base_1").GetComponent<Base>().TakeOfLifeTime(shieldDamage);
+                GameObject.FindWithTag("Player 1").GetComponent<Player>()?.m_PlayerBase.TakeOfLifeTime(7);
                 break;
 
             case "1":
-                GameObject.FindWithTag("Base_0").GetComponent<Base>().TakeOfLifeTime(shieldDamage);
+                GameObject.FindWithTag("Player 0").GetComponent<Player>()?.m_PlayerBase.TakeOfLifeTime(7);
                 break;
         }
     }
@@ -47,8 +47,10 @@ public class ShieldDestroyer : Powerup
     {
         if (other.gameObject.GetComponent<Player>() != null)
         {
+            Debug.Log("SHIELD DESTROY !!!");
             m_picker = other.gameObject;
             IsPick();
+            GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
         }
     }
 }
