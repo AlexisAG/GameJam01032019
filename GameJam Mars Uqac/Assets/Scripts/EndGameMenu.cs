@@ -19,7 +19,6 @@ public class EndGameMenu : MonoBehaviour
 
     public void ExitToMainMenu()
     {
-        Debug.Log("Exit to main menu.");
         Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
@@ -27,6 +26,6 @@ public class EndGameMenu : MonoBehaviour
     public void RestartAGame()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("Map 1", LoadSceneMode.Single);
+        SceneManager.LoadScene("GameMap", LoadSceneMode.Single);
     }
 }

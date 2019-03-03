@@ -24,7 +24,8 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Map", LoadSceneMode.Single);
+        Time.timeScale = 1;
+        SceneManager.LoadScene("GameMap", LoadSceneMode.Single);
     }
 
     public void GoToInstructions(bool value)

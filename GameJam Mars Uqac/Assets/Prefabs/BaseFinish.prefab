@@ -27,7 +27,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BaseScale: {x: 1, y: 1, z: 8}
-  m_maxLife: 20
+  m_maxLife: 150
   m_PlayerTag: 
 --- !u!1 &7641442050855423574
 GameObject:

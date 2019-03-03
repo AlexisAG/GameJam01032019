@@ -23,7 +23,7 @@ public class Base : MonoBehaviour
     {
         m_PreviousRayon = -1;
         m_TimeAddForOneRessource = 8;
-        m_LifeTime = m_maxLife; // Match to 60 seconds of LifeTime
+        m_LifeTime = m_maxLife*2f/3f; // Match to 60 seconds of LifeTime
         m_LoseLifeMultiplicator = 3; // With this scale 1 seconds match to 3 seconds
         m_ScaleFactorByLifeTime = 1f / (float)(m_maxLife/5f);// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
