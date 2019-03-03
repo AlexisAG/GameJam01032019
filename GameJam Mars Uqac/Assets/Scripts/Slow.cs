@@ -52,6 +52,7 @@ public class Slow : Powerup
             m_picker = other.gameObject;
             m_picker.GetComponent<Player>().m_powerUpCooldown = true;
             IsPick();
+            GameObject.Find("SpeedDebuffSE").GetComponent<AudioSource>().Play();
             GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
         }
     }
