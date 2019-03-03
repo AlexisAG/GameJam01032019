@@ -157,7 +157,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "O\xB2 : "
+  m_Text: 
 --- !u!1 &3857888903943937141
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "O\xB2 :"
+  m_Text: 
 --- !u!1 &6210295730344657171
 GameObject:
   m_ObjectHideFlags: 0
