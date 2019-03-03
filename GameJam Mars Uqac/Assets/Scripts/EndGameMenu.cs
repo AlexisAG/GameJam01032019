@@ -19,6 +19,7 @@ public class EndGameMenu : MonoBehaviour
 
     public void ExitToMainMenu()
     {
+        Debug.Log("Exit to main menu.");
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 

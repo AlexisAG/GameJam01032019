@@ -63,6 +63,7 @@ public class Base : MonoBehaviour
     {
         if(m_LifeTime<=0)
         {
+            Debug.Log("Fin de Game");
             m_IsGameFinish = true;
             FinishGame();
         }
