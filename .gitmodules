@@ -1,0 +1,3 @@
+[submodule "AgToolkit"]
+	path = AgToolkit
+	url = https://github.com/AlexisAG/AgToolkit.git
