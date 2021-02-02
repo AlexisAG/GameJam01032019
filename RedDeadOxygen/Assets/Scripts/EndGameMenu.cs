@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AgToolkit.Core.GameModes;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,18 +14,14 @@ public class EndGameMenu : MonoBehaviour
         m_IsGameFinish = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ExitToMainMenu()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        SoloGameMode gameMode = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
+        gameMode?.GetComponent<Animator>()?.SetTrigger(gameMode.ExiteSoloTrigger);
     }
 
+    //todo: change it
     public void RestartAGame()
     {
         Time.timeScale = 1;

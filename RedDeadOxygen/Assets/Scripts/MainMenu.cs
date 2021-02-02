@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using AgToolkit.Core.GameModes;
 
 public class MainMenu : MonoBehaviour
 {
@@ -18,16 +19,11 @@ public class MainMenu : MonoBehaviour
         m_Play.Select();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void StartGame()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("GameMap", LoadSceneMode.Single);
+        MainMenuGameMode gameMode = GameManager.Instance.GetCurrentGameMode<MainMenuGameMode>();
+        gameMode?.GetComponent<Animator>()?.SetTrigger(gameMode.SoloTrigger);
     }
 
     public void GoToInstructions(bool value)
