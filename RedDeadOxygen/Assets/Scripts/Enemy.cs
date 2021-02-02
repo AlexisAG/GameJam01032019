@@ -45,8 +45,8 @@ public class Enemy : MonoBehaviour
         {
             m_colider = other;
             m_isMoving = false;
-            GetComponent<Animator>().SetBool("isGonaExplose", true);
-            GameObject.Find("SlimeSE").GetComponent<AudioSource>().Play();
+            GetComponent<Animator>()?.SetBool("isGonaExplose", true);
+            RegisterManager.Instance.GetGameObjectInstance("SlimeSE")?.GetComponent<AudioSource>()?.Play();
         }
         else if(other.gameObject.GetComponent<Mine>() != null)
         {
@@ -55,15 +55,15 @@ public class Enemy : MonoBehaviour
             GetComponent<Animator>().SetBool("isGonaExplose", true);
             other.GetComponent<Mine>().MakeExplosionEffect();
             Destroy(other.gameObject);
-            GameObject.Find("MineSE").GetComponent<AudioSource>().Play();
+            RegisterManager.Instance.GetGameObjectInstance("MineSE")?.GetComponent<AudioSource>()?.Play();
 
         }
     }
 
     public void ExplosionFinish()
     {
-        if(m_colider)
-            m_colider.gameObject.GetComponent<Base>().TakeOfLifeTime(3.0f);
+        if(m_colider != null)
+            m_colider.gameObject.GetComponent<Base>()?.TakeOfLifeTime(3.0f);
 
         Destroy(this.gameObject);
     }

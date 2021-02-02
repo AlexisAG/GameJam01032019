@@ -43,7 +43,7 @@ public class SpeedBoost : Powerup
             m_picker = other.gameObject;
             m_picker.GetComponent<Player>().m_powerUpCooldown = true;
             IsPick();
-            GameObject.Find("SpeedBoostSE").GetComponent<AudioSource>().Play();
+            RegisterManager.Instance.GetGameObjectInstance("SpeedBoostSE")?.GetComponent<AudioSource>()?.Play();
             GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
 
         }
