@@ -5,8 +5,6 @@ using UnityEngine;
 public class Ressource : MonoBehaviour, Pickup
 {
     public bool m_isUsed;
-
-
     private Map m_map;
     private Vector2Int m_position;
     /* INTERFACE FUNCTIONS */
@@ -37,7 +35,7 @@ public class Ressource : MonoBehaviour, Pickup
     /* CLASS FUNCTION */
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         m_isUsed = false;
         m_map = GameObject.Find("Map_Plane").GetComponent<Map>();
@@ -46,22 +44,18 @@ public class Ressource : MonoBehaviour, Pickup
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void RecreateRessource()
     {
+        if (m_map == null) return;
+
         Respawn();
         m_map.RemoveGameObjectOnTheGrid(-m_position.x, m_position.y, Map.TypeObject.e_Ressource);
     }
 
     public void PickupFinish()
     {
-        gameObject.GetComponent<Animator>().enabled = false;
-        gameObject.GetComponent<Animator>().transform.localScale = new Vector3(0, 0, 0);
+        GetComponent<Animator>().enabled = false;
+        transform.localScale = new Vector3(0, 0, 0);
     }
 
 }

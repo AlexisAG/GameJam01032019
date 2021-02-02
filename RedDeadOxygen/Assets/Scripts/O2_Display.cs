@@ -34,19 +34,15 @@ public class O2_Display : MonoBehaviour
         int l_Base1Life = 0, l_Base2Life = 0;
 
         if (b1)
-            l_Base1Life = (int)Mathf.Clamp(b1.GetCurrentLife(),0,1000000);
+            l_Base1Life = Mathf.FloorToInt(b1.GetCurrentLife());
         if(b2)
-            l_Base2Life = (int)Mathf.Clamp(b2.GetCurrentLife(), 0, 1000000);
-
-
-        baseP1.text = "Vie restante : " + l_Base1Life.ToString()+" %";
-        baseP2.text = "Vie restante : " + l_Base2Life.ToString()+" %";
+            l_Base2Life = Mathf.FloorToInt(b2.GetCurrentLife());
 
         //Update UI values
-        o2Text_P1.text = "Oxygen " + o2_P1.ToString() + "/5";
-        o2Text_P2.text = "Oxygen " + o2_P2.ToString() + "/5";
-
-
+        baseP1.text = $"Vie restante : {l_Base1Life}%";
+        baseP2.text = $"Vie restante : {l_Base2Life}%";
+        o2Text_P1.text = $"Oxygen {o2_P1}/5";
+        o2Text_P2.text = $"Oxygen {o2_P2}/5";
         mineP1.text = mine_P1;
         mineP2.text = mine_P2;
     }
