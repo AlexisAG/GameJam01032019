@@ -1,55 +1,78 @@
-﻿using System.Collections;
+﻿using AgToolkit.Core.Pool;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Map : MonoBehaviour
 {
-    public enum TypeObject
-    {
-        e_None,
-        e_Mine,
-        e_Ressource,
-        e_PowerUp
-    }
-    public GameObject BasePrefab;
-    public GameObject MinePrefab;
-    public GameObject RessourcePrefab;
-    public GameObject PlayerPrefab;
-    public GameObject EnemyPrefab;
-    public GameObject LurePrefab;
-    public GameObject SlowPrefab;
-    public GameObject SpeedBoostPrefab;
-    public GameObject ShieldBreakPrefab;
-    public int NbRessource = 10;
+    [SerializeField]
+    [FormerlySerializedAs("BasePrefab")]
+    private GameObject _basePrefab;
+    [SerializeField]
+    [FormerlySerializedAs("MinePrefab")]
+    private GameObject _minePrefab;
+    [SerializeField]
+    [FormerlySerializedAs("RessourcePrefab")]
+    private GameObject _ressourcePrefab;
+    [SerializeField]
+    [FormerlySerializedAs("PlayerPrefab")]
+    private GameObject _playerPrefab;
+    [SerializeField]
+    [FormerlySerializedAs("EnemyPrefab")]
+    private GameObject _enemyPrefab;
+    [SerializeField]
+    [FormerlySerializedAs("LurePrefab")]
+    private GameObject _lurePrefab;
+    [SerializeField]
+    [FormerlySerializedAs("SlowPrefab")]
+    private GameObject _slowPowerPrefab;
+    [SerializeField]
+    [FormerlySerializedAs("SpeedBoostPrefab")]
+    private GameObject _boostPowerPrefab;
+    [SerializeField]
+    [FormerlySerializedAs("ShieldBreakPrefab")]
+    private GameObject _shieldBreakPowerPrefab;
+    [SerializeField]
+    private int _maxRessource = 10;
     public float StartEnemySpawnFrequency = 10; // Time in seconds between two spawns
     public float TimeOfFirstSpawnEnemy = 5; // Time in seconds when spawn the first enemy
     public float PowerUpSpawnFrequency = 10; //Time in seconds between powerup spawns
     public float PowerUpDeletionTime = 5; //Time to get the powerups before they disappear
 
-    private float m_powerupSpawnTimer;
-    private float m_powerupDeleteTimer;
+
     private List<GameObject> m_bases = new List<GameObject>();
     private List<GameObject> m_mines = new List<GameObject>();
     private List<GameObject> m_ressources = new List<GameObject>();
     private List<GameObject> m_powerups = new List<GameObject>();
     private GameObject m_player1, m_player2;
-    private GameObject[,] m_grid;
-    private int m_indexGridX, m_indexGridZ;
-    private float m_nextTimeEnemySpawn;
+    private GameObject[,] _grid;
+    private Vector2Int _gridSize = Vector2Int.zero;
     private int m_nbPlayers;
+    private float m_nextTimeEnemySpawn;
+    private float m_powerupSpawnTimer;
+    private float m_powerupDeleteTimer;
     private float m_enemySpawnFrequency;
 
-    // Start is called before the first frame update
-    void Start()
+    public enum TypeObject
     {
+        e_Base,
+        e_Mine,
+        e_Ressource,
+        e_PowerUp
+    }
 
-        m_grid = new GameObject[(int)GetComponent<Renderer>().bounds.size.x, (int)GetComponent<Renderer>().bounds.size.z]; // init the capacity with scale of plane
+    // Use Start instead of Awake for IEnumerator
+    private IEnumerator Start()
+    {
+        // Init pool
+        yield return PoolManager.Instance.CreatePool(new PoolData(_ressourcePrefab.name, _ressourcePrefab, _maxRessource));
 
-        m_indexGridX = m_grid.Length / (int)GetComponent<Renderer>().bounds.size.x;
-        m_indexGridZ = m_grid.Length / (int)GetComponent<Renderer>().bounds.size.z;
-
-        
-        m_nbPlayers = 2;
+        // Init grid size from plane renderer
+        Vector3 planeSize = GetComponent<Renderer>()?.bounds.size ?? Vector3.zero;
+        _gridSize = new Vector2Int((int)planeSize.x, (int)planeSize.z);
+        _grid = new GameObject[_gridSize.x, _gridSize.y];
+    
         m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency,1,300);
         m_nextTimeEnemySpawn = Time.fixedTime + TimeOfFirstSpawnEnemy;
 
@@ -65,9 +88,6 @@ public class Map : MonoBehaviour
     {
         CheckSpawnEnemys();
 
-        if (m_ressources.Count < NbRessource)
-            SpawnARessource();
-
         //powerUps Timer
         m_powerupSpawnTimer -= Time.deltaTime;
         if (m_powerupSpawnTimer <= 0)
@@ -79,6 +99,27 @@ public class Map : MonoBehaviour
         CheckIfDeletePowerups();
     }
 
+
+    // Create all the ressources of the map
+    private void InitRessources() 
+    {
+        for (int i = 0; i < _maxRessource; i++) 
+        {
+            SpawnARessource();
+        }
+    }
+
+    private void SpawnARessource() 
+    {
+        Vector2Int pos = GetRandomFreePosition();
+        GameObject ressource = PoolManager.Instance.GetPooledObject(_ressourcePrefab.name);
+        ressource.transform.SetParent(transform);
+        ressource.transform.localPosition = new Vector3(-pos.x, 0f, pos.y);
+        ressource.transform.rotation = Quaternion.identity;
+        AddGameObjectOnTheGrid(pos.x, pos.y, ressource, TypeObject.e_Ressource);
+    }
+
+
     void InitBase()
     {
 
@@ -87,59 +128,28 @@ public class Map : MonoBehaviour
         /* Instantiate Base 1 & Base 2 */
 
         // base 1
-        GameObject l_base1 = Instantiate<GameObject>(BasePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform);
+        GameObject l_base1 = Instantiate<GameObject>(_basePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform);
         //l_base1.tag = "Player 0";
         m_bases.Add(l_base1);
-        AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_None);
+        AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_Base);
         
-        
-        
-
         //player 1
-        m_player1 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-3, PlayerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
+        m_player1 = Instantiate<GameObject>(_playerPrefab, new Vector3(-3, _playerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
         m_player1.GetComponent<Player>().m_joystickNumber = 0;
         m_player1.tag = "Player 0";
         m_player1.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.magenta;
 
         //base 2
-        m_bases.Add(Instantiate<GameObject>(BasePrefab, new Vector3(-(m_indexGridX - 3), 0, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform));
-        AddGameObjectOnTheGrid((m_indexGridX - 3), (m_indexGridZ - 3), m_bases[1], TypeObject.e_None);
+        m_bases.Add(Instantiate<GameObject>(_basePrefab, new Vector3(-(_gridSize.x - 3), 0, (_gridSize.y - 3)), Quaternion.identity, gameObject.transform));
+        AddGameObjectOnTheGrid((_gridSize.x - 3), (_gridSize.y - 3), m_bases[1], TypeObject.e_Base);
         //m_bases[1].tag = "Player 1";
 
         //player 2
-        m_player2 = Instantiate<GameObject>(PlayerPrefab, new Vector3(-(m_indexGridX - 3), PlayerPrefab.transform.localScale.y / 2, (m_indexGridZ - 3)), Quaternion.identity, gameObject.transform);
+        m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(_gridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (_gridSize.y - 3)), Quaternion.identity, gameObject.transform);
         m_player2.GetComponent<Player>().m_joystickNumber = 1;
         m_player2.tag = "Player 1";
         m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);
 
-    }
-
-    // Create all the ressources of the map
-    void InitRessources()
-    {
-
-        m_ressources = new List<GameObject>(NbRessource); // init the capacity
-
-
-        for (int i = 0; i < NbRessource; i++)
-        {
-
-            Vector2Int pos = GetRandomFreePosition();
-
-            // add the ressource to the List m_ressources
-            GameObject ressource = Instantiate<GameObject>(RessourcePrefab, new Vector3(-pos.x, 0f, pos.y), Quaternion.identity, gameObject.transform);
-            AddGameObjectOnTheGrid(pos.x, pos.y, ressource, TypeObject.e_Ressource);
-        }
-
-    }
-
-    void SpawnARessource()
-    {
-        Vector2Int pos = GetRandomFreePosition();
-
-        // add the ressource to the List m_ressources
-        GameObject ressource = Instantiate<GameObject>(RessourcePrefab, new Vector3(-pos.x, 0f, pos.y), Quaternion.identity, gameObject.transform);
-        AddGameObjectOnTheGrid(pos.x, pos.y, ressource, TypeObject.e_Ressource);
     }
 
     void SpawnPowerups()
@@ -152,15 +162,15 @@ public class Map : MonoBehaviour
         bool l_lurePos = (Random.value > 0.5f);
         if (l_lurePos)
         {
-            GameObject lurePowerUp = Instantiate<GameObject>(LurePrefab, l_leftSpawnPosition,Quaternion.identity, transform);
-            AddGameObjectOnTheGrid((int)-l_leftSpawnPosition.x, m_indexGridZ / 2, lurePowerUp, TypeObject.e_PowerUp);
+            GameObject lurePowerUp = Instantiate<GameObject>(_lurePrefab, l_leftSpawnPosition,Quaternion.identity, transform);
+            AddGameObjectOnTheGrid((int)-l_leftSpawnPosition.x, _gridSize.y / 2, lurePowerUp, TypeObject.e_PowerUp);
             l_remainingPosition = l_rightSpawnPosition;
             l_remainingIndex = (int)-l_remainingPosition.x;
         }
         else
         {
-            GameObject lurePowerUp = Instantiate<GameObject>(LurePrefab, l_rightSpawnPosition, Quaternion.identity, transform);
-            AddGameObjectOnTheGrid((int)-l_rightSpawnPosition.x, m_indexGridZ / 2, lurePowerUp, TypeObject.e_PowerUp);
+            GameObject lurePowerUp = Instantiate<GameObject>(_lurePrefab, l_rightSpawnPosition, Quaternion.identity, transform);
+            AddGameObjectOnTheGrid((int)-l_rightSpawnPosition.x, _gridSize.y / 2, lurePowerUp, TypeObject.e_PowerUp);
             l_remainingPosition = l_leftSpawnPosition;
             l_remainingIndex = (int)-l_remainingPosition.x;
         }
@@ -170,18 +180,18 @@ public class Map : MonoBehaviour
         switch (l_PowerUpType)
         {
             case 0:
-                GameObject slowPowerUp = Instantiate<GameObject>(SlowPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, slowPowerUp, TypeObject.e_PowerUp);
+                GameObject slowPowerUp = Instantiate<GameObject>(_slowPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
+                AddGameObjectOnTheGrid(l_remainingIndex, _gridSize.y / 2, slowPowerUp, TypeObject.e_PowerUp);
                 break;
 
             case 1:
-                GameObject speedBoostPowerUp = Instantiate<GameObject>(SpeedBoostPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, speedBoostPowerUp, TypeObject.e_PowerUp);
+                GameObject speedBoostPowerUp = Instantiate<GameObject>(_boostPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
+                AddGameObjectOnTheGrid(l_remainingIndex, _gridSize.y / 2, speedBoostPowerUp, TypeObject.e_PowerUp);
                 break;
 
             case 2:
-                GameObject shieldBreakPowerUp = Instantiate<GameObject>(ShieldBreakPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, m_indexGridZ / 2, shieldBreakPowerUp, TypeObject.e_PowerUp);
+                GameObject shieldBreakPowerUp = Instantiate<GameObject>(_shieldBreakPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
+                AddGameObjectOnTheGrid(l_remainingIndex, _gridSize.y / 2, shieldBreakPowerUp, TypeObject.e_PowerUp);
                 break;
 
             default:
@@ -195,8 +205,8 @@ public class Map : MonoBehaviour
         m_powerupDeleteTimer -= Time.deltaTime;
         if (m_powerupDeleteTimer <= 0)
         {
-            RemoveGameObjectOnTheGrid(11, m_indexGridZ / 2, TypeObject.e_PowerUp);
-            RemoveGameObjectOnTheGrid(9, m_indexGridZ / 2, TypeObject.e_PowerUp);
+            RemoveGameObjectOnTheGrid(11, _gridSize.x / 2, TypeObject.e_PowerUp);
+            RemoveGameObjectOnTheGrid(9, _gridSize.y / 2, TypeObject.e_PowerUp);
 
             m_powerupDeleteTimer = 2*PowerUpSpawnFrequency;
             m_powerupSpawnTimer = PowerUpSpawnFrequency;
@@ -219,27 +229,26 @@ public class Map : MonoBehaviour
 
     private void SpawnEnemy()
     {
-
         switch(m_nbPlayers)
         {
             case 2:
-                GameObject FirstPlayerEnemy = (GameObject)Instantiate(EnemyPrefab, new Vector3(-3, 0, 17), Quaternion.identity);
+                GameObject FirstPlayerEnemy = (GameObject)Instantiate(_enemyPrefab, new Vector3(-3, 0, 17), Quaternion.identity);
                 FirstPlayerEnemy.transform.Rotate(new Vector3(180, 0, 180));
 
-                GameObject SecondPlayerEnemy = (GameObject)Instantiate(EnemyPrefab, new Vector3(-17, 0, 3), Quaternion.identity);
+                GameObject SecondPlayerEnemy = (GameObject)Instantiate(_enemyPrefab, new Vector3(-17, 0, 3), Quaternion.identity);
                 break;
         }
     }
 
     // Public method for add an object into the grid
-    public void AddGameObjectOnTheGrid(int x, int z, GameObject obj, TypeObject type)
+    public void AddGameObjectOnTheGrid(int x, int z, GameObject obj, TypeObject type, bool replace = true)
     {
-
-        if (m_grid[x, z] != null)
+        if (_grid[x, z] != null && !replace) return;
+        else if (_grid[x, z] != null && replace)
         {
-            Debug.Log(m_grid[x, z].name);
+            Debug.LogWarning(_grid[x, z].name);
 
-            switch (m_grid[x, z].name)
+            switch (_grid[x, z].name)
             {
                 case "Ressource(Clone)":
                     RemoveGameObjectOnTheGrid(x, z, TypeObject.e_Ressource);
@@ -254,62 +263,37 @@ public class Map : MonoBehaviour
                     break;
             }
         }
-        m_grid[x, z] = obj;
 
-        switch (type)
-        {
-            case TypeObject.e_Mine:
-                m_mines.Add(obj);
-                break;
-            case TypeObject.e_Ressource:
-                m_ressources.Add(obj);
-                break;
-            default:
-                break;
-        }
-
-
+        _grid[x, z] = obj;
     }
 
-    // public method for destroy an object from the grid
     public void RemoveGameObjectOnTheGrid(int x, int z, TypeObject type)
     {
-
-        switch (type)
-        {
-            case TypeObject.e_Mine:
-                m_mines.Remove(m_grid[x, z]);
-                break;
-            case TypeObject.e_Ressource:
-                m_ressources.Remove(m_grid[x, z]);
-                break;
-            default:
-                break;
-        }
-
-        Destroy(m_grid[x, z]);
+        _grid[x, z].SetActive(false); // send pooled object to his pool
+        _grid[x, z] = null;
     }
 
+    //todo: DAFUQ?????
     public int[] GetGridSize()
     {
-        return new int[2] { m_indexGridX, m_indexGridZ };
+        return new int[2] { _gridSize.x, _gridSize.y }; 
     }
 
+    //todo: probably a better way for that
     public Vector2Int GetRandomFreePosition()
     {
         int x = 0;
-        int z = 0;
+        int y = 0;
 
         // random position on the grid
         do
         {
+            x = Random.Range(0, _gridSize.x);
+            y = Random.Range(0, _gridSize.y);
 
-            x = Random.Range(0, m_indexGridX);
-            z = Random.Range(0, m_indexGridZ);
+        } while (_grid[x, y] != null);
 
-        } while (m_grid[x, z] != null);
-
-        return new Vector2Int(x,z);
+        return new Vector2Int(x,y);
     }
 
 }

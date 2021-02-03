@@ -27,7 +27,7 @@ public class Ressource : MonoBehaviour, Pickup
 
         m_map.AddGameObjectOnTheGrid(
             pos.x, pos.y,
-            Instantiate<GameObject>(m_map.RessourcePrefab, new Vector3(-pos.x, 0f, pos.y), Quaternion.identity, m_map.gameObject.transform),
+            Instantiate<GameObject>(/*m_map.RessourcePrefab*/ null, new Vector3(-pos.x, 0f, pos.y), Quaternion.identity, m_map.gameObject.transform),
             Map.TypeObject.e_Ressource
         );
     }
