@@ -83,7 +83,6 @@ public class Base : MonoBehaviour
 
     private void UpdatePosInRange()
     {
-        Map l_map = GameObject.Find("Map_Plane").GetComponent<Map>();
         List<Vector2>  l_CurrentPosInRangeOfDome = new List<Vector2>();
         for (int i=0; i<= GetComponent<MeshRenderer>().bounds.size.x;i++)
         {
@@ -103,10 +102,7 @@ public class Base : MonoBehaviour
             if (!m_PosInRangeOfDome.Contains(l_vec))
             {
                 m_PosInRangeOfDome.Add(l_vec);
-                if (l_map)
-                {
-                    l_map.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject(), Map.TypeObject.e_None);
-                }
+                MapManager.Instance.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject(), MapManager.TypeObject.e_None);
             }
         }
 
@@ -124,10 +120,7 @@ public class Base : MonoBehaviour
         foreach(Vector2 l_vec in l_PosToRemove)
         {
             m_PosInRangeOfDome.Remove(l_vec);
-            if (l_map)
-            {
-                l_map.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, Map.TypeObject.e_None);
-            }
+            MapManager.Instance.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, MapManager.TypeObject.e_None);
         }
     }
 

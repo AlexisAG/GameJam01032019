@@ -5,7 +5,6 @@ using UnityEngine;
 public class Ressource : MonoBehaviour, Pickup
 {
     public bool m_isUsed;
-    private Map m_map;
     private Vector2Int m_position;
     /* INTERFACE FUNCTIONS */
 
@@ -23,12 +22,12 @@ public class Ressource : MonoBehaviour, Pickup
 
     public void Respawn()
     {
-        Vector2Int pos = m_map.GetRandomFreePosition();
+        Vector2Int pos = MapManager.Instance.GetRandomFreePosition();
 
-        m_map.AddGameObjectOnTheGrid(
+        MapManager.Instance.AddGameObjectOnTheGrid(
             pos.x, pos.y,
-            Instantiate<GameObject>(/*m_map.RessourcePrefab*/ null, new Vector3(-pos.x, 0f, pos.y), Quaternion.identity, m_map.gameObject.transform),
-            Map.TypeObject.e_Ressource
+            Instantiate<GameObject>(/*m_map.RessourcePrefab*/ null, new Vector3(-pos.x, 0f, pos.y), Quaternion.identity, MapManager.Instance.gameObject.transform),
+            MapManager.TypeObject.e_Ressource
         );
     }
 
@@ -38,7 +37,6 @@ public class Ressource : MonoBehaviour, Pickup
     void Awake()
     {
         m_isUsed = false;
-        m_map = GameObject.Find("Map_Plane").GetComponent<Map>();
         m_position = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         gameObject.GetComponent<Animator>().SetBool("IsPickup", false);
 
@@ -46,10 +44,8 @@ public class Ressource : MonoBehaviour, Pickup
 
     public void RecreateRessource()
     {
-        if (m_map == null) return;
-
         Respawn();
-        m_map.RemoveGameObjectOnTheGrid(-m_position.x, m_position.y, Map.TypeObject.e_Ressource);
+        MapManager.Instance.RemoveGameObjectOnTheGrid(-m_position.x, m_position.y, MapManager.TypeObject.e_Ressource);
     }
 
     public void PickupFinish()

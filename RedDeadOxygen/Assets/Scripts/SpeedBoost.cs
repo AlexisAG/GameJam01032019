@@ -44,8 +44,7 @@ public class SpeedBoost : Powerup
             m_picker.GetComponent<Player>().m_powerUpCooldown = true;
             IsPick();
             RegisterManager.Instance.GetGameObjectInstance("SpeedBoostSE")?.GetComponent<AudioSource>()?.Play();
-            GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
-
+            MapManager.Instance.RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), MapManager.TypeObject.e_Ressource);
         }
     }
 }

@@ -25,13 +25,6 @@ public class Lure : Powerup
     void Start()
     {
         m_boxCollider = GetComponent<BoxCollider>();
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -41,7 +34,7 @@ public class Lure : Powerup
             IsPick();
             other.gameObject.GetComponent<Player>().m_powerUpCooldown = true;
             RegisterManager.Instance.GetGameObjectInstance("LureSE")?.GetComponent<AudioSource>()?.Play();
-            GameObject.Find("Map_Plane").GetComponent<Map>().RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), Map.TypeObject.e_Ressource);
+            MapManager.Instance.RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), MapManager.TypeObject.e_Ressource);
         }
     }
 }

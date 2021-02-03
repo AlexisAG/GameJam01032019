@@ -1,10 +1,11 @@
-﻿using AgToolkit.Core.Pool;
+﻿using AgToolkit.AgToolkit.Core.Singleton;
+using AgToolkit.Core.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Map : MonoBehaviour
+public class MapManager : Singleton<MapManager>
 {
     [SerializeField]
     [FormerlySerializedAs("BasePrefab")]
@@ -35,27 +36,30 @@ public class Map : MonoBehaviour
     private GameObject _shieldBreakPowerPrefab;
     [SerializeField]
     private int _maxRessource = 10;
-    public float StartEnemySpawnFrequency = 10; // Time in seconds between two spawns
-    public float TimeOfFirstSpawnEnemy = 5; // Time in seconds when spawn the first enemy
-    public float PowerUpSpawnFrequency = 10; //Time in seconds between powerup spawns
-    public float PowerUpDeletionTime = 5; //Time to get the powerups before they disappear
-
 
     private List<GameObject> m_bases = new List<GameObject>();
     private List<GameObject> m_mines = new List<GameObject>();
     private List<GameObject> m_ressources = new List<GameObject>();
     private List<GameObject> m_powerups = new List<GameObject>();
     private GameObject m_player1, m_player2;
-    private GameObject[,] _grid;
-    private Vector2Int _gridSize = Vector2Int.zero;
+    private GameObject[,] _grid = new GameObject[0,0];
     private int m_nbPlayers;
     private float m_nextTimeEnemySpawn;
     private float m_powerupSpawnTimer;
     private float m_powerupDeleteTimer;
     private float m_enemySpawnFrequency;
 
+    public float StartEnemySpawnFrequency = 10; // Time in seconds between two spawns
+    public float TimeOfFirstSpawnEnemy = 5; // Time in seconds when spawn the first enemy
+    public float PowerUpSpawnFrequency = 10; //Time in seconds between powerup spawns
+    public float PowerUpDeletionTime = 5; //Time to get the powerups before they disappear
+
+    public Vector2Int GridSize { get; private set; } = Vector2Int.zero;
+
+
     public enum TypeObject
     {
+        e_None,
         e_Base,
         e_Mine,
         e_Ressource,
@@ -70,8 +74,8 @@ public class Map : MonoBehaviour
 
         // Init grid size from plane renderer
         Vector3 planeSize = GetComponent<Renderer>()?.bounds.size ?? Vector3.zero;
-        _gridSize = new Vector2Int((int)planeSize.x, (int)planeSize.z);
-        _grid = new GameObject[_gridSize.x, _gridSize.y];
+        GridSize = new Vector2Int((int)planeSize.x, (int)planeSize.z);
+        _grid = new GameObject[GridSize.x, GridSize.y];
     
         m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency,1,300);
         m_nextTimeEnemySpawn = Time.fixedTime + TimeOfFirstSpawnEnemy;
@@ -140,12 +144,12 @@ public class Map : MonoBehaviour
         m_player1.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.magenta;
 
         //base 2
-        m_bases.Add(Instantiate<GameObject>(_basePrefab, new Vector3(-(_gridSize.x - 3), 0, (_gridSize.y - 3)), Quaternion.identity, gameObject.transform));
-        AddGameObjectOnTheGrid((_gridSize.x - 3), (_gridSize.y - 3), m_bases[1], TypeObject.e_Base);
+        m_bases.Add(Instantiate<GameObject>(_basePrefab, new Vector3(-(GridSize.x - 3), 0, (GridSize.y - 3)), Quaternion.identity, gameObject.transform));
+        AddGameObjectOnTheGrid((GridSize.x - 3), (GridSize.y - 3), m_bases[1], TypeObject.e_Base);
         //m_bases[1].tag = "Player 1";
 
         //player 2
-        m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(_gridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (_gridSize.y - 3)), Quaternion.identity, gameObject.transform);
+        m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(GridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (GridSize.y - 3)), Quaternion.identity, gameObject.transform);
         m_player2.GetComponent<Player>().m_joystickNumber = 1;
         m_player2.tag = "Player 1";
         m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);
@@ -163,14 +167,14 @@ public class Map : MonoBehaviour
         if (l_lurePos)
         {
             GameObject lurePowerUp = Instantiate<GameObject>(_lurePrefab, l_leftSpawnPosition,Quaternion.identity, transform);
-            AddGameObjectOnTheGrid((int)-l_leftSpawnPosition.x, _gridSize.y / 2, lurePowerUp, TypeObject.e_PowerUp);
+            AddGameObjectOnTheGrid((int)-l_leftSpawnPosition.x, GridSize.y / 2, lurePowerUp, TypeObject.e_PowerUp);
             l_remainingPosition = l_rightSpawnPosition;
             l_remainingIndex = (int)-l_remainingPosition.x;
         }
         else
         {
             GameObject lurePowerUp = Instantiate<GameObject>(_lurePrefab, l_rightSpawnPosition, Quaternion.identity, transform);
-            AddGameObjectOnTheGrid((int)-l_rightSpawnPosition.x, _gridSize.y / 2, lurePowerUp, TypeObject.e_PowerUp);
+            AddGameObjectOnTheGrid((int)-l_rightSpawnPosition.x, GridSize.y / 2, lurePowerUp, TypeObject.e_PowerUp);
             l_remainingPosition = l_leftSpawnPosition;
             l_remainingIndex = (int)-l_remainingPosition.x;
         }
@@ -181,17 +185,17 @@ public class Map : MonoBehaviour
         {
             case 0:
                 GameObject slowPowerUp = Instantiate<GameObject>(_slowPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, _gridSize.y / 2, slowPowerUp, TypeObject.e_PowerUp);
+                AddGameObjectOnTheGrid(l_remainingIndex, GridSize.y / 2, slowPowerUp, TypeObject.e_PowerUp);
                 break;
 
             case 1:
                 GameObject speedBoostPowerUp = Instantiate<GameObject>(_boostPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, _gridSize.y / 2, speedBoostPowerUp, TypeObject.e_PowerUp);
+                AddGameObjectOnTheGrid(l_remainingIndex, GridSize.y / 2, speedBoostPowerUp, TypeObject.e_PowerUp);
                 break;
 
             case 2:
                 GameObject shieldBreakPowerUp = Instantiate<GameObject>(_shieldBreakPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, _gridSize.y / 2, shieldBreakPowerUp, TypeObject.e_PowerUp);
+                AddGameObjectOnTheGrid(l_remainingIndex, GridSize.y / 2, shieldBreakPowerUp, TypeObject.e_PowerUp);
                 break;
 
             default:
@@ -205,8 +209,8 @@ public class Map : MonoBehaviour
         m_powerupDeleteTimer -= Time.deltaTime;
         if (m_powerupDeleteTimer <= 0)
         {
-            RemoveGameObjectOnTheGrid(11, _gridSize.x / 2, TypeObject.e_PowerUp);
-            RemoveGameObjectOnTheGrid(9, _gridSize.y / 2, TypeObject.e_PowerUp);
+            RemoveGameObjectOnTheGrid(11, GridSize.x / 2, TypeObject.e_PowerUp);
+            RemoveGameObjectOnTheGrid(9, GridSize.y / 2, TypeObject.e_PowerUp);
 
             m_powerupDeleteTimer = 2*PowerUpSpawnFrequency;
             m_powerupSpawnTimer = PowerUpSpawnFrequency;
@@ -243,7 +247,8 @@ public class Map : MonoBehaviour
     // Public method for add an object into the grid
     public void AddGameObjectOnTheGrid(int x, int z, GameObject obj, TypeObject type, bool replace = true)
     {
-        if (_grid[x, z] != null && !replace) return;
+        if (_grid.Length <= 0) return;
+        else if (_grid[x, z] != null && !replace) return;
         else if (_grid[x, z] != null && replace)
         {
             Debug.LogWarning(_grid[x, z].name);
@@ -269,14 +274,10 @@ public class Map : MonoBehaviour
 
     public void RemoveGameObjectOnTheGrid(int x, int z, TypeObject type)
     {
+        if (_grid.Length <= 0 || _grid[x, z] == null) return;
+
         _grid[x, z].SetActive(false); // send pooled object to his pool
         _grid[x, z] = null;
-    }
-
-    //todo: DAFUQ?????
-    public int[] GetGridSize()
-    {
-        return new int[2] { _gridSize.x, _gridSize.y }; 
     }
 
     //todo: probably a better way for that
@@ -288,8 +289,8 @@ public class Map : MonoBehaviour
         // random position on the grid
         do
         {
-            x = Random.Range(0, _gridSize.x);
-            y = Random.Range(0, _gridSize.y);
+            x = Random.Range(0, GridSize.x);
+            y = Random.Range(0, GridSize.y);
 
         } while (_grid[x, y] != null);
 

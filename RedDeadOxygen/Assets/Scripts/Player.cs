@@ -15,7 +15,6 @@ public class Player : MonoBehaviour {
     public ParticleSystem SpeedEffect;
 
     private Rigidbody m_rb;
-    private Map m_map;
     private float m_coolDownMine;
     private int m_resourcesCount;
     private bool m_isCarryingMine;
@@ -31,7 +30,6 @@ public class Player : MonoBehaviour {
     {
         m_AverageSpeed = 5;
         m_rb = GetComponent<Rigidbody>();
-        m_map = GameObject.Find("Map_Plane")?.GetComponent<Map>();
         m_isCarryingMine = true;
         m_resourcesCount = 0;
         m_coolDownMine = 0f;
@@ -198,13 +196,16 @@ public class Player : MonoBehaviour {
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
 
-        //Check if player is in bounds
+        //Check if player is in bounds //todo: Maybe use collider ??
         if (l_newPos.x >= -transform.lossyScale.x)
             l_newPos.x = -transform.lossyScale.x;
-        if (l_newPos.x <= -((float)m_map.GetGridSize()[0] - transform.lossyScale.x))
-            l_newPos.x = -((float)m_map.GetGridSize()[0] - transform.lossyScale.x);
-        if (l_newPos.z >= (float)m_map.GetGridSize()[1] - transform.lossyScale.z)
-            l_newPos.z = (float)m_map.GetGridSize()[1] - transform.lossyScale.z;
+
+        if (l_newPos.x <= -(MapManager.Instance.GridSize.x - transform.lossyScale.x))
+            l_newPos.x = -(MapManager.Instance.GridSize.x - transform.lossyScale.x);
+
+        if (l_newPos.z >= MapManager.Instance.GridSize.y - transform.lossyScale.z)
+            l_newPos.z = MapManager.Instance.GridSize.y - transform.lossyScale.z;
+
         if (l_newPos.z <= transform.lossyScale.z)
             l_newPos.z = transform.lossyScale.z;
 
@@ -235,8 +236,8 @@ public class Player : MonoBehaviour {
             if (m_mine != null)
                 Destroy(m_mine);
 
-            m_mine = Instantiate<GameObject>(MinePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), m_map.transform);
-            m_map.AddGameObjectOnTheGrid(-(int) Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z), m_mine, Map.TypeObject.e_Mine);
+            m_mine = Instantiate<GameObject>(MinePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), MapManager.Instance.transform);
+            MapManager.Instance.AddGameObjectOnTheGrid(-(int) Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z), m_mine, MapManager.TypeObject.e_Mine);
             m_mine.GetComponent<Mine>().m_PlayerTag = tag;
             m_isCarryingMine = false;
         }
