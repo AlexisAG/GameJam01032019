@@ -1,4 +1,5 @@
 ﻿using AgToolkit.Core.GameModes;
+using AgToolkit.Core.Loader;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,6 @@ public class EndGameMenu : MonoBehaviour
     public void RestartAGame()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("GameMap", LoadSceneMode.Single);
+        SceneLoaderManager.Instance.Load(GameManager.Instance.CurrentSceneContent);
     }
 }
