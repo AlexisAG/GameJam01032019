@@ -73,7 +73,7 @@ public class MapManager : Singleton<MapManager>
         yield return PoolManager.Instance.CreatePool(new PoolData(_ressourcePrefab.name, _ressourcePrefab, _maxRessource));
 
         // Init grid size from plane renderer
-        Vector3 planeSize = GetComponent<Renderer>()?.bounds.size ?? Vector3.zero;
+        Vector3 planeSize = GetComponent<Renderer>()?.bounds.size/2 ?? Vector3.zero;
         GridSize = new Vector2Int((int)planeSize.x, (int)planeSize.z);
         _grid = new GameObject[GridSize.x, GridSize.y];
     
@@ -115,12 +115,9 @@ public class MapManager : Singleton<MapManager>
 
     private void SpawnARessource() 
     {
-        Vector2Int pos = GetRandomFreePosition();
         GameObject ressource = PoolManager.Instance.GetPooledObject(_ressourcePrefab.name);
-        ressource.transform.SetParent(transform);
-        ressource.transform.localPosition = new Vector3(-pos.x, 0f, pos.y);
-        ressource.transform.rotation = Quaternion.identity;
-        AddGameObjectOnTheGrid(pos.x, pos.y, ressource, TypeObject.e_Ressource);
+        ressource.SetActive(true);
+        ressource.GetComponent<Ressource>()?.Respawn();
     }
 
 
@@ -244,23 +241,61 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
-    // Public method for add an object into the grid
-    public void AddGameObjectOnTheGrid(int x, int z, GameObject obj, TypeObject type, bool replace = true)
+    private void ConvertUnityPositionToCordinate(ref int x, ref int y) 
     {
-        if (_grid.Length <= 0) return;
-        else if (_grid[x, z] != null && !replace) return;
-        else if (_grid[x, z] != null && replace)
-        {
-            Debug.LogWarning(_grid[x, z].name);
+        //adjust Unity Local Position with grid position
+        if (x < 0) {
+            x = -x;
+        }
+        else if (x > 0) {
+            x *= 2;
+        }
 
-            switch (_grid[x, z].name)
+        if (y < 0) {
+            y = -y;
+        }
+        else if (y > 0) {
+            y *= 2;
+        }
+    }
+
+    private void ConvertCoordinateToUnityPosition(ref int x, ref int y) 
+    {
+        //adjust coordination with Unity Local Position
+        if (x < GridSize.x / 2) {
+            x = -x;
+        }
+        else if (x > GridSize.x / 2) {
+            x /= 2;
+        }
+
+        if (y < GridSize.y / 2) {
+            y = -y;
+        }
+        else if (y > GridSize.y / 2) {
+            y /= 2;
+        }
+    }
+
+    // Public method for add an object into the grid
+    public void AddGameObjectOnTheGrid(int x, int y, GameObject obj, TypeObject type, bool replace = true)
+    {
+        ConvertUnityPositionToCordinate(ref x, ref y);
+
+        if (_grid.Length <= 0) return;
+        else if (_grid[x, y] != null && !replace) return;
+        else if (_grid[x, y] != null && replace)
+        {
+            Debug.LogWarning(_grid[x, y].name);
+
+            switch (_grid[x, y].name)
             {
                 case "Ressource(Clone)":
-                    RemoveGameObjectOnTheGrid(x, z, TypeObject.e_Ressource);
+                    RemoveGameObjectOnTheGrid(x, y, TypeObject.e_Ressource);
                     break;
 
                 case "Mine(Clone)":
-                    RemoveGameObjectOnTheGrid(x, z, TypeObject.e_Mine);
+                    RemoveGameObjectOnTheGrid(x, y, TypeObject.e_Mine);
                     break;
 
                 default:
@@ -269,14 +304,15 @@ public class MapManager : Singleton<MapManager>
             }
         }
 
-        _grid[x, z] = obj;
+        _grid[x, y] = obj;
     }
 
     public void RemoveGameObjectOnTheGrid(int x, int z, TypeObject type)
     {
+        ConvertUnityPositionToCordinate(ref x, ref z);
+
         if (_grid.Length <= 0 || _grid[x, z] == null) return;
 
-        _grid[x, z].SetActive(false); // send pooled object to his pool
         _grid[x, z] = null;
     }
 
@@ -293,6 +329,8 @@ public class MapManager : Singleton<MapManager>
             y = Random.Range(0, GridSize.y);
 
         } while (_grid[x, y] != null);
+
+        ConvertCoordinateToUnityPosition(ref x, ref y);
 
         return new Vector2Int(x,y);
     }
