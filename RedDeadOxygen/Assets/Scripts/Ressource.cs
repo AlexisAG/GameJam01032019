@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Ressource : MonoBehaviour, Pickup
 {
-    public bool m_isUsed;
-    private Vector2Int m_position;
-    /* INTERFACE FUNCTIONS */
+    private Vector2Int _position;
+    public bool IsUsed { get; private set; }
 
+    #region PickupInterface
     public void Activate()
     {
         throw new System.NotImplementedException();
@@ -15,37 +15,34 @@ public class Ressource : MonoBehaviour, Pickup
 
     public void IsPick()
     {
-        m_isUsed = true;
-        Debug.Log("Ressource is pick");
+        IsUsed = true;
         gameObject.GetComponent<Animator>().SetBool("IsPickup", true);
     }
+    #endregion
 
     public void Respawn()
     {
-        Vector2Int pos = MapManager.Instance.GetRandomFreePosition();
+        IsUsed = false;
+        _position = MapManager.Instance.GetRandomFreePosition();
 
-        MapManager.Instance.AddGameObjectOnTheGrid(
-            pos.x, pos.y,
-            Instantiate<GameObject>(/*m_map.RessourcePrefab*/ null, new Vector3(-pos.x, 0f, pos.y), Quaternion.identity, MapManager.Instance.gameObject.transform),
-            MapManager.TypeObject.e_Ressource
-        );
+        transform.SetParent(MapManager.Instance.transform);
+        transform.localPosition = new Vector3(-_position.x, 0f, _position.y);
+        transform.rotation = Quaternion.identity;
+        MapManager.Instance.AddGameObjectOnTheGrid(_position.x, _position.y, gameObject, MapManager.TypeObject.e_Ressource);
     }
 
-    /* CLASS FUNCTION */
 
-    // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
-        m_isUsed = false;
-        m_position = new Vector2Int((int)transform.position.x, (int)transform.position.z);
-        gameObject.GetComponent<Animator>().SetBool("IsPickup", false);
+        IsUsed = false;
+        gameObject.GetComponent<Animator>()?.SetBool("IsPickup", false);
 
     }
 
     public void RecreateRessource()
     {
+        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y, MapManager.TypeObject.e_Ressource);
         Respawn();
-        MapManager.Instance.RemoveGameObjectOnTheGrid(-m_position.x, m_position.y, MapManager.TypeObject.e_Ressource);
     }
 
     public void PickupFinish()

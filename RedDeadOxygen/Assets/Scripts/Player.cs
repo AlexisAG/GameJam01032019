@@ -48,7 +48,7 @@ public class Player : MonoBehaviour {
     {
         if (other.GetComponent<Ressource>() != null)
         {
-            if (!other.GetComponent<Ressource>().m_isUsed && m_resourcesCount < 5)
+            if (!other.GetComponent<Ressource>().IsUsed && m_resourcesCount < 5)
             {
                 m_resourcesCount++;
                 other.GetComponent<Ressource>().IsPick();

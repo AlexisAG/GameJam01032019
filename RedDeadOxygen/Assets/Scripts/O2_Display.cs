@@ -12,14 +12,12 @@ public class O2_Display : MonoBehaviour
     public Text o2Text_P1, o2Text_P2, mineP1, mineP2, baseP1, baseP2;
     private Player[] m_players;
 
-    private void Awake() {
-        
-    }
-
     private void Update() {
         
         //"catch" all spawned players
-        m_players = GameObject.Find("Map_Plane")?.GetComponentsInChildren<Player>();
+        m_players = MapManager.Instance.GetComponentsInChildren<Player>();
+
+        if (m_players == null || m_players.Length <= 0) return;
 
         //link the resources number of each player to respective variable
         o2_P1 = m_players.Where<Player>(p => p.tag == "Player 0").ToArray<Player>()[0].GetNbOfRessources();
