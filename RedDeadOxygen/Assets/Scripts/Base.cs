@@ -102,7 +102,7 @@ public class Base : MonoBehaviour
             if (!m_PosInRangeOfDome.Contains(l_vec))
             {
                 m_PosInRangeOfDome.Add(l_vec);
-                MapManager.Instance.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject(), MapManager.TypeObject.e_None);
+                MapManager.Instance.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject(), MapManager.TypeObject.e_Base);
             }
         }
 
@@ -120,7 +120,7 @@ public class Base : MonoBehaviour
         foreach(Vector2 l_vec in l_PosToRemove)
         {
             m_PosInRangeOfDome.Remove(l_vec);
-            MapManager.Instance.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, MapManager.TypeObject.e_None);
+            MapManager.Instance.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, MapManager.TypeObject.e_Base);
         }
     }
 

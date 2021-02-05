@@ -23,12 +23,18 @@ public class Ressource : MonoBehaviour, Pickup
     public void Respawn()
     {
         IsUsed = false;
-        _position = MapManager.Instance.GetRandomFreePosition();
 
+        _position = MapManager.Instance.GetRandomFreePosition();
         transform.SetParent(MapManager.Instance.transform);
-        transform.localPosition = new Vector3(-_position.x, 0f, _position.y);
+        transform.localPosition = new Vector3(_position.x, 0f, _position.y);
         transform.rotation = Quaternion.identity;
-        MapManager.Instance.AddGameObjectOnTheGrid(_position.x, _position.y, gameObject, MapManager.TypeObject.e_Ressource);
+        bool isOk = MapManager.Instance.AddGameObjectOnTheGrid(_position.x, _position.y, gameObject, MapManager.TypeObject.e_Ressource);
+
+        if (!isOk) 
+        {
+            Debug.LogWarning($"Add GameObject on grid failed -> Position X{_position.x} Y{_position.y} Type: Ressource");
+            Respawn();
+        }
     }
 
 

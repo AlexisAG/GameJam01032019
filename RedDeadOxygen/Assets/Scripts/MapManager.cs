@@ -35,9 +35,10 @@ public class MapManager : Singleton<MapManager>
     [FormerlySerializedAs("ShieldBreakPrefab")]
     private GameObject _shieldBreakPowerPrefab;
     [SerializeField]
+    private List<Vector3> _basesPosition = new List<Vector3>(2);
+    [SerializeField]
     private int _maxRessource = 10;
 
-    private List<GameObject> m_bases = new List<GameObject>();
     private List<GameObject> m_mines = new List<GameObject>();
     private List<GameObject> m_ressources = new List<GameObject>();
     private List<GameObject> m_powerups = new List<GameObject>();
@@ -76,7 +77,8 @@ public class MapManager : Singleton<MapManager>
         Vector3 planeSize = GetComponent<Renderer>()?.bounds.size/2 ?? Vector3.zero;
         GridSize = new Vector2Int((int)planeSize.x, (int)planeSize.z);
         _grid = new GameObject[GridSize.x, GridSize.y];
-    
+        GridSize -= new Vector2Int(1, 1);
+
         m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency,1,300);
         m_nextTimeEnemySpawn = Time.fixedTime + TimeOfFirstSpawnEnemy;
 
@@ -90,6 +92,8 @@ public class MapManager : Singleton<MapManager>
     // Update is called once per frame
     void Update()
     {
+        return;
+
         CheckSpawnEnemys();
 
         //powerUps Timer
@@ -123,33 +127,27 @@ public class MapManager : Singleton<MapManager>
 
     void InitBase()
     {
-
-        m_bases = new List<GameObject>(2);
-
-        /* Instantiate Base 1 & Base 2 */
-
         // base 1
-        GameObject l_base1 = Instantiate<GameObject>(_basePrefab, new Vector3(-3, 0, 3), Quaternion.identity, gameObject.transform);
-        //l_base1.tag = "Player 0";
-        m_bases.Add(l_base1);
-        AddGameObjectOnTheGrid(3, 3, m_bases[0], TypeObject.e_Base);
-        
+        GameObject base1 = Instantiate<GameObject>(_basePrefab, transform);
+        base1.transform.localPosition = _basesPosition[0];
+        AddGameObjectOnTheGrid((int)_basesPosition[0].x, (int)_basesPosition[0].z, base1, TypeObject.e_Base);
+
         //player 1
-        m_player1 = Instantiate<GameObject>(_playerPrefab, new Vector3(-3, _playerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
+        /*m_player1 = Instantiate<GameObject>(_playerPrefab, new Vector3(-3, _playerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
         m_player1.GetComponent<Player>().m_joystickNumber = 0;
         m_player1.tag = "Player 0";
-        m_player1.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.magenta;
+        m_player1.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.magenta;*/
 
         //base 2
-        m_bases.Add(Instantiate<GameObject>(_basePrefab, new Vector3(-(GridSize.x - 3), 0, (GridSize.y - 3)), Quaternion.identity, gameObject.transform));
-        AddGameObjectOnTheGrid((GridSize.x - 3), (GridSize.y - 3), m_bases[1], TypeObject.e_Base);
-        //m_bases[1].tag = "Player 1";
+        GameObject base2 = Instantiate<GameObject>(_basePrefab, transform);
+        base2.transform.localPosition = _basesPosition[1];
+        AddGameObjectOnTheGrid((int)_basesPosition[1].x, (int)_basesPosition[1].z, base2, TypeObject.e_Base);
 
         //player 2
-        m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(GridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (GridSize.y - 3)), Quaternion.identity, gameObject.transform);
+        /*m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(GridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (GridSize.y - 3)), Quaternion.identity, gameObject.transform);
         m_player2.GetComponent<Player>().m_joystickNumber = 1;
         m_player2.tag = "Player 1";
-        m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);
+        m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);*/
 
     }
 
@@ -211,8 +209,7 @@ public class MapManager : Singleton<MapManager>
 
             m_powerupDeleteTimer = 2*PowerUpSpawnFrequency;
             m_powerupSpawnTimer = PowerUpSpawnFrequency;
-        }
-        
+        }        
     }
 
     private void CheckSpawnEnemys()
@@ -241,6 +238,7 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
+    #region CoordinationConverter
     private void ConvertUnityPositionToCordinate(ref int x, ref int y) 
     {
         //adjust Unity Local Position with grid position
@@ -256,6 +254,24 @@ public class MapManager : Singleton<MapManager>
         }
         else if (y > 0) {
             y *= 2;
+        }
+    }
+
+    private void ConvertUnityPositionToCordinate(ref Vector3 v) 
+    {
+        //adjust Unity Local Position with grid position
+        if (v.x < 0) {
+            v.x = -v.x;
+        }
+        else if (v.x > 0) {
+            v.x *= 2;
+        }
+
+        if (v.z < 0) {
+            v.z = -v.z;
+        }
+        else if (v.z > 0) {
+            v.z *= 2;
         }
     }
 
@@ -277,19 +293,38 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
+    private void ConvertCoordinateToUnityPosition(ref Vector3 v) 
+    {
+        //adjust coordination with Unity Local Position
+        if (v.x < GridSize.x / 2) {
+            v.x = -v.x;
+        }
+        else if (v.x > GridSize.x / 2) {
+            v.x /= 2;
+        }
+
+        if (v.z < GridSize.y / 2) {
+            v.z = -v.z;
+        }
+        else if (v.z > GridSize.y / 2) {
+            v.z /= 2;
+        }
+    }
+    #endregion
+
     // Public method for add an object into the grid
-    public void AddGameObjectOnTheGrid(int x, int y, GameObject obj, TypeObject type, bool replace = true)
+    public bool AddGameObjectOnTheGrid(int x, int y, GameObject obj, TypeObject type, bool replace = true)
     {
         ConvertUnityPositionToCordinate(ref x, ref y);
 
-        if (_grid.Length <= 0) return;
-        else if (_grid[x, y] != null && !replace) return;
-        else if (_grid[x, y] != null && replace)
-        {
+        if (_grid.Length <= 0) return false;
+        else if (x > GridSize.x || x < 0) return false;
+        else if (y > GridSize.y || y < 0) return false;
+        else if (_grid[x, y] != null && !replace) return false;
+        else if (_grid[x, y] != null && replace) {
             Debug.LogWarning(_grid[x, y].name);
 
-            switch (_grid[x, y].name)
-            {
+            switch (_grid[x, y].name) {
                 case "Ressource(Clone)":
                     RemoveGameObjectOnTheGrid(x, y, TypeObject.e_Ressource);
                     break;
@@ -305,6 +340,7 @@ public class MapManager : Singleton<MapManager>
         }
 
         _grid[x, y] = obj;
+        return true;
     }
 
     public void RemoveGameObjectOnTheGrid(int x, int z, TypeObject type)
