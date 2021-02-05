@@ -26,6 +26,7 @@ public class EndGameMenu : MonoBehaviour
     public void RestartAGame()
     {
         Time.timeScale = 1;
-        SceneLoaderManager.Instance.Load(GameManager.Instance.CurrentSceneContent);
+        MapManager.Instance.ClearGrid();
+        MapManager.Instance.InitMap();
     }
 }

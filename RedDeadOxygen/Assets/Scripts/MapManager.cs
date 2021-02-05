@@ -85,8 +85,7 @@ public class MapManager : Singleton<MapManager>
         m_powerupSpawnTimer = PowerUpSpawnFrequency;
         m_powerupDeleteTimer = PowerUpDeletionTime;
 
-        InitBase();
-        InitRessources();
+        InitMap();
     }
 
     // Update is called once per frame
@@ -123,7 +122,6 @@ public class MapManager : Singleton<MapManager>
         ressource.SetActive(true);
         ressource.GetComponent<Ressource>()?.Respawn();
     }
-
 
     void InitBase()
     {
@@ -312,6 +310,8 @@ public class MapManager : Singleton<MapManager>
     }
     #endregion
 
+
+
     // Public method for add an object into the grid
     public bool AddGameObjectOnTheGrid(int x, int y, GameObject obj, TypeObject type, bool replace = true)
     {
@@ -343,6 +343,12 @@ public class MapManager : Singleton<MapManager>
         return true;
     }
 
+    public void InitMap() 
+    {
+        InitBase();
+        InitRessources();
+    }
+
     public void RemoveGameObjectOnTheGrid(int x, int z, TypeObject type)
     {
         ConvertUnityPositionToCordinate(ref x, ref z);
@@ -352,6 +358,19 @@ public class MapManager : Singleton<MapManager>
         _grid[x, z] = null;
     }
 
+    public void ClearGrid() 
+    {
+        for (int i = 0; i <= GridSize.x; i++) 
+        {
+            for (int j = 0; j <= GridSize.y; j++) 
+            {
+                if (_grid[i, j] == null) continue;
+
+                _grid[i, j].SetActive(false);
+                _grid[i, j] = null;
+            }
+        }
+    }
     //todo: probably a better way for that
     public Vector2Int GetRandomFreePosition()
     {
