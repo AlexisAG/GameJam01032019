@@ -310,8 +310,6 @@ public class MapManager : Singleton<MapManager>
     }
     #endregion
 
-
-
     // Public method for add an object into the grid
     public bool AddGameObjectOnTheGrid(int x, int y, GameObject obj, TypeObject type, bool replace = true)
     {
