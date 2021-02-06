@@ -5,6 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class Ressource : MonoBehaviour, Pickup
 {
+    [SerializeField]
+    private float _power = 8;
+
+    private Player _player;
     private Animator _animator;
     private Vector2Int _position;
     public bool IsUsed { get; private set; }
@@ -19,18 +23,22 @@ public class Ressource : MonoBehaviour, Pickup
     #region PickupInterface
     public void Activate()
     {
-        throw new System.NotImplementedException();
+        _player.m_PlayerBase.AddRessourceToBase(_power);
+        RecreateRessource();
     }
 
-    public void IsPick()
+    public void IsPick(Player playerRef)
     {
         IsUsed = true;
+        _player = playerRef;
+        transform.SetParent(_player.transform, false);
         _animator.SetBool("IsPickup", IsUsed);
     }
     #endregion
 
     public void Respawn()
     {
+        _player = null;
         IsUsed = false;
 
         _position = MapManager.Instance.GetRandomFreePosition();

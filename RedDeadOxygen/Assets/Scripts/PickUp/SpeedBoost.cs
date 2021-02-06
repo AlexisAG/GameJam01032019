@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lure : Powerup
+public class SpeedBoost : Powerup
 {
+    public float SpeedMultiplier = 20;
+
     private BoxCollider m_boxCollider;
+    private GameObject m_picker;
 
     public override void Activate()
     {
-        Debug.Log("Leurre");
+        m_picker.GetComponent<Player>().m_walkSpeed = SpeedMultiplier;
     }
 
-    public override void IsPick()
+    public override void IsPick(Player player)
     {
         Activate();
     }
@@ -27,13 +30,20 @@ public class Lure : Powerup
         m_boxCollider = GetComponent<BoxCollider>();
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().m_powerUpCooldown)
         {
-            IsPick();
-            other.gameObject.GetComponent<Player>().m_powerUpCooldown = true;
-            RegisterManager.Instance.GetGameObjectInstance("LureSE")?.GetComponent<AudioSource>()?.Play();
+            m_picker = other.gameObject;
+            m_picker.GetComponent<Player>().m_powerUpCooldown = true;
+            IsPick(other.gameObject.GetComponent<Player>());
+            RegisterManager.Instance.GetGameObjectInstance("SpeedBoostSE")?.GetComponent<AudioSource>()?.Play();
             MapManager.Instance.RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), MapManager.TypeObject.e_Ressource);
         }
     }

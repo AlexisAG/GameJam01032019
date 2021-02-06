@@ -51,32 +51,28 @@ public class Player : MonoBehaviour {
             if (!other.GetComponent<Ressource>().IsUsed && m_resourcesCount < 5)
             {
                 m_resourcesCount++;
-                other.GetComponent<Ressource>().IsPick();
+                other.GetComponent<Ressource>().IsPick(this);
                 RegisterManager.Instance.GetGameObjectInstance("ResourcesSE")?.GetComponent<AudioSource>()?.Play();
-                other.gameObject.transform.SetParent(transform);
             }
         }
         else if (other.GetComponent<Base>() != null)
         {
-            if(m_PlayerBase == null)
-            {
-                m_PlayerBase = other.GetComponent<Base>();
-                m_PlayerBase.m_PlayerTag = tag;
-            }
             if(other.GetComponent<Base>() == m_PlayerBase)
             {
-                other.GetComponent<Base>().AddRessourceToBase(m_resourcesCount);
-                if(m_resourcesCount>0)
-                    RegisterManager.Instance.GetGameObjectInstance("BaseSE")?.GetComponent<AudioSource>()?.Play();
+                if (m_resourcesCount <= 0) return;
+
+                RegisterManager.Instance.GetGameObjectInstance("BaseSE")?.GetComponent<AudioSource>()?.Play();
 
                 foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
                 {
-                    l_RessourceChild.RecreateRessource();
+                    l_RessourceChild.Activate();
                 }
+
                 m_resourcesCount = 0;
             }
             //WARNING : UNFINISHED
-        } else if (other.GetComponent<Mine>() != null)
+        }
+        else if (other.GetComponent<Mine>() != null)
         {
             if( (other.GetComponent<Mine>().m_PlayerTag != tag && other.GetComponent<Mine>() != null) )
             {

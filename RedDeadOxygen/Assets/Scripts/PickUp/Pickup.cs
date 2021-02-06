@@ -6,7 +6,7 @@ public interface Pickup
 {
 
     // called when is pciked by a player
-    void IsPick();
+    void IsPick(Player playerRef);
 
     // called when the item need to be activate
     void Activate();

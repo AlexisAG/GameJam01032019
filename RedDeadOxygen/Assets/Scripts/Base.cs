@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class Base : MonoBehaviour
 {
-    public Vector3 m_BaseScale; // Basic sphere scale without timeLife 
-    public float m_maxLife = 180;
-    public string m_PlayerTag;
-
+    [SerializeField]
+    private Vector3 _baseScale; // Basic sphere scale without timeLife 
+    [SerializeField]
+    private float _maxLife = 150;
 
     private float m_TimeAddForOneRessource; // Time in second add for ine ressource when it's drop in base 
     private float m_ScaleFactorByLifeTime; 
@@ -24,9 +24,9 @@ public class Base : MonoBehaviour
     {
         m_PreviousRayon = -1;
         m_TimeAddForOneRessource = 8;
-        m_LifeTime = m_maxLife*2f/3f; // Match to 60 seconds of LifeTime
+        m_LifeTime = _maxLife*2f/3f; // Match to 60 seconds of LifeTime
         m_LoseLifeMultiplicator = 6; // With this scale 1 seconds match to 3 seconds
-        m_ScaleFactorByLifeTime = 1f / (float)(m_maxLife/5f);// If 1/6 that say one minute of lifetime match to 10 scale factor
+        m_ScaleFactorByLifeTime = 1f / (float)(_maxLife/5f);// If 1/6 that say one minute of lifetime match to 10 scale factor
         m_IsGameFinish = false; // The start of the game
         m_PosInRangeOfDome = new List<Vector2>();
         UpdateSphereSize();
@@ -34,11 +34,6 @@ public class Base : MonoBehaviour
         m_PreviousRayon = Mathf.CeilToInt(transform.localScale.x);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void FixedUpdate()
     {
@@ -52,10 +47,10 @@ public class Base : MonoBehaviour
 
     private void UpdateSphereSize()
     {
-        float l_NewScale = (m_BaseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
+        float l_NewScale = (_baseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
        
         l_NewScale = Mathf.Clamp(l_NewScale, 0, 5);
-        transform.localScale = new Vector3(l_NewScale, l_NewScale, m_BaseScale.z);
+        transform.localScale = new Vector3(l_NewScale, l_NewScale, _baseScale.z);
         if(m_PreviousRayon != Mathf.CeilToInt(transform.localScale.x))
         {
             m_PreviousRayon = Mathf.CeilToInt(transform.localScale.x);
@@ -124,15 +119,15 @@ public class Base : MonoBehaviour
         }
     }
 
-    public void AddRessourceToBase(int p_NbRessources)
+    public void AddRessourceToBase(float amount)
     {
-        AddLifeTime(p_NbRessources * m_TimeAddForOneRessource);
+        AddLifeTime(amount);
     }
 
     public void AddLifeTime(float p_Value = 10)
     {
         m_LifeTime += p_Value;
-        m_LifeTime = Mathf.Clamp(m_LifeTime, 0, m_maxLife);
+        m_LifeTime = Mathf.Clamp(m_LifeTime, 0, _maxLife);
     }
 
     public void TakeOfLifeTime(float p_Value = 10)
@@ -147,7 +142,11 @@ public class Base : MonoBehaviour
 
     private void FinishGame()
     {
-        if(!GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish)
+
+        //TODO GAMEMODE CREATE A GAMESTATE FOR ENDMENU
+
+
+        /*if(!GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish)
         {
             GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish = true;
             string l_WinnerName = "Le vainqueur est : \n";
@@ -170,13 +169,12 @@ public class Base : MonoBehaviour
             GameObject.Find("EndScreen").GetComponentInChildren<Text>().color = col;
             GameObject.Find("EndScreen").transform.GetChild(1).gameObject.SetActive(true);
             GameObject.Find("EndScreen").transform.GetChild(2).gameObject.SetActive(true);
-            GameObject.Find("EndScreen").transform.GetChild(2).gameObject.GetComponent<Button>().Select();
+            GameObject.Find("EndScreen").transform.GetChild(2).gameObject.GetComponent<Button>().Select();*/
             Time.timeScale = 0;
-        }
     }
 
     public float GetCurrentLife()
     {
-        return (m_LifeTime/m_maxLife)*100f;
+        return (m_LifeTime/_maxLife)*100f;
     }
 }

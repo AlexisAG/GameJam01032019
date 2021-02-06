@@ -24,7 +24,7 @@ public class Slow : Powerup
         }
     }
 
-    public override void IsPick()
+    public override void IsPick(Player player)
     {
         Activate();
     }
@@ -51,7 +51,7 @@ public class Slow : Powerup
         {
             m_picker = other.gameObject;
             m_picker.GetComponent<Player>().m_powerUpCooldown = true;
-            IsPick();
+            IsPick(other.gameObject.GetComponent<Player>());
             GameObject.Find("SpeedDebuffSE").GetComponent<AudioSource>().Play();
             MapManager.Instance.RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), MapManager.TypeObject.e_Ressource);
         }

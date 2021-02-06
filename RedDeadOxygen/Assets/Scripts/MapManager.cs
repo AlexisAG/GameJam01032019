@@ -123,7 +123,7 @@ public class MapManager : Singleton<MapManager>
         ressource.GetComponent<Ressource>()?.Respawn();
     }
 
-    void InitBase()
+    private void InitBase()
     {
         // base 1
         GameObject base1 = Instantiate<GameObject>(_basePrefab, transform);
@@ -148,7 +148,7 @@ public class MapManager : Singleton<MapManager>
         m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);*/
 
     }
-
+    
     void SpawnPowerups()
     {
         Vector3 l_leftSpawnPosition = new Vector3(-11, 0, 10);
@@ -370,6 +370,7 @@ public class MapManager : Singleton<MapManager>
             }
         }
     }
+    
     //todo: probably a better way for that
     public Vector2Int GetRandomFreePosition()
     {
