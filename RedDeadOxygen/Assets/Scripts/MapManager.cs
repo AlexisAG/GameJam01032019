@@ -319,7 +319,8 @@ public class MapManager : Singleton<MapManager>
         else if (x > GridSize.x || x < 0) return false;
         else if (y > GridSize.y || y < 0) return false;
         else if (_grid[x, y] != null && !replace) return false;
-        else if (_grid[x, y] != null && replace) {
+        else if (_grid[x, y] != null && replace) 
+        {
             Debug.LogWarning(_grid[x, y].name);
 
             switch (_grid[x, y].name) {

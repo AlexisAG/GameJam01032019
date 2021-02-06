@@ -19,7 +19,7 @@ public class EndGameMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         SoloGameMode gameMode = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
-        gameMode?.GetComponent<Animator>()?.SetTrigger(gameMode.ExiteSoloTrigger);
+        gameMode?.GetComponent<Animator>()?.SetTrigger(gameMode.ExitSoloTrigger);
     }
 
     //todo: change it

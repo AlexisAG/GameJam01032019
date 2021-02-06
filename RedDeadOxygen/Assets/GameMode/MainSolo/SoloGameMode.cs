@@ -8,5 +8,5 @@ public class SoloGameMode : GameMode
     [SerializeField]
     private string _exitSoloTrigger;
 
-    public string ExiteSoloTrigger => _exitSoloTrigger;
+    public string ExitSoloTrigger => _exitSoloTrigger;
 }
