@@ -63,10 +63,11 @@ public class Base : MonoBehaviour
     private void UpdatePosInRange()
     {
         List<Vector2Int> l_CurrentPosInRangeOfDome = new List<Vector2Int>();
+        int index = Mathf.FloorToInt(m_PreviousRayon/2);
 
-        for (int i=-Mathf.FloorToInt(m_PreviousRayon/2); i<= Mathf.FloorToInt(m_PreviousRayon/2); i++)
+        for (int i=-index; i<= index; i++)
         {
-            for (int j=-Mathf.FloorToInt(m_PreviousRayon/2); j<= Mathf.FloorToInt(m_PreviousRayon/2); j++)
+            for (int j=-index; j<= index; j++)
             {
                 Vector2Int l_TestPositionR = new Vector2Int(Mathf.FloorToInt(transform.parent.localPosition.x + i*.5f), 
                     Mathf.FloorToInt(transform.parent.localPosition.z + j*.5f));
