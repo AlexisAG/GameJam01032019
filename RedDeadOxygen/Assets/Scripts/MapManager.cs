@@ -129,7 +129,7 @@ public class MapManager : Singleton<MapManager>
         GameObject base1 = Instantiate<GameObject>(_basePrefab, transform);
         base1.transform.localPosition = _basesPosition[0];
         AddGameObjectOnTheGrid((int)_basesPosition[0].x, (int)_basesPosition[0].z, base1, TypeObject.e_Base);
-
+        base1.GetComponentInChildren<Base>().Init();
         //player 1
         /*m_player1 = Instantiate<GameObject>(_playerPrefab, new Vector3(-3, _playerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
         m_player1.GetComponent<Player>().m_joystickNumber = 0;
@@ -140,6 +140,7 @@ public class MapManager : Singleton<MapManager>
         GameObject base2 = Instantiate<GameObject>(_basePrefab, transform);
         base2.transform.localPosition = _basesPosition[1];
         AddGameObjectOnTheGrid((int)_basesPosition[1].x, (int)_basesPosition[1].z, base2, TypeObject.e_Base);
+        base2.GetComponentInChildren<Base>().Init();
 
         //player 2
         /*m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(GridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (GridSize.y - 3)), Quaternion.identity, gameObject.transform);

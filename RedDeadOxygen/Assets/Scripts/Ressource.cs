@@ -46,13 +46,14 @@ public class Ressource : MonoBehaviour, Pickup
         transform.localPosition = new Vector3(_position.x, 0f, _position.y);
         transform.rotation = Quaternion.identity;
 
-        if (!MapManager.Instance.AddGameObjectOnTheGrid(_position.x, _position.y, gameObject, MapManager.TypeObject.e_Ressource)) 
-        {
+        if (!MapManager.Instance.AddGameObjectOnTheGrid(_position.x, _position.y, gameObject, MapManager.TypeObject.e_Ressource, false)) {
             Debug.LogWarning($"Add GameObject on grid failed -> Position X{_position.x} Y{_position.y} Type: Ressource");
             Respawn();
         }
-
-        _animator.SetBool("IsPickup", IsUsed);
+        else 
+        {
+            _animator.SetBool("IsPickup", IsUsed);
+        }
     }
 
     public void RecreateRessource()

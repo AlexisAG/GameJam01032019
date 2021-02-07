@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AgToolkit.Core.Helper;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,115 +9,117 @@ public class Base : MonoBehaviour
     [SerializeField]
     private Vector3 _baseScale; // Basic sphere scale without timeLife 
     [SerializeField]
-    private float _maxLife = 150;
+    private float _maxLifeInSeconds = 20f;
+    [SerializeField]
+    private float _maxLife = 150f;
+    [SerializeField]
+    private int _maxScale = 5;
 
-    private float m_TimeAddForOneRessource; // Time in second add for ine ressource when it's drop in base 
+    private int m_PreviousRayon;
     private float m_ScaleFactorByLifeTime; 
     private float m_LifeTime; // Current life of the base decrease with time
     private float m_LoseLifeMultiplicator; // Scale apply to time to decrease life time
-    private bool m_IsGameFinish; // boolean to check if game is finish
-    private List<Vector2> m_PosInRangeOfDome; // All pos in range of dome
-    private int m_PreviousRayon;
+    private List<Vector2Int> _posInRangeOfDome; // All pos in range of dome
     private GameObject m_EventManager;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Update() 
     {
-        m_PreviousRayon = -1;
-        m_TimeAddForOneRessource = 8;
-        m_LifeTime = _maxLife*2f/3f; // Match to 60 seconds of LifeTime
-        m_LoseLifeMultiplicator = 6; // With this scale 1 seconds match to 3 seconds
-        m_ScaleFactorByLifeTime = 1f / (float)(_maxLife/5f);// If 1/6 that say one minute of lifetime match to 10 scale factor
-        m_IsGameFinish = false; // The start of the game
-        m_PosInRangeOfDome = new List<Vector2>();
-        UpdateSphereSize();
-        UpdatePosInRange();
-        m_PreviousRayon = Mathf.CeilToInt(transform.localScale.x);
+        UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
+        CheckLifetime(); // Check if base is dead    
     }
 
-
-    void FixedUpdate()
+    private IEnumerator DecreaseLifeOverTime()
     {
-        if (GetEventManager() != null && !GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish && Time.timeScale != 0)
+        float counter = 0f;
+        float lifeOnStart = m_LifeTime;
+
+        while (m_LifeTime > 0f && Time.timeScale != 0 && counter < 1f && m_LifeTime <= lifeOnStart)
         {
-            TakeOfLifeTime(Time.fixedDeltaTime * m_LoseLifeMultiplicator); // Decrease life with the time and multiplicator
-            UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
-            CheckLifetime(); // Check if base is dead
+            counter += Time.deltaTime;
+            TakeOfLifeTime(m_LifeTime - Mathf.Lerp(lifeOnStart, lifeOnStart - m_LoseLifeMultiplicator, counter / 1f));
+
+            yield return null;            
+        }
+
+        if (m_LifeTime > 0f && Time.timeScale != 0) 
+        {
+            CoroutineManager.Instance.StartCoroutine(DecreaseLifeOverTime());
         }
     }
 
     private void UpdateSphereSize()
     {
-        float l_NewScale = (_baseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
-       
-        l_NewScale = Mathf.Clamp(l_NewScale, 0, 5);
-        transform.localScale = new Vector3(l_NewScale, l_NewScale, _baseScale.z);
-        if(m_PreviousRayon != Mathf.CeilToInt(transform.localScale.x))
+        float newScale = (_baseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
+        newScale = Mathf.Clamp(newScale, 0, _maxScale);
+        transform.localScale = new Vector3(newScale, newScale, _baseScale.z);
+
+        if (m_PreviousRayon != Mathf.CeilToInt(transform.localScale.x))
         {
             m_PreviousRayon = Mathf.CeilToInt(transform.localScale.x);
             UpdatePosInRange();
         }
     }
 
-    private void CheckLifetime()
+    private void UpdatePosInRange()
     {
-        if(m_LifeTime<=0)
+        List<Vector2Int> l_CurrentPosInRangeOfDome = new List<Vector2Int>();
+
+        for (int i=-Mathf.FloorToInt(m_PreviousRayon/2); i<= Mathf.FloorToInt(m_PreviousRayon/2); i++)
+        {
+            for (int j=-Mathf.FloorToInt(m_PreviousRayon/2); j<= Mathf.FloorToInt(m_PreviousRayon/2); j++)
+            {
+                Vector2Int l_TestPositionR = new Vector2Int(Mathf.FloorToInt(transform.parent.localPosition.x + i*.5f), 
+                    Mathf.FloorToInt(transform.parent.localPosition.z + j*.5f));
+
+                l_CurrentPosInRangeOfDome.Add(l_TestPositionR);
+            }
+            
+        }
+
+        // add new positions
+        foreach(Vector2Int l_vec in l_CurrentPosInRangeOfDome)
+        {
+            if (!_posInRangeOfDome.Contains(l_vec))
+            {
+                _posInRangeOfDome.Add(l_vec);
+                MapManager.Instance.AddGameObjectOnTheGrid(l_vec.x, l_vec.y, transform.parent.gameObject, MapManager.TypeObject.e_Base);
+            }
+        }
+
+        // remove old positions
+        List<Vector2Int> temp = new List<Vector2Int>();
+
+        for (int i = _posInRangeOfDome.Count - 1; i >= 0; i--)
+        {
+            Vector2Int l_vec = _posInRangeOfDome[i];
+
+            if (!l_CurrentPosInRangeOfDome.Contains(l_vec))
+            {
+                _posInRangeOfDome.RemoveAt(i);
+                MapManager.Instance.RemoveGameObjectOnTheGrid(l_vec.x, l_vec.y, MapManager.TypeObject.e_Base);
+            }
+        }
+    }
+
+    private void CheckLifetime() 
+    {
+        if (m_LifeTime <= 0) 
         {
             Debug.Log("Fin de Game");
             FinishGame();
         }
     }
 
-    GameObject GetEventManager()
+    public void Init() 
     {
-        if(m_EventManager == null)
-        {
-            m_EventManager = GameObject.Find("EventSystem");
-        }
-        return m_EventManager;
-    }
-
-    private void UpdatePosInRange()
-    {
-        List<Vector2>  l_CurrentPosInRangeOfDome = new List<Vector2>();
-        for (int i=0; i<= GetComponent<MeshRenderer>().bounds.size.x;i++)
-        {
-            for (int j=0; j<= GetComponent<MeshRenderer>().bounds.size.x;j++)
-            {
-                Vector2 l_TestPositionR = new Vector2(transform.parent.position.x + (int)((float)i - (float)GetComponent<MeshRenderer>().bounds.size.x / 2f), transform.parent.position.z + (int)((float)j - (float)GetComponent<MeshRenderer>().bounds.size.x / 2f));
-                if (!(l_TestPositionR.x == transform.parent.position.x && l_TestPositionR.y == transform.parent.position.z))
-                {
-                    l_CurrentPosInRangeOfDome.Add(l_TestPositionR);
-                }
-            }
-            
-        }
-
-        foreach(Vector2 l_vec in l_CurrentPosInRangeOfDome)
-        {
-            if (!m_PosInRangeOfDome.Contains(l_vec))
-            {
-                m_PosInRangeOfDome.Add(l_vec);
-                MapManager.Instance.AddGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, new GameObject(), MapManager.TypeObject.e_Base);
-            }
-        }
-
-        List<Vector2> l_PosToRemove = new List<Vector2>();
-
-        foreach (Vector2 l_vec in m_PosInRangeOfDome)
-        {
-            
-            if (!l_CurrentPosInRangeOfDome.Contains(l_vec))
-            {
-                l_PosToRemove.Add(l_vec);
-            }
-        }
-
-        foreach(Vector2 l_vec in l_PosToRemove)
-        {
-            m_PosInRangeOfDome.Remove(l_vec);
-            MapManager.Instance.RemoveGameObjectOnTheGrid((int)-l_vec.x, (int)l_vec.y, MapManager.TypeObject.e_Base);
-        }
+        m_PreviousRayon = -1;
+        m_LifeTime = _maxLife;
+        m_LoseLifeMultiplicator = _maxLife / _maxLifeInSeconds;
+        m_ScaleFactorByLifeTime = 1f / (_maxLife / _maxScale);
+        _posInRangeOfDome = new List<Vector2Int>();
+        UpdateSphereSize();
+        UpdatePosInRange();
+        CoroutineManager.Instance.StartCoroutine(DecreaseLifeOverTime());
     }
 
     public void AddRessourceToBase(float amount)
@@ -135,9 +138,11 @@ public class Base : MonoBehaviour
         m_LifeTime -= p_Value;
     }
 
-    public void TakeOfPourcentOfLifeTime(float p_Pourcent = 25)
+    public void TakeOfPourcentOfLifeTime(float p_Pourcent = .25f)
     {
-        m_LifeTime -= (p_Pourcent / 100) * m_LifeTime;
+        if (p_Pourcent > 1f) return;
+
+        m_LifeTime -= p_Pourcent * m_LifeTime;
     }
 
     private void FinishGame()
