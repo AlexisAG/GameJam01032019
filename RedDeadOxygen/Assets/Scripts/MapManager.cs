@@ -54,6 +54,7 @@ public class MapManager : Singleton<MapManager>
     public float TimeOfFirstSpawnEnemy = 5; // Time in seconds when spawn the first enemy
     public float PowerUpSpawnFrequency = 10; //Time in seconds between powerup spawns
     public float PowerUpDeletionTime = 5; //Time to get the powerups before they disappear
+    public List<Base> Bases { get; private set; } = new List<Base>();
 
     public Vector2Int GridSize { get; private set; } = Vector2Int.zero;
 
@@ -65,27 +66,6 @@ public class MapManager : Singleton<MapManager>
         e_Mine,
         e_Ressource,
         e_PowerUp
-    }
-
-    // Use Start instead of Awake for IEnumerator
-    private IEnumerator Start()
-    {
-        // Init pool
-        yield return PoolManager.Instance.CreatePool(new PoolData(_ressourcePrefab.name, _ressourcePrefab, _maxRessource));
-
-        // Init grid size from plane renderer
-        Vector3 planeSize = GetComponent<Renderer>()?.bounds.size/2 ?? Vector3.zero;
-        GridSize = new Vector2Int((int)planeSize.x, (int)planeSize.z);
-        _grid = new GameObject[GridSize.x, GridSize.y];
-        GridSize -= new Vector2Int(1, 1);
-
-        m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency,1,300);
-        m_nextTimeEnemySpawn = Time.fixedTime + TimeOfFirstSpawnEnemy;
-
-        m_powerupSpawnTimer = PowerUpSpawnFrequency;
-        m_powerupDeleteTimer = PowerUpDeletionTime;
-
-        InitMap();
     }
 
     // Update is called once per frame
@@ -147,7 +127,9 @@ public class MapManager : Singleton<MapManager>
         m_player2.GetComponent<Player>().m_joystickNumber = 1;
         m_player2.tag = "Player 1";
         m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);*/
-
+        
+        Bases.Add(base1.GetComponentInChildren<Base>());
+        Bases.Add(base2.GetComponentInChildren<Base>());
     }
     
     void SpawnPowerups()
@@ -343,8 +325,26 @@ public class MapManager : Singleton<MapManager>
         return true;
     }
 
-    public void InitMap() 
+    public IEnumerator InitMap() 
     {
+        // Init pool
+        if (!PoolManager.Instance.PoolExists(_ressourcePrefab.name)) 
+        {
+            yield return PoolManager.Instance.CreatePool(new PoolData(_ressourcePrefab.name, _ressourcePrefab, _maxRessource));
+        }
+
+        // Init grid size from plane renderer
+        Vector3 planeSize = GetComponent<Renderer>()?.bounds.size / 2 ?? Vector3.zero;
+        GridSize = new Vector2Int((int)planeSize.x, (int)planeSize.z);
+        _grid = new GameObject[GridSize.x, GridSize.y];
+        GridSize -= new Vector2Int(1, 1);
+
+        m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency, 1, 300);
+        m_nextTimeEnemySpawn = Time.fixedTime + TimeOfFirstSpawnEnemy;
+
+        m_powerupSpawnTimer = PowerUpSpawnFrequency;
+        m_powerupDeleteTimer = PowerUpDeletionTime;
+
         InitBase();
         InitRessources();
     }
@@ -370,6 +370,13 @@ public class MapManager : Singleton<MapManager>
                 _grid[i, j] = null;
             }
         }
+
+        foreach (Base item in Bases) 
+        {
+            GameObject.Destroy(item);
+        }
+
+        Bases.Clear();
     }
     
     //todo: probably a better way for that

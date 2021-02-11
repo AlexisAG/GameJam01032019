@@ -7,26 +7,24 @@ using UnityEngine.SceneManagement;
 
 public class EndGameMenu : MonoBehaviour
 {
-    public bool m_IsGameFinish;
+    private SoloGameMode _gm = null;
+    private Animator _gmAnimator = null;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start() 
     {
-        m_IsGameFinish = false;
+        _gm = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
+        _gmAnimator = _gm?.GetComponent<Animator>();
     }
 
     public void ExitToMainMenu()
     {
         Time.timeScale = 1;
-        SoloGameMode gameMode = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
-        gameMode?.GetComponent<Animator>()?.SetTrigger(gameMode.ExitSoloTrigger);
+        _gmAnimator?.SetTrigger(_gm.ExitSoloTrigger);
     }
 
     //todo: change it
     public void RestartAGame()
     {
-        Time.timeScale = 1;
-        MapManager.Instance.ClearGrid();
-        MapManager.Instance.InitMap();
+        _gmAnimator?.SetTrigger(_gm.GenerationTrigger);
     }
 }

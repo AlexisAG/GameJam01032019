@@ -7,6 +7,13 @@ public class SoloGameMode : GameMode
 {
     [SerializeField]
     private string _exitSoloTrigger;
+    [SerializeField]
+    private string _generationTrigger;
+    [SerializeField]
+    private string _endTrigger;
 
     public string ExitSoloTrigger => _exitSoloTrigger;
+    public string GenerationTrigger => _generationTrigger;
+    public string EndTrigger => _endTrigger;
+    public bool GameIsOver { get; set; } = false;
 }

@@ -1,4 +1,5 @@
-﻿using AgToolkit.Core.Helper;
+﻿using AgToolkit.Core.GameModes;
+using AgToolkit.Core.Helper;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,9 +22,18 @@ public class Base : MonoBehaviour
     private float m_LoseLifeMultiplicator; // Scale apply to time to decrease life time
     private List<Vector2Int> _posInRangeOfDome; // All pos in range of dome
     private GameObject m_EventManager;
+    private SoloGameMode _gm = null;
+
+    private void Start() 
+    {
+        _gm = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
+
+    }
 
     private void Update() 
     {
+        if (_gm.GameIsOver) return;
+
         UpdateSphereSize(); // Update the scale of the sphere with remaining life time 
         CheckLifetime(); // Check if base is dead    
     }
@@ -176,7 +186,8 @@ public class Base : MonoBehaviour
             GameObject.Find("EndScreen").transform.GetChild(1).gameObject.SetActive(true);
             GameObject.Find("EndScreen").transform.GetChild(2).gameObject.SetActive(true);
             GameObject.Find("EndScreen").transform.GetChild(2).gameObject.GetComponent<Button>().Select();*/
-            Time.timeScale = 0;
+        _gm.GameIsOver = true;
+        _gm?.GetComponent<Animator>().SetTrigger(_gm?.EndTrigger);
     }
 
     public float GetCurrentLife()
