@@ -42,7 +42,7 @@ public class Ressource : MonoBehaviour, Pickup
         IsUsed = false;
 
         _position = MapManager.Instance.GetRandomFreePosition();
-        transform.SetParent(MapManager.Instance.transform);
+        transform.SetParent(MapManager.Instance.transform, false);
         transform.localPosition = new Vector3(_position.x, 0f, _position.y);
         transform.rotation = Quaternion.identity;
 
