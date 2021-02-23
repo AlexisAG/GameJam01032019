@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class SpeedBoost : Powerup
 {
-    public float SpeedMultiplier = 20;
+    public float SpeedMultiplier = 4f;
 
     private BoxCollider m_boxCollider;
     private GameObject m_picker;
 
     public override void Activate()
     {
-        m_picker.GetComponent<Player>().m_walkSpeed = SpeedMultiplier;
+        m_picker.GetComponent<Player>()?.ApplySpeedEffect(SpeedMultiplier);
     }
 
     public override void IsPick(Player player)
@@ -28,12 +28,6 @@ public class SpeedBoost : Powerup
     void Start()
     {
         m_boxCollider = GetComponent<BoxCollider>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private void OnTriggerEnter(Collider other)

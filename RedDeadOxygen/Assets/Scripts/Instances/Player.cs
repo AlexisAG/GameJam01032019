@@ -2,56 +2,77 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using AgToolkit.AgToolkit.Core.Timer;
+using UnityEngine.Events;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
+    [SerializeField]
+    private float _averageSpeed = 5f;
+    [SerializeField]
+    private float _cooldownMine = 5f;
+    [SerializeField]
+    private float _PowerUpCooldownTimer = 5f;
+    [SerializeField]
+    private GameObject _minePrefab = null;
+    [SerializeField]
+    private ParticleSystem _slowEffect = null;
+    [SerializeField]
+    private ParticleSystem _speedEffect = null;
 
-    public double m_health;
-    public float m_walkSpeed = 5, m_CooldDownMineMax, m_joystickNumber;
-    public GameObject MinePrefab;
-    public Base m_PlayerBase;
     public bool m_powerUpCooldown = false;
+    public float m_joystickNumber;
+    public Base m_PlayerBase;
 
-    public ParticleSystem SlowEffect;
-    public ParticleSystem SpeedEffect;
-
-    private Rigidbody m_rb;
-    private float m_coolDownMine;
-    private int m_resourcesCount;
     private bool m_isCarryingMine;
+    private float _actualSpeed;
     private GameObject m_mine;
-    private float m_SpeedRestTimer, m_PowerUpcooldownTimer;
-    private ParticleSystem m_SpeedEffect;
-    private float m_AverageSpeed;
-    
-
+    private Rigidbody m_rb;
+    private Timer _mineTimer;
+    private Timer _powerUpTimer;
+    private Timer _speedTimer;
+    private List<Ressource> _Ressources = new List<Ressource>();
 
     // Start is called before the first frame update
     void Start()
     {
-        m_AverageSpeed = 5;
+        _actualSpeed = _averageSpeed;
         m_rb = GetComponent<Rigidbody>();
         m_isCarryingMine = true;
-        m_resourcesCount = 0;
-        m_coolDownMine = 0f;
-        m_SpeedRestTimer = 5;
-        m_walkSpeed = m_AverageSpeed;
-        m_PowerUpcooldownTimer = 5;
-        transform.GetChild(1).gameObject.SetActive(true);
-        transform.GetChild(2).gameObject.SetActive(true);
-        ParticleSystem.EmissionModule em = transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().emission;
-        em.enabled = false;
-        ParticleSystem.EmissionModule em1 = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().emission;
-        em1.enabled = false;
+        _slowEffect.Stop(true);
+        _speedEffect.Stop(true);
+
+        UnityEvent mineEvent = new UnityEvent(); 
+        UnityEvent powerUpEvent = new UnityEvent(); 
+        UnityEvent speedEvent = new UnityEvent();
+
+        mineEvent.AddListener(() => { m_isCarryingMine = true; });
+        speedEvent.AddListener(() => { m_powerUpCooldown = false; });
+        speedEvent.AddListener(() =>
+        {
+           _slowEffect.Stop(true);
+           _speedEffect.Stop(true);
+           _actualSpeed = _averageSpeed;
+        });
+
+        _mineTimer = new Timer("mine", _cooldownMine, mineEvent);
+        _powerUpTimer = new Timer("powerUp", _PowerUpCooldownTimer, powerUpEvent);
+        _speedTimer = new Timer("speedEffect", _PowerUpCooldownTimer, speedEvent);
+
+        TimerManager.Instance.Register(_mineTimer);
+        TimerManager.Instance.Register(_powerUpTimer);
+        TimerManager.Instance.Register(_speedTimer);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Ressource>() != null)
         {
-            if (!other.GetComponent<Ressource>().IsUsed && m_resourcesCount < 5)
+            if (!other.GetComponent<Ressource>().IsUsed && _Ressources.Count < 5)
             {
-                m_resourcesCount++;
-                other.GetComponent<Ressource>().IsPick(this);
+                Ressource ressource = other.GetComponent<Ressource>();
+                ressource.IsPick(this);
+                _Ressources.Add(ressource);
                 RegisterManager.Instance.GetGameObjectInstance("ResourcesSE")?.GetComponent<AudioSource>()?.Play();
             }
         }
@@ -59,28 +80,29 @@ public class Player : MonoBehaviour {
         {
             if(other.GetComponent<Base>() == m_PlayerBase)
             {
-                if (m_resourcesCount <= 0) return;
+                if (_Ressources.Count <= 0) return;
 
                 RegisterManager.Instance.GetGameObjectInstance("BaseSE")?.GetComponent<AudioSource>()?.Play();
 
-                foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
+                foreach (Ressource ressource in _Ressources)
                 {
-                    l_RessourceChild.Activate();
+                    ressource.Activate();
                 }
 
-                m_resourcesCount = 0;
+                _Ressources.Clear();
             }
             //WARNING : UNFINISHED
         }
         else if (other.GetComponent<Mine>() != null)
         {
-            if( (other.GetComponent<Mine>().m_PlayerTag != tag && other.GetComponent<Mine>() != null) )
+            if(other.GetComponent<Mine>().m_PlayerTag != tag)
             {
-                foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
+                foreach (Ressource ressource in _Ressources)
                 {
-                    l_RessourceChild.RecreateRessource();
+                    ressource.Respawn();
                 }
-                m_resourcesCount = 0;
+
+                _Ressources.Clear();
                 other.GetComponent<Mine>().MakeExplosionEffect();
                 RegisterManager.Instance.GetGameObjectInstance("PlayerSE")?.GetComponent<AudioSource>()?.Play();
                 Destroy(other.gameObject);
@@ -94,100 +116,56 @@ public class Player : MonoBehaviour {
 
     public void HitBySlime()
     {
-        foreach (Ressource l_RessourceChild in GetComponentsInChildren<Ressource>().ToList())
+        foreach (Ressource ressource in _Ressources)
         {
-            l_RessourceChild.RecreateRessource();
+            ressource.Respawn();
         }
-        m_resourcesCount = 0;
+
+        _Ressources.Clear();
         RegisterManager.Instance.GetGameObjectInstance("PlayerSE")?.GetComponent<AudioSource>()?.Play();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //m_moveWithController(m_joystickNumber);
-
-        //Debug.Log(gameObject.tag);
+        MoveWithController(m_joystickNumber);
 
         if (Input.GetButton("Fire_P" + m_joystickNumber) && gameObject.tag == "Player " + m_joystickNumber)
             PutTheMine();
 
-        if(!m_isCarryingMine)
+        if(!m_isCarryingMine && !_mineTimer.IsActive)
         {
-            m_coolDownMine += Time.deltaTime;
-
-            if(m_coolDownMine >= m_CooldDownMineMax)
-            {
-                m_isCarryingMine = true;
-                m_coolDownMine = 0f;
-            }
+            TimerManager.Instance.StartTimer(_mineTimer);
         }
-        
-
-
 
         //reset speed if changed with powerup
-        if (m_walkSpeed != m_AverageSpeed)
+        if (_actualSpeed != _averageSpeed)
         {
-            m_SpeedRestTimer -= Time.deltaTime;
-            if (m_walkSpeed < m_AverageSpeed)
+            if (_actualSpeed < _averageSpeed)
             {
-                ParticleSystem.EmissionModule em = transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().emission;
-                em.enabled = true;
-            } else
-            {
-                ParticleSystem.EmissionModule em = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().emission;
-                em.enabled = true;
+                _slowEffect.Play(true);
             }
-        }
-        if (m_SpeedRestTimer <= 0)
-        {
-            m_SpeedEffect = null;
-            ParticleSystem.EmissionModule em = transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().emission;
-            em.enabled = false;
-            ParticleSystem.EmissionModule em1 = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().emission;
-            em1.enabled = false;
-            m_walkSpeed = m_AverageSpeed;
-            m_SpeedRestTimer = 5;
+            else
+            {
+                _speedEffect.Play(true);
+            }
         }
 
         //manage pickup cooldown
-        if (m_powerUpCooldown)
+        if (m_powerUpCooldown && !_powerUpTimer.IsActive)
         {
-            m_PowerUpcooldownTimer -= Time.deltaTime;
-        }
-        if (m_PowerUpcooldownTimer <= 0)
-        {
-            m_PowerUpcooldownTimer = 5;
-            m_powerUpCooldown = false;
+            TimerManager.Instance.StartTimer(_powerUpTimer);
         }
     }
 
-
-    public int GetNbOfRessources()
+    private void MoveWithController(float p_joystickNumber)
     {
-        return m_resourcesCount;
-    }
-
-    private void FixedUpdate()
-    {
-        m_moveWithController(m_joystickNumber);
-    }
-
-    public void m_moveWithController(float p_joystickNumber)
-    {
-        m_rb = GetComponent<Rigidbody>();
-
         //get controller axis
         Vector2 l_controllerAxis = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber), -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber));
         l_controllerAxis.Normalize();
-        
-
-        
-
 
         //Movement vector
-        Vector3 l_movement = new Vector3((l_controllerAxis.x * m_walkSpeed)*Time.fixedDeltaTime, 0.0f, (l_controllerAxis.y * m_walkSpeed)* Time.fixedDeltaTime);
+        Vector3 l_movement = new Vector3((l_controllerAxis.x * _actualSpeed), 0.0f, (l_controllerAxis.y * _actualSpeed)) * Time.deltaTime ;
 
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
@@ -213,11 +191,22 @@ public class Player : MonoBehaviour {
         if(l_movement.x != 0 && l_movement.z != 0)
         {
             float radius = Mathf.Atan2(l_movement.x, l_movement.z);
-            radius = (radius * 180f) / 3.141592f;
+            radius = (radius * 180f) / Mathf.PI;
             m_rb.MoveRotation(Quaternion.Euler(0, radius, 0));
         }
             
 
+    }
+
+    public int GetNbOfRessources()
+    {
+        return _Ressources.Count - 1;
+    }
+
+    public void ApplySpeedEffect(float effect)
+    {
+        _actualSpeed *= effect;
+        TimerManager.Instance.StartTimer(_speedTimer);
     }
 
     public bool HaveMine()
@@ -227,17 +216,17 @@ public class Player : MonoBehaviour {
 
     public void PutTheMine() {
 
+        //todo USE POOL
+
         if (m_isCarryingMine && gameObject.tag == "Player " + m_joystickNumber) {
 
             if (m_mine != null)
                 Destroy(m_mine);
 
-            m_mine = Instantiate<GameObject>(MinePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), MapManager.Instance.transform);
+            m_mine = Instantiate<GameObject>(_minePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), MapManager.Instance.transform);
             MapManager.Instance.AddGameObjectOnTheGrid(-(int) Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z), m_mine, MapManager.TypeObject.e_Mine);
             m_mine.GetComponent<Mine>().m_PlayerTag = tag;
             m_isCarryingMine = false;
         }
-
     }
-
 }

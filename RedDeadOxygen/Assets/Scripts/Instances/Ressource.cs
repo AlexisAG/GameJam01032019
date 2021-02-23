@@ -24,7 +24,7 @@ public class Ressource : MonoBehaviour, Pickup
     public void Activate()
     {
         _player.m_PlayerBase.AddRessourceToBase(_power);
-        RecreateRessource();
+        Respawn();
     }
 
     public void IsPick(Player playerRef)
@@ -41,6 +41,7 @@ public class Ressource : MonoBehaviour, Pickup
         _player = null;
         IsUsed = false;
 
+        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y, MapManager.TypeObject.e_Ressource);
         _position = MapManager.Instance.GetRandomFreePosition();
         transform.SetParent(MapManager.Instance.transform, false);
         transform.localPosition = new Vector3(_position.x, 0f, _position.y);
@@ -54,11 +55,5 @@ public class Ressource : MonoBehaviour, Pickup
         {
             _animator.SetBool("IsPickup", IsUsed);
         }
-    }
-
-    public void RecreateRessource()
-    {
-        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y, MapManager.TypeObject.e_Ressource);
-        Respawn();
     }
 }
