@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Slow : Powerup
 {
-    public float SlowMultiplier = 3;
+    public float SlowMultiplier = .75f;
 
 
     private BoxCollider m_boxCollider;
@@ -13,13 +13,14 @@ public class Slow : Powerup
 
     public override void Activate()
     { 
+        //todo: Maybe apply the malus on a base instead of a player
         switch (m_picker.tag.Substring(m_picker.tag.Length - 1, 1)) {
             case "0" :
-                GameObject.FindWithTag("Player 1").GetComponent<Player>().m_walkSpeed= SlowMultiplier;
+                GameObject.FindWithTag("Player 1")?.GetComponent<Player>().ApplySpeedEffect(SlowMultiplier);
                 break;
 
             case "1" :
-                GameObject.FindWithTag("Player 0").GetComponent<Player>().m_walkSpeed = SlowMultiplier;
+                GameObject.FindWithTag("Player 0")?.GetComponent<Player>().ApplySpeedEffect(SlowMultiplier);
                 break;
         }
     }
