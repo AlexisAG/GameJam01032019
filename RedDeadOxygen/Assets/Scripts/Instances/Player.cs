@@ -112,14 +112,15 @@ public class Player : MonoBehaviour
         {
             if(other.GetComponent<Mine>().m_PlayerTag != tag)
             {
+                other.GetComponent<Mine>().MakeExplosionEffect();
+                RegisterManager.Instance.GetGameObjectInstance("PlayerSE")?.GetComponent<AudioSource>()?.Play();
+
                 foreach (Ressource ressource in _Ressources)
                 {
                     ressource.Respawn();
                 }
 
                 _Ressources.Clear();
-                other.GetComponent<Mine>().MakeExplosionEffect();
-                RegisterManager.Instance.GetGameObjectInstance("PlayerSE")?.GetComponent<AudioSource>()?.Play();
                 Destroy(other.gameObject);
             }
         }
@@ -226,9 +227,8 @@ public class Player : MonoBehaviour
         return m_isCarryingMine;
     }
 
-    public void PutTheMine() {
-
-        //todo USE POOL
+    public void PutTheMine()
+    {
 
         if (m_isCarryingMine && gameObject.tag == "Player " + m_joystickNumber) {
 
