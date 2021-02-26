@@ -14,22 +14,6 @@ CapsuleCollider:
   m_Height: 0.02
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7564092863297561890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2149008818752300428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc7c571d3e0363140b99e3a2709189e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _baseScale: {x: 1, y: 1, z: 15}
-  _maxLifeInSeconds: 25
-  _maxLife: 150
-  _maxScale: 5
 --- !u!1 &7641442050855423574
 GameObject:
   m_ObjectHideFlags: 0
@@ -41,6 +25,7 @@ GameObject:
   - component: {fileID: 3395952900209147552}
   - component: {fileID: 2777344732658363432}
   - component: {fileID: 7613085162578867828}
+  - component: {fileID: 5541852100246108757}
   m_Layer: 0
   m_Name: BaseFinish
   m_TagString: Untagged
@@ -113,6 +98,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5541852100246108757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7641442050855423574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc7c571d3e0363140b99e3a2709189e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sphere: {fileID: 2149008818752600492}
+  _baseScale: {x: 1, y: 1, z: 15}
+  _maxLifeInSeconds: 25
+  _maxLife: 150
+  _maxScale: 5
 --- !u!1001 &2149008818752201516
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class Base : MonoBehaviour
 {
     [SerializeField]
+    private Transform _sphere;
+    [SerializeField]
     private Vector3 _baseScale; // Basic sphere scale without timeLife 
     [SerializeField]
     private float _maxLifeInSeconds = 20f;
@@ -16,6 +18,7 @@ public class Base : MonoBehaviour
     [SerializeField]
     private int _maxScale = 5;
 
+    private int _baseIndex;
     private int m_PreviousRayon;
     private float m_ScaleFactorByLifeTime; 
     private float m_LifeTime; // Current life of the base decrease with time
@@ -23,6 +26,8 @@ public class Base : MonoBehaviour
     private List<Vector2Int> _posInRangeOfDome; // All pos in range of dome
     private GameObject m_EventManager;
     private SoloGameMode _gm = null;
+
+    public List<Player> Players { get; private set; } = new List<Player>();
 
     private void Start() 
     {
@@ -57,15 +62,27 @@ public class Base : MonoBehaviour
         }
     }
 
+    private void CreatePlayer(int index, GameObject prefab)
+    {
+        Player p = Instantiate<GameObject>(prefab, 
+            new Vector3(transform.position.x, prefab.transform.localScale.y / 2, transform.position.z), 
+            Quaternion.identity, 
+            MapManager.Instance.gameObject.transform).GetComponent<Player>();
+
+        p.transform.GetChild(0).GetComponent<Renderer>().material.color = _baseIndex == 0 ? Color.magenta : Color.cyan;
+        p.Init(index, this);
+        Players.Add(p);
+    }
+
     private void UpdateSphereSize()
     {
         float newScale = (_baseScale.x * m_LifeTime * m_ScaleFactorByLifeTime);
         newScale = Mathf.Clamp(newScale, 0, _maxScale);
-        transform.localScale = new Vector3(newScale, newScale, _baseScale.z);
+        _sphere.localScale = new Vector3(newScale, newScale, _baseScale.z);
 
-        if (m_PreviousRayon != Mathf.CeilToInt(transform.localScale.x))
+        if (m_PreviousRayon != Mathf.CeilToInt(_sphere.localScale.x))
         {
-            m_PreviousRayon = Mathf.CeilToInt(transform.localScale.x);
+            m_PreviousRayon = Mathf.CeilToInt(_sphere.localScale.x);
             UpdatePosInRange();
         }
     }
@@ -79,8 +96,8 @@ public class Base : MonoBehaviour
         {
             for (int j=-index; j<= index; j++)
             {
-                Vector2Int l_TestPositionR = new Vector2Int(Mathf.FloorToInt(transform.parent.localPosition.x + i*.5f), 
-                    Mathf.FloorToInt(transform.parent.localPosition.z + j*.5f));
+                Vector2Int l_TestPositionR = new Vector2Int(Mathf.FloorToInt(transform.localPosition.x + i*.5f), 
+                    Mathf.FloorToInt(transform.localPosition.z + j*.5f));
 
                 l_CurrentPosInRangeOfDome.Add(l_TestPositionR);
             }
@@ -93,7 +110,7 @@ public class Base : MonoBehaviour
             if (!_posInRangeOfDome.Contains(l_vec))
             {
                 _posInRangeOfDome.Add(l_vec);
-                MapManager.Instance.AddGameObjectOnTheGrid(l_vec.x, l_vec.y, transform.parent.gameObject, MapManager.TypeObject.e_Base);
+                MapManager.Instance.AddGameObjectOnTheGrid(l_vec.x, l_vec.y, transform.gameObject, MapManager.TypeObject.e_Base);
             }
         }
 
@@ -121,8 +138,15 @@ public class Base : MonoBehaviour
         }
     }
 
-    public void Init() 
+    public void Init(int baseIndex, GameObject playerPrefab, int nbPlayer = 1) 
     {
+        _baseIndex = baseIndex;
+
+        for (int i = 0; i < nbPlayer; i++)
+        {
+            CreatePlayer(i + baseIndex, playerPrefab);
+        }
+
         m_PreviousRayon = -1;
         m_LifeTime = _maxLife;
         m_LoseLifeMultiplicator = _maxLife / _maxLifeInSeconds;

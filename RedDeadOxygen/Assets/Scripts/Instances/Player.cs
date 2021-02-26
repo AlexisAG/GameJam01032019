@@ -20,11 +20,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private ParticleSystem _speedEffect = null;
 
-    public bool m_powerUpCooldown = false;
-    public float m_joystickNumber;
-    public Base m_PlayerBase;
-    public GameObject MinePrefabe => _minePrefab;
-
+    private float m_joystickNumber;
     private bool m_isCarryingMine;
     private float _actualSpeed;
     private GameObject m_mine;
@@ -35,12 +31,16 @@ public class Player : MonoBehaviour
     private Timer _speedTimer;
     private List<Ressource> _Ressources = new List<Ressource>();
 
+    public bool m_powerUpCooldown = false;
+    public Base PlayerBase { get; private set; }
+    public GameObject MinePrefab => _minePrefab;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _actualSpeed = _averageSpeed;
         m_rb = GetComponent<Rigidbody>();
-        m_isCarryingMine = true;
+        m_isCarryingMine = false;
         _slowEffect.Stop(true);
         _speedEffect.Stop(true);
 
@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         UnityEvent speedEvent = new UnityEvent();
 
         mineEvent.AddListener(() => { m_isCarryingMine = true; });
-        speedEvent.AddListener(() => { m_powerUpCooldown = false; });
+        powerUpEvent.AddListener(() => { m_powerUpCooldown = false; });
         speedEvent.AddListener(() =>
         {
            _slowEffect.Stop(true);
@@ -90,9 +90,9 @@ public class Player : MonoBehaviour
                 RegisterManager.Instance.GetGameObjectInstance("ResourcesSE")?.GetComponent<AudioSource>()?.Play();
             }
         }
-        else if (other.GetComponent<Base>() != null)
+        else if (other.GetComponentInParent<Base>() != null)
         {
-            if(other.GetComponent<Base>() == m_PlayerBase)
+            if(other.GetComponentInParent<Base>() == PlayerBase)
             {
                 if (_Ressources.Count <= 0) return;
 
@@ -124,27 +124,19 @@ public class Player : MonoBehaviour
         }
         else if(other.GetComponent<Enemy>() != null)
         {
-            HitBySlime();
+            DropResources();
+            RegisterManager.Instance.GetGameObjectInstance("PlayerSE")?.GetComponent<AudioSource>()?.Play();
         }
-    }
-
-    public void HitBySlime()
-    {
-        foreach (Ressource ressource in _Ressources)
-        {
-            ressource.Respawn();
-        }
-
-        _Ressources.Clear();
-        RegisterManager.Instance.GetGameObjectInstance("PlayerSE")?.GetComponent<AudioSource>()?.Play();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        if (!(gameObject.tag == "Player " + m_joystickNumber)) return;
+
         MoveWithController(m_joystickNumber);
 
-        if (Input.GetButton("Fire_P" + m_joystickNumber) && gameObject.tag == "Player " + m_joystickNumber)
+        if (Input.GetButton("Fire_P" + m_joystickNumber))
             PutTheMine();
 
         if(!m_isCarryingMine && !_mineTimer.IsActive)
@@ -197,6 +189,23 @@ public class Player : MonoBehaviour
             radius = (radius * 180f) / Mathf.PI;
             m_rb.MoveRotation(Quaternion.Euler(0, radius, 0));
         }
+    }
+
+    public void Init(int index, Base b)
+    {
+        PlayerBase = b;
+        m_joystickNumber = index;
+        gameObject.tag = $"Player {index}";
+    }
+
+    public void DropResources()
+    {
+        foreach (Ressource ressource in _Ressources)
+        {
+            ressource.Respawn();
+        }
+
+        _Ressources.Clear();
     }
 
     public int GetNbOfRessources()

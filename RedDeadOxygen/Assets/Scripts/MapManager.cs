@@ -42,7 +42,6 @@ public class MapManager : Singleton<MapManager>
     private List<GameObject> m_mines = new List<GameObject>();
     private List<GameObject> m_ressources = new List<GameObject>();
     private List<GameObject> m_powerups = new List<GameObject>();
-    private GameObject m_player1, m_player2;
     private GameObject[,] _grid = new GameObject[0,0];
     private int m_nbPlayers;
     private float m_nextTimeEnemySpawn;
@@ -58,7 +57,7 @@ public class MapManager : Singleton<MapManager>
 
     public Vector2Int GridSize { get; private set; } = Vector2Int.zero;
 
-
+    //todo USELESS ??
     public enum TypeObject
     {
         e_None,
@@ -106,30 +105,19 @@ public class MapManager : Singleton<MapManager>
     private void InitBase()
     {
         // base 1
-        GameObject base1 = Instantiate<GameObject>(_basePrefab, transform);
+        Base base1 = Instantiate<GameObject>(_basePrefab, transform).GetComponentInChildren<Base>();
         base1.transform.localPosition = _basesPosition[0];
-        AddGameObjectOnTheGrid((int)_basesPosition[0].x, (int)_basesPosition[0].z, base1, TypeObject.e_Base);
-        base1.GetComponentInChildren<Base>().Init();
-        //player 1
-        m_player1 = Instantiate<GameObject>(_playerPrefab, new Vector3(-3, _playerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
-        m_player1.GetComponent<Player>().m_joystickNumber = 0;
-        m_player1.tag = "Player 0";
-        m_player1.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.magenta;
+        AddGameObjectOnTheGrid((int)_basesPosition[0].x, (int)_basesPosition[0].z, base1.gameObject, TypeObject.e_Base);
+        base1.Init(0, _playerPrefab);
 
         //base 2
-        GameObject base2 = Instantiate<GameObject>(_basePrefab, transform);
+        Base base2 = Instantiate<GameObject>(_basePrefab, transform).GetComponentInChildren<Base>();
         base2.transform.localPosition = _basesPosition[1];
-        AddGameObjectOnTheGrid((int)_basesPosition[1].x, (int)_basesPosition[1].z, base2, TypeObject.e_Base);
-        base2.GetComponentInChildren<Base>().Init();
-
-        //player 2
-        m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(GridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (GridSize.y - 3)), Quaternion.identity, gameObject.transform);
-        m_player2.GetComponent<Player>().m_joystickNumber = 1;
-        m_player2.tag = "Player 1";
-        m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);
+        AddGameObjectOnTheGrid((int)_basesPosition[1].x, (int)_basesPosition[1].z, base2.gameObject, TypeObject.e_Base);
+        base2.Init(1, _playerPrefab);
         
-        Bases.Add(base1.GetComponentInChildren<Base>());
-        Bases.Add(base2.GetComponentInChildren<Base>());
+        Bases.Add(base1);
+        Bases.Add(base2);
     }
     
     void SpawnPowerups()
@@ -373,7 +361,7 @@ public class MapManager : Singleton<MapManager>
 
         foreach (Base item in Bases) 
         {
-            GameObject.Destroy(item);
+            GameObject.Destroy(item.gameObject);
         }
 
         Bases.Clear();

@@ -23,7 +23,7 @@ public class Ressource : MonoBehaviour, Pickup
     #region PickupInterface
     public void Activate()
     {
-        _player.m_PlayerBase.AddRessourceToBase(_power);
+        _player.PlayerBase.AddRessourceToBase(_power);
         Respawn();
     }
 

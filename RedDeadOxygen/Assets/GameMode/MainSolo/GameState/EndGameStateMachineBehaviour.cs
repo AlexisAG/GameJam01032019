@@ -8,6 +8,16 @@ public class EndGameStateMachineBehaviour : GameStateMachineBehaviour<EndData>
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {
         Data.EndGameMenu.gameObject.SetActive(true);
+
+        foreach (Base b in MapManager.Instance.Bases)
+        {
+            foreach (Player p in b.Players)
+            {
+                p.DropResources();
+                GameObject.Destroy(p.gameObject);
+            }
+        }
+
         MapManager.Instance.ClearGrid();
     }
 

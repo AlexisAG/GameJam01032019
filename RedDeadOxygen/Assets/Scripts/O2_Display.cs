@@ -26,8 +26,8 @@ public class O2_Display : MonoBehaviour
         mine_P1 = m_players.Where<Player>(p => p.tag == "Player 0").ToArray<Player>()[0].HaveMine() ? "Mine disponible" : "Mine indisponible";
         mine_P2 = m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].HaveMine() ? "Mine disponible" : "Mine indisponible";
 
-        Base b1 = m_players.Where<Player>(p => p.tag == "Player 0").ToArray<Player>()[0].m_PlayerBase;
-        Base b2 = m_players.Where<Player>(p => p.tag == "Player 1").ToArray<Player>()[0].m_PlayerBase;
+        Base b1 = MapManager.Instance.Bases[0];
+        Base b2 = MapManager.Instance.Bases[1];
 
         int l_Base1Life = 0, l_Base2Life = 0;
 
