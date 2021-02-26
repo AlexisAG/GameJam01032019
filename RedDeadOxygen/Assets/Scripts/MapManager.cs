@@ -111,10 +111,10 @@ public class MapManager : Singleton<MapManager>
         AddGameObjectOnTheGrid((int)_basesPosition[0].x, (int)_basesPosition[0].z, base1, TypeObject.e_Base);
         base1.GetComponentInChildren<Base>().Init();
         //player 1
-        /*m_player1 = Instantiate<GameObject>(_playerPrefab, new Vector3(-3, _playerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
+        m_player1 = Instantiate<GameObject>(_playerPrefab, new Vector3(-3, _playerPrefab.transform.localScale.y / 2, 3), Quaternion.identity, gameObject.transform);
         m_player1.GetComponent<Player>().m_joystickNumber = 0;
         m_player1.tag = "Player 0";
-        m_player1.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.magenta;*/
+        m_player1.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.magenta;
 
         //base 2
         GameObject base2 = Instantiate<GameObject>(_basePrefab, transform);
@@ -123,10 +123,10 @@ public class MapManager : Singleton<MapManager>
         base2.GetComponentInChildren<Base>().Init();
 
         //player 2
-        /*m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(GridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (GridSize.y - 3)), Quaternion.identity, gameObject.transform);
+        m_player2 = Instantiate<GameObject>(_playerPrefab, new Vector3(-(GridSize.x - 3), _playerPrefab.transform.localScale.y / 2, (GridSize.y - 3)), Quaternion.identity, gameObject.transform);
         m_player2.GetComponent<Player>().m_joystickNumber = 1;
         m_player2.tag = "Player 1";
-        m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);*/
+        m_player2.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);
         
         Bases.Add(base1.GetComponentInChildren<Base>());
         Bases.Add(base2.GetComponentInChildren<Base>());

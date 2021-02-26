@@ -23,11 +23,13 @@ public class Player : MonoBehaviour
     public bool m_powerUpCooldown = false;
     public float m_joystickNumber;
     public Base m_PlayerBase;
+    public GameObject MinePrefabe => _minePrefab;
 
     private bool m_isCarryingMine;
     private float _actualSpeed;
     private GameObject m_mine;
     private Rigidbody m_rb;
+    private Vector4 _mapLimit;
     private Timer _mineTimer;
     private Timer _powerUpTimer;
     private Timer _speedTimer;
@@ -42,6 +44,18 @@ public class Player : MonoBehaviour
         _slowEffect.Stop(true);
         _speedEffect.Stop(true);
 
+        //MAP LIMIT
+        Vector3 mapPos = MapManager.Instance.gameObject.transform.position;
+        Vector3 mapScale = MapManager.Instance.gameObject.GetComponent<Renderer>().bounds.size / 2;
+
+        float maxX = mapPos.x + mapScale.x - transform.lossyScale.x;
+        float minX = mapPos.x - mapScale.x + transform.lossyScale.x;
+        float maxY = mapPos.z + mapScale.z - transform.lossyScale.z;
+        float minY = mapPos.z - mapScale.z + transform.lossyScale.z;
+  
+        _mapLimit = new Vector4(minX, maxX, minY, maxY);
+
+        //TIMER
         UnityEvent mineEvent = new UnityEvent(); 
         UnityEvent powerUpEvent = new UnityEvent(); 
         UnityEvent speedEvent = new UnityEvent();
@@ -170,22 +184,11 @@ public class Player : MonoBehaviour
         //New position
         Vector3 l_newPos = m_rb.position + l_movement;
 
-        //Check if player is in bounds //todo: Maybe use collider ??
-        if (l_newPos.x >= -transform.lossyScale.x)
-            l_newPos.x = -transform.lossyScale.x;
-
-        if (l_newPos.x <= -(MapManager.Instance.GridSize.x - transform.lossyScale.x))
-            l_newPos.x = -(MapManager.Instance.GridSize.x - transform.lossyScale.x);
-
-        if (l_newPos.z >= MapManager.Instance.GridSize.y - transform.lossyScale.z)
-            l_newPos.z = MapManager.Instance.GridSize.y - transform.lossyScale.z;
-
-        if (l_newPos.z <= transform.lossyScale.z)
-            l_newPos.z = transform.lossyScale.z;
-
+        //Check if player is in bounds
+        l_newPos.x = Mathf.Clamp(l_newPos.x, _mapLimit.x, _mapLimit.y);
+        l_newPos.z = Mathf.Clamp(l_newPos.z, _mapLimit.z, _mapLimit.w);
 
         //Move player to the new position
-
         m_rb.MovePosition(l_newPos);
 
         if(l_movement.x != 0 && l_movement.z != 0)
@@ -194,8 +197,6 @@ public class Player : MonoBehaviour
             radius = (radius * 180f) / Mathf.PI;
             m_rb.MoveRotation(Quaternion.Euler(0, radius, 0));
         }
-            
-
     }
 
     public int GetNbOfRessources()
@@ -224,7 +225,7 @@ public class Player : MonoBehaviour
                 Destroy(m_mine);
 
             m_mine = Instantiate<GameObject>(_minePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), MapManager.Instance.transform);
-            MapManager.Instance.AddGameObjectOnTheGrid(-(int) Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z), m_mine, MapManager.TypeObject.e_Mine);
+            MapManager.Instance.AddGameObjectOnTheGrid(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z), m_mine, MapManager.TypeObject.e_Mine);
             m_mine.GetComponent<Mine>().m_PlayerTag = tag;
             m_isCarryingMine = false;
         }
