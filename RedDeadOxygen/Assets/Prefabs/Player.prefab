@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4258710157398469677}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2039922559711408680}
   - {fileID: 6401530152335264480}
@@ -67,12 +67,11 @@ MonoBehaviour:
   _averageSpeed: 20
   _cooldownMine: 5
   _PowerUpCooldownTimer: 5
-  _minePrefab: {fileID: 0}
+  _minePrefab: {fileID: 1732381903405346695, guid: 2a2dd2770fee0bb4ca6bb7d8730557fd,
+    type: 3}
   _slowEffect: {fileID: 1441224113283643647}
   _speedEffect: {fileID: 4897181383469690698}
   m_powerUpCooldown: 0
-  m_joystickNumber: 0
-  m_PlayerBase: {fileID: 0}
 --- !u!136 &4747590686460722722
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -83,10 +82,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 1.5
-  m_Height: 10
+  m_Radius: 0.65
+  m_Height: 2.5
   m_Direction: 1
-  m_Center: {x: 0, y: 5, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &395870164551849525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -415,15 +414,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 471a73c7e5a7ae745b956be33bb46e3e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 100
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 471a73c7e5a7ae745b956be33bb46e3e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 100
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 471a73c7e5a7ae745b956be33bb46e3e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 100
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 471a73c7e5a7ae745b956be33bb46e3e, type: 3}
       propertyPath: m_LocalPosition.x

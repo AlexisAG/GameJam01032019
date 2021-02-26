@@ -348,6 +348,8 @@ public class MapManager : Singleton<MapManager>
 
     public void ClearGrid() 
     {
+        if (_grid.Length <= 0) return;
+
         for (int i = 0; i <= GridSize.x; i++) 
         {
             for (int j = 0; j <= GridSize.y; j++) 
@@ -361,6 +363,12 @@ public class MapManager : Singleton<MapManager>
 
         foreach (Base item in Bases) 
         {
+            foreach (Player p in item.Players)
+            {
+                p.DropResources();
+                GameObject.Destroy(p.gameObject);
+            }
+
             GameObject.Destroy(item.gameObject);
         }
 

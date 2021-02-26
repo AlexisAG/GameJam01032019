@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using AgToolkit.AgToolkit.Core.Timer;
 using UnityEngine.Events;
+using AgToolkit.Core.GameModes;
 
 public class Player : MonoBehaviour
 {
@@ -132,6 +133,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (GameManager.Instance.GetCurrentGameMode<SoloGameMode>()?.GameIsOver ?? true) return;
         if (!(gameObject.tag == "Player " + m_joystickNumber)) return;
 
         MoveWithController(m_joystickNumber);

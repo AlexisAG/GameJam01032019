@@ -7,6 +7,8 @@ public class Ressource : MonoBehaviour, Pickup
 {
     [SerializeField]
     private float _power = 8;
+    [SerializeField]
+    private Vector3 _offsetOnPick = Vector3.zero;
 
     private Player _player;
     private Animator _animator;
@@ -32,7 +34,9 @@ public class Ressource : MonoBehaviour, Pickup
         IsUsed = true;
         _player = playerRef;
         transform.SetParent(_player.transform, false);
-        _animator.SetBool("IsPickup", IsUsed);
+        transform.localPosition = _offsetOnPick;
+        transform.localRotation = Quaternion.identity;
+        _animator.enabled = false;
     }
     #endregion
 
@@ -40,10 +44,10 @@ public class Ressource : MonoBehaviour, Pickup
     {
         _player = null;
         IsUsed = false;
+        transform.SetParent(MapManager.Instance.transform, false);
 
         MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y, MapManager.TypeObject.e_Ressource);
         _position = MapManager.Instance.GetRandomFreePosition();
-        transform.SetParent(MapManager.Instance.transform, false);
         transform.localPosition = new Vector3(_position.x, 0f, _position.y);
         transform.rotation = Quaternion.identity;
 
@@ -53,6 +57,7 @@ public class Ressource : MonoBehaviour, Pickup
         }
         else 
         {
+            _animator.enabled = true;
             _animator.SetBool("IsPickup", IsUsed);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using AgToolkit.Core.GameModes;
 
 public class O2_Display : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class O2_Display : MonoBehaviour
     public Text o2Text_P1, o2Text_P2, mineP1, mineP2, baseP1, baseP2;
     private Player[] m_players;
 
-    private void Update() {
-        
+    private void Update()
+    {
+        if (GameManager.Instance.GetCurrentGameMode<SoloGameMode>()?.GameIsOver ?? true) return;
+
         //"catch" all spawned players
         m_players = MapManager.Instance.GetComponentsInChildren<Player>();
 
