@@ -42,7 +42,7 @@ public class MapManager : Singleton<MapManager>
     private List<GameObject> m_mines = new List<GameObject>();
     private List<GameObject> m_ressources = new List<GameObject>();
     private List<GameObject> m_powerups = new List<GameObject>();
-    private GameObject[,] _grid = new GameObject[0,0];
+    private GameObjectGrid[,] _grid = new GameObjectGrid[0,0];
     private int m_nbPlayers;
     private float m_nextTimeEnemySpawn;
     private float m_powerupSpawnTimer;
@@ -57,7 +57,6 @@ public class MapManager : Singleton<MapManager>
 
     public Vector2Int GridSize { get; private set; } = Vector2Int.zero;
 
-    //todo USELESS ??
     public enum TypeObject
     {
         e_None,
@@ -66,6 +65,20 @@ public class MapManager : Singleton<MapManager>
         e_Ressource,
         e_PowerUp
     }
+    private class GameObjectGrid
+    {
+        public GameObject GameObjectRef { get; private set; }
+        public TypeObject TypeRef { get; private set; }
+        public Vector2Int PositionOnGrid { get; private set; }
+
+        public GameObjectGrid(GameObject go, TypeObject type, int x, int y)
+        {
+            GameObjectRef = go;
+            TypeRef = type;
+            PositionOnGrid = new Vector2Int(x, y);
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -292,14 +305,14 @@ public class MapManager : Singleton<MapManager>
         else if (_grid[x, y] != null && !replace) return false;
         else if (_grid[x, y] != null && replace) 
         {
-            Debug.LogWarning(_grid[x, y].name);
+            Debug.LogWarning(_grid[x, y].GameObjectRef.name);
 
-            switch (_grid[x, y].name) {
-                case "Ressource(Clone)":
+            switch (_grid[x, y].TypeRef) {
+                case TypeObject.e_Ressource:
                     RemoveGameObjectOnTheGrid(x, y, TypeObject.e_Ressource);
                     break;
 
-                case "Mine(Clone)":
+                case TypeObject.e_Mine:
                     RemoveGameObjectOnTheGrid(x, y, TypeObject.e_Mine);
                     break;
 
@@ -309,7 +322,7 @@ public class MapManager : Singleton<MapManager>
             }
         }
 
-        _grid[x, y] = obj;
+        _grid[x, y] = new GameObjectGrid(obj, type, x, y);
         return true;
     }
 
@@ -324,7 +337,7 @@ public class MapManager : Singleton<MapManager>
         // Init grid size from plane renderer
         Vector3 planeSize = GetComponent<Renderer>()?.bounds.size / 2 ?? Vector3.zero;
         GridSize = new Vector2Int((int)planeSize.x, (int)planeSize.z);
-        _grid = new GameObject[GridSize.x, GridSize.y];
+        _grid = new GameObjectGrid[GridSize.x, GridSize.y];
         GridSize -= new Vector2Int(1, 1);
 
         m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency, 1, 300);
@@ -342,9 +355,9 @@ public class MapManager : Singleton<MapManager>
         ConvertUnityPositionToCordinate(ref x, ref z);
 
         if (_grid.Length <= 0 || _grid[x, z] == null) return;
-        if(_grid[x, z].GetComponentInChildren<Base>() != null) return;
+        if(_grid[x, z].GameObjectRef.GetComponentInChildren<Base>() != null) return;
 
-        _grid[x, z].SetActive(false);
+        _grid[x, z].GameObjectRef.SetActive(false);
         _grid[x, z] = null;
     }
 
@@ -352,17 +365,7 @@ public class MapManager : Singleton<MapManager>
     {
         if (_grid.Length <= 0) return;
 
-        for (int i = 0; i <= GridSize.x; i++) 
-        {
-            for (int j = 0; j <= GridSize.y; j++) 
-            {
-                if (_grid[i, j] == null) continue;
-
-                _grid[i, j].SetActive(false);
-                _grid[i, j] = null;
-            }
-        }
-
+        // Destroy players (not referenced in the grid)
         foreach (Base item in Bases) 
         {
             foreach (Player p in item.Players)
@@ -370,9 +373,28 @@ public class MapManager : Singleton<MapManager>
                 p.DropResources();
                 GameObject.Destroy(p.gameObject);
             }
-
-            GameObject.Destroy(item.gameObject);
         }
+
+        // clean the grid
+        for (int i = 0; i <= GridSize.x; i++) 
+        {
+            for (int j = 0; j <= GridSize.y; j++) 
+            {
+                if (_grid[i, j] == null) continue;
+
+                if (_grid[i, j].TypeRef == TypeObject.e_Ressource)
+                {
+                    _grid[i, j].GameObjectRef.SetActive(false);
+                }
+                else
+                {
+                    Destroy(_grid[i, j].GameObjectRef);
+                }
+
+                _grid[i, j] = null;
+            }
+        }
+
 
         Bases.Clear();
     }
