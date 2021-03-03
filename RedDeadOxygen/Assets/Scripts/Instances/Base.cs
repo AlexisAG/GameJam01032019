@@ -18,6 +18,7 @@ public class Base : MonoBehaviour
     [SerializeField]
     private int _maxScale = 5;
 
+    private bool _lifeChanged = false;
     private int _baseIndex;
     private int m_PreviousRayon;
     private float m_ScaleFactorByLifeTime; 
@@ -48,16 +49,17 @@ public class Base : MonoBehaviour
         float counter = 0f;
         float lifeOnStart = m_LifeTime;
 
-        while (m_LifeTime > 0f && Time.timeScale != 0 && counter < 1f && m_LifeTime <= lifeOnStart)
+        while (m_LifeTime > 0f && Time.timeScale != 0 && counter < 1f && !_lifeChanged)
         {
             counter += Time.deltaTime;
-            TakeOfLifeTime(m_LifeTime - Mathf.Lerp(lifeOnStart, lifeOnStart - m_LoseLifeMultiplicator, counter / 1f));
+            m_LifeTime -= m_LifeTime - Mathf.Lerp(lifeOnStart, lifeOnStart - m_LoseLifeMultiplicator, counter / 1f);
 
             yield return null;            
         }
 
-        if (m_LifeTime > 0f && Time.timeScale != 0) 
+        if (m_LifeTime > 0f && !_gm.GameIsOver) 
         {
+            _lifeChanged = false;
             CoroutineManager.Instance.StartCoroutine(DecreaseLifeOverTime());
         }
     }
@@ -166,11 +168,13 @@ public class Base : MonoBehaviour
     {
         m_LifeTime += p_Value;
         m_LifeTime = Mathf.Clamp(m_LifeTime, 0, _maxLife);
+        _lifeChanged = true;
     }
 
     public void TakeOfLifeTime(float p_Value = 10)
     {
         m_LifeTime -= p_Value;
+        _lifeChanged = true;
     }
 
     public void TakeOfPourcentOfLifeTime(float p_Pourcent = .25f)
@@ -178,6 +182,7 @@ public class Base : MonoBehaviour
         if (p_Pourcent > 1f) return;
 
         m_LifeTime -= p_Pourcent * m_LifeTime;
+        _lifeChanged = true;
     }
 
     private void FinishGame()

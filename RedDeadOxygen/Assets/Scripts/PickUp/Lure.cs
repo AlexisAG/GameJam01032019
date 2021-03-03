@@ -29,10 +29,10 @@ public class Lure : Powerup
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().m_powerUpCooldown)
+        if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().PowerUpCooldown)
         {
             IsPick(other.gameObject.GetComponent<Player>());
-            other.gameObject.GetComponent<Player>().m_powerUpCooldown = true;
+            other.gameObject.GetComponent<Player>().PowerUpCooldown = true;
             RegisterManager.Instance.GetGameObjectInstance("LureSE")?.GetComponent<AudioSource>()?.Play();
             MapManager.Instance.RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), MapManager.TypeObject.e_Ressource);
         }

@@ -32,10 +32,10 @@ public class SpeedBoost : Powerup
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().m_powerUpCooldown)
+        if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().PowerUpCooldown)
         {
             m_picker = other.gameObject;
-            m_picker.GetComponent<Player>().m_powerUpCooldown = true;
+            m_picker.GetComponent<Player>().PowerUpCooldown = true;
             IsPick(other.gameObject.GetComponent<Player>());
             RegisterManager.Instance.GetGameObjectInstance("SpeedBoostSE")?.GetComponent<AudioSource>()?.Play();
             MapManager.Instance.RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), MapManager.TypeObject.e_Ressource);

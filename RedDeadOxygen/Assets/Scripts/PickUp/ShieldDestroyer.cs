@@ -4,26 +4,25 @@ using UnityEngine;
 
 public class ShieldDestroyer : Powerup
 {
-    private BoxCollider m_boxCollider;
+    [SerializeField]
+    private float _damagePercent = .33f;
+
     private GameObject m_picker;
-    public float shieldDamage = 15.0f;
+    private Player _player;
 
     public override void Activate()
     {
-        switch (m_picker.tag.Substring(m_picker.tag.Length - 1, 1))
-        {
-            case "0":
-                GameObject.FindWithTag("Player 1").GetComponent<Player>()?.PlayerBase.TakeOfLifeTime(7);
-                break;
+        MapManager.Instance.Bases.Find((Base b) => b != _player.PlayerBase)?.TakeOfPourcentOfLifeTime(_damagePercent);
 
-            case "1":
-                GameObject.FindWithTag("Player 0").GetComponent<Player>()?.PlayerBase.TakeOfLifeTime(7);
-                break;
-        }
+        RegisterManager.Instance.GetGameObjectInstance("ShieldSE")?.GetComponent<AudioSource>()?.Play();
+        _player.PowerUpCooldown = true;
+        MapManager.Instance.RemoveGameObjectOnTheGrid(Mathf.FloorToInt(transform.localPosition.x), Mathf.FloorToInt(transform.localPosition.z), MapManager.TypeObject.e_PowerUp);
     }
 
     public override void IsPick(Player player)
     {
+        m_picker = player.gameObject;
+        _player = player;
         Activate();
     }
 
@@ -32,21 +31,13 @@ public class ShieldDestroyer : Powerup
         throw new System.NotImplementedException();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        m_boxCollider = GetComponent<BoxCollider>();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Player>() != null && !other.gameObject.GetComponent<Player>().m_powerUpCooldown)
+        Player p = other.GetComponent<Player>();
+
+        if (p != null && !p.PowerUpCooldown)
         {
-            m_picker = other.gameObject;
-            m_picker.GetComponent<Player>().m_powerUpCooldown = true;
-            IsPick(other.gameObject.GetComponent<Player>());
-            RegisterManager.Instance.GetGameObjectInstance("ShieldSE")?.GetComponent<AudioSource>()?.Play();
-            MapManager.Instance.RemoveGameObjectOnTheGrid(-Mathf.FloorToInt(this.transform.position.x), Mathf.FloorToInt(this.transform.position.z), MapManager.TypeObject.e_Ressource);
+            IsPick(p);
         }
     }
 }

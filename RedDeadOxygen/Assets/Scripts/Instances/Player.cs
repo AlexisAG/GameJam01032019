@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     private Timer _speedTimer;
     private List<Ressource> _Ressources = new List<Ressource>();
 
-    public bool m_powerUpCooldown = false;
+    public bool PowerUpCooldown = false;
     public Base PlayerBase { get; private set; }
     public GameObject MinePrefab => _minePrefab;
 
@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
         UnityEvent speedEvent = new UnityEvent();
 
         mineEvent.AddListener(() => { m_isCarryingMine = true; });
-        powerUpEvent.AddListener(() => { m_powerUpCooldown = false; });
+        powerUpEvent.AddListener(() => { PowerUpCooldown = false; });
         speedEvent.AddListener(() =>
         {
            _slowEffect.Stop(true);
@@ -161,7 +161,7 @@ public class Player : MonoBehaviour
         }
 
         //manage pickup cooldown
-        if (m_powerUpCooldown && !_powerUpTimer.IsActive)
+        if (PowerUpCooldown && !_powerUpTimer.IsActive)
         {
             TimerManager.Instance.StartTimer(_powerUpTimer);
         }
@@ -236,7 +236,7 @@ public class Player : MonoBehaviour
                 Destroy(m_mine);
 
             m_mine = Instantiate<GameObject>(_minePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), MapManager.Instance.transform);
-            MapManager.Instance.AddGameObjectOnTheGrid(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z), m_mine, MapManager.TypeObject.e_Mine);
+            MapManager.Instance.AddGameObjectOnTheGrid(Mathf.FloorToInt(transform.localPosition.x), Mathf.FloorToInt(transform.localPosition.z), m_mine, MapManager.TypeObject.e_Mine);
             m_mine.GetComponent<Mine>().m_PlayerTag = tag;
             m_isCarryingMine = false;
         }

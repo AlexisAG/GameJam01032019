@@ -342,7 +342,9 @@ public class MapManager : Singleton<MapManager>
         ConvertUnityPositionToCordinate(ref x, ref z);
 
         if (_grid.Length <= 0 || _grid[x, z] == null) return;
+        if(_grid[x, z].GetComponentInChildren<Base>() != null) return;
 
+        _grid[x, z].SetActive(false);
         _grid[x, z] = null;
     }
 
