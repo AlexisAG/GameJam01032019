@@ -355,9 +355,23 @@ public class MapManager : Singleton<MapManager>
         ConvertUnityPositionToCordinate(ref x, ref z);
 
         if (_grid.Length <= 0 || _grid[x, z] == null) return;
-        if(_grid[x, z].GameObjectRef.GetComponentInChildren<Base>() != null) return;
 
-        _grid[x, z].GameObjectRef.SetActive(false);
+        switch (_grid[x, z].TypeRef)
+        {
+            case TypeObject.e_Base:
+                return;
+            case TypeObject.e_Ressource:
+                _grid[x, z].GameObjectRef.GetComponent<Ressource>()?.Respawn();
+                break;
+            case TypeObject.e_None:
+            case TypeObject.e_Mine:
+            case TypeObject.e_PowerUp:
+            default:
+                _grid[x, z].GameObjectRef.SetActive(false);
+                break;
+        }
+
+
         _grid[x, z] = null;
     }
 

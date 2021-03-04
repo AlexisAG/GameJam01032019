@@ -26,7 +26,7 @@ public class Ressource : MonoBehaviour, Pickup
     public void Activate()
     {
         _player.PlayerBase.AddRessourceToBase(_power);
-        Respawn();
+        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y, MapManager.TypeObject.e_Ressource);
     }
 
     public void IsPick(Player playerRef)
@@ -46,7 +46,6 @@ public class Ressource : MonoBehaviour, Pickup
         IsUsed = false;
         transform.SetParent(MapManager.Instance.transform, false);
 
-        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y, MapManager.TypeObject.e_Ressource);
         _position = MapManager.Instance.GetRandomFreePosition();
         transform.localPosition = new Vector3(_position.x, 0f, _position.y);
         transform.rotation = Quaternion.identity;
