@@ -1,12 +1,15 @@
 ﻿using AgToolkit.AgToolkit.Core.Singleton;
+using AgToolkit.AgToolkit.Core.Timer;
 using AgToolkit.Core.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class MapManager : Singleton<MapManager>
 {
+    [Header("Prefabs")]
     [SerializeField]
     [FormerlySerializedAs("BasePrefab")]
     private GameObject _basePrefab;
@@ -26,33 +29,33 @@ public class MapManager : Singleton<MapManager>
     [FormerlySerializedAs("LurePrefab")]
     private GameObject _lurePrefab;
     [SerializeField]
-    [FormerlySerializedAs("SlowPrefab")]
-    private GameObject _slowPowerPrefab;
-    [SerializeField]
-    [FormerlySerializedAs("SpeedBoostPrefab")]
-    private GameObject _boostPowerPrefab;
-    [SerializeField]
-    [FormerlySerializedAs("ShieldBreakPrefab")]
-    private GameObject _shieldBreakPowerPrefab;
+    private List<GameObject> _powerUpPrefabs = new List<GameObject>();
+
+    [Header("Positions")]
     [SerializeField]
     private List<Vector3> _basesPosition = new List<Vector3>(2);
     [SerializeField]
+    private List<Vector3> _powerUpPosition = new List<Vector3>(2);
+
+    [Header("Timers")]
+    [SerializeField]
+    private float _powerUpSpawnTime = 10f;
+    [SerializeField]
+    private float _powerUpRemoveTime = 5f;
+
+    [Header("Divers")]
+    [SerializeField]
     private int _maxRessource = 10;
 
-    private List<GameObject> m_mines = new List<GameObject>();
-    private List<GameObject> m_ressources = new List<GameObject>();
-    private List<GameObject> m_powerups = new List<GameObject>();
     private GameObjectGrid[,] _grid = new GameObjectGrid[0,0];
+    private Timer _powerUpSpawnTimer;
+    private Timer _powerUpDeleteTimer;
     private int m_nbPlayers;
     private float m_nextTimeEnemySpawn;
-    private float m_powerupSpawnTimer;
-    private float m_powerupDeleteTimer;
     private float m_enemySpawnFrequency;
 
     public float StartEnemySpawnFrequency = 10; // Time in seconds between two spawns
     public float TimeOfFirstSpawnEnemy = 5; // Time in seconds when spawn the first enemy
-    public float PowerUpSpawnFrequency = 10; //Time in seconds between powerup spawns
-    public float PowerUpDeletionTime = 5; //Time to get the powerups before they disappear
     public List<Base> Bases { get; private set; } = new List<Base>();
 
     public Vector2Int GridSize { get; private set; } = Vector2Int.zero;
@@ -86,18 +89,7 @@ public class MapManager : Singleton<MapManager>
         return;
 
         CheckSpawnEnemys();
-
-        //powerUps Timer
-        m_powerupSpawnTimer -= Time.deltaTime;
-        if (m_powerupSpawnTimer <= 0)
-        {
-            m_powerupSpawnTimer = 2*PowerUpSpawnFrequency;
-            SpawnPowerups();
-            m_powerupDeleteTimer = PowerUpDeletionTime;
-        }
-        CheckIfDeletePowerups();
     }
-
 
     // Create all the ressources of the map
     private void InitRessources() 
@@ -133,65 +125,32 @@ public class MapManager : Singleton<MapManager>
         Bases.Add(base2);
     }
     
-    void SpawnPowerups()
+    private void SpawnPowerups()
     {
-        Vector3 l_leftSpawnPosition = new Vector3(-11, 0, 10);
-        Vector3 l_rightSpawnPosition = new Vector3(-9, 0, 10);
-        Vector3 l_remainingPosition;
-        int l_remainingIndex;
+        bool leureIsFirstPos = (Random.value > 0.5f);
+        int powerUpIndex = Random.Range(0, _powerUpPrefabs.Count);
+        int index = leureIsFirstPos ? 0 : 1;
+        
+        //lure
+        GameObject lure = GameObject.Instantiate(_lurePrefab, transform, false);
+        lure.transform.rotation = Quaternion.identity;
+        lure.transform.localPosition = _powerUpPosition[index];
+        AddGameObjectOnTheGrid((int)_powerUpPosition[index].x, (int)_powerUpPosition[index].z, lure, TypeObject.e_PowerUp);
 
-        bool l_lurePos = (Random.value > 0.5f);
-        if (l_lurePos)
-        {
-            GameObject lurePowerUp = Instantiate<GameObject>(_lurePrefab, l_leftSpawnPosition,Quaternion.identity, transform);
-            AddGameObjectOnTheGrid((int)-l_leftSpawnPosition.x, GridSize.y / 2, lurePowerUp, TypeObject.e_PowerUp);
-            l_remainingPosition = l_rightSpawnPosition;
-            l_remainingIndex = (int)-l_remainingPosition.x;
-        }
-        else
-        {
-            GameObject lurePowerUp = Instantiate<GameObject>(_lurePrefab, l_rightSpawnPosition, Quaternion.identity, transform);
-            AddGameObjectOnTheGrid((int)-l_rightSpawnPosition.x, GridSize.y / 2, lurePowerUp, TypeObject.e_PowerUp);
-            l_remainingPosition = l_leftSpawnPosition;
-            l_remainingIndex = (int)-l_remainingPosition.x;
-        }
+        //powerUp
+        GameObject powerUp = GameObject.Instantiate(_powerUpPrefabs[powerUpIndex], transform, false);
+        powerUp.transform.rotation = Quaternion.identity;
+        powerUp.transform.localPosition = _powerUpPosition[index == 0 ? 1 : 0];
+        AddGameObjectOnTheGrid((int)powerUp.transform.localPosition.x, (int)powerUp.transform.localPosition.z, powerUp, TypeObject.e_PowerUp);
 
-        int l_PowerUpType = Random.Range(0, 2);
-
-        switch (l_PowerUpType)
-        {
-            case 0:
-                GameObject slowPowerUp = Instantiate<GameObject>(_slowPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, GridSize.y / 2, slowPowerUp, TypeObject.e_PowerUp);
-                break;
-
-            case 1:
-                GameObject speedBoostPowerUp = Instantiate<GameObject>(_boostPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, GridSize.y / 2, speedBoostPowerUp, TypeObject.e_PowerUp);
-                break;
-
-            case 2:
-                GameObject shieldBreakPowerUp = Instantiate<GameObject>(_shieldBreakPowerPrefab, l_remainingPosition, Quaternion.identity, transform);
-                AddGameObjectOnTheGrid(l_remainingIndex, GridSize.y / 2, shieldBreakPowerUp, TypeObject.e_PowerUp);
-                break;
-
-            default:
-                break;
-        }
-
+        TimerManager.Instance.StartTimer(_powerUpDeleteTimer);
     }
 
-    private void CheckIfDeletePowerups()
+    private void DeletePowerups()
     {
-        m_powerupDeleteTimer -= Time.deltaTime;
-        if (m_powerupDeleteTimer <= 0)
-        {
-            RemoveGameObjectOnTheGrid(11, GridSize.x / 2, TypeObject.e_PowerUp);
-            RemoveGameObjectOnTheGrid(9, GridSize.y / 2, TypeObject.e_PowerUp);
-
-            m_powerupDeleteTimer = 2*PowerUpSpawnFrequency;
-            m_powerupSpawnTimer = PowerUpSpawnFrequency;
-        }        
+        RemoveGameObjectOnTheGrid((int)_powerUpPosition[0].x, (int)_powerUpPosition[0].z, TypeObject.e_PowerUp);
+        RemoveGameObjectOnTheGrid((int)_powerUpPosition[1].x, (int)_powerUpPosition[1].z, TypeObject.e_PowerUp);
+        TimerManager.Instance.StartTimer(_powerUpSpawnTimer);
     }
 
     private void CheckSpawnEnemys()
@@ -343,11 +302,23 @@ public class MapManager : Singleton<MapManager>
         m_enemySpawnFrequency = Mathf.Clamp(StartEnemySpawnFrequency, 1, 300);
         m_nextTimeEnemySpawn = Time.fixedTime + TimeOfFirstSpawnEnemy;
 
-        m_powerupSpawnTimer = PowerUpSpawnFrequency;
-        m_powerupDeleteTimer = PowerUpDeletionTime;
+        // Register timers
+        UnityEvent spawnPowerUpEvent = new UnityEvent();
+        UnityEvent deletePowerUpEvent = new UnityEvent();
+        spawnPowerUpEvent.AddListener(SpawnPowerups);
+        deletePowerUpEvent.AddListener(DeletePowerups);
+
+        _powerUpSpawnTimer = new Timer("powerUpSpawn", _powerUpSpawnTime, spawnPowerUpEvent);
+        _powerUpDeleteTimer = new Timer("powerUpDelete", _powerUpRemoveTime, deletePowerUpEvent);
+
+        TimerManager.Instance.Register(_powerUpSpawnTimer);
+        TimerManager.Instance.Register(_powerUpDeleteTimer);
 
         InitBase();
         InitRessources();
+
+        // Start timer (not _powerUpDeleteTimer)
+        TimerManager.Instance.StartTimer(_powerUpSpawnTimer);
     }
 
     public void RemoveGameObjectOnTheGrid(int x, int z, TypeObject type)
