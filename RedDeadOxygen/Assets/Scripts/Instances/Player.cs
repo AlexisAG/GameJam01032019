@@ -106,7 +106,6 @@ public class Player : MonoBehaviour
 
                 _Ressources.Clear();
             }
-            //WARNING : UNFINISHED
         }
         else if (other.GetComponent<Mine>() != null)
         {
@@ -152,11 +151,17 @@ public class Player : MonoBehaviour
         {
             if (_actualSpeed < _averageSpeed)
             {
-                _slowEffect.Play(true);
+                if (!_slowEffect.isPlaying)
+                {
+                    _slowEffect.Play(true);
+                }
             }
             else
             {
-                _speedEffect.Play(true);
+                if (!_speedEffect.isPlaying)
+                {
+                    _speedEffect.Play(true);
+                }
             }
         }
 

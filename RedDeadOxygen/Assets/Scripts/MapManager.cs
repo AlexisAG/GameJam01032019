@@ -338,7 +338,7 @@ public class MapManager : Singleton<MapManager>
             case TypeObject.e_Mine:
             case TypeObject.e_PowerUp:
             default:
-                _grid[x, z].GameObjectRef.SetActive(false);
+                GameObject.Destroy(_grid[x, z].GameObjectRef);
                 break;
         }
 
@@ -380,7 +380,8 @@ public class MapManager : Singleton<MapManager>
             }
         }
 
-
+        TimerManager.Instance.StopTimer(_powerUpSpawnTimer);
+        TimerManager.Instance.StopTimer(_powerUpDeleteTimer);
         Bases.Clear();
     }
     
