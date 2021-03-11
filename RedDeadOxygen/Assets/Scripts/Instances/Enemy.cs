@@ -41,7 +41,6 @@ public class Enemy : MonoBehaviour
         {
             _animator.SetBool("isGonaExplose", true);
             other.GetComponent<Mine>().MakeExplosionEffect();
-            MapManager.Instance.RemoveGameObjectOnTheGrid((int)other.transform.localPosition.x, (int)other.transform.localPosition.z, MapManager.TypeObject.e_Mine);
             RegisterManager.Instance.GetGameObjectInstance("MineSE")?.GetComponent<AudioSource>()?.Play();
             Disable();
         }

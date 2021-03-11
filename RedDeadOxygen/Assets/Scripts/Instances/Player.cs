@@ -116,7 +116,6 @@ public class Player : MonoBehaviour
                 }
 
                 _Ressources.Clear();
-                Destroy(other.gameObject);
             }
         }
         else if(other.GetComponent<Enemy>() != null)
