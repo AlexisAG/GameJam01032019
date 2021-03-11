@@ -56,6 +56,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -67,6 +69,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -79,6 +82,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8276557465923217241
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -89,9 +93,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &8276557465923217221
 MonoBehaviour:
@@ -105,25 +109,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f369d9620ffb2374a9fff4e2c18647da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BasePrefab: {fileID: 7641442050855423574, guid: 4f3cd9a7bbc57ca4485ea4bb218d1eec,
+  _basePrefab: {fileID: 7641442050855423574, guid: 4f3cd9a7bbc57ca4485ea4bb218d1eec,
     type: 3}
-  MinePrefab: {fileID: 1732381903405346695, guid: 2a2dd2770fee0bb4ca6bb7d8730557fd,
+  _minePrefab: {fileID: 1732381903405346695, guid: 2a2dd2770fee0bb4ca6bb7d8730557fd,
     type: 3}
-  RessourcePrefab: {fileID: 21766501, guid: 7248ffe17c590e74b9ec196dc46e4b3f, type: 3}
-  PlayerPrefab: {fileID: 4258710157398469677, guid: 074b6ee6fcf200f4fa913d32df4f7df9,
+  _ressourcePrefab: {fileID: 21766501, guid: 7248ffe17c590e74b9ec196dc46e4b3f, type: 3}
+  _playerPrefab: {fileID: 4258710157398469677, guid: 074b6ee6fcf200f4fa913d32df4f7df9,
     type: 3}
-  EnemyPrefab: {fileID: 4153199980268997449, guid: 27b2b5449b1fd114ca65432a1afc6cf3,
+  _enemyPrefab: {fileID: 4153199980268997449, guid: 27b2b5449b1fd114ca65432a1afc6cf3,
     type: 3}
-  LurePrefab: {fileID: 6930467623156951726, guid: 2f8f7795df3acad439d35d1d92691987,
+  _lurePrefab: {fileID: 6930467623156951726, guid: 2f8f7795df3acad439d35d1d92691987,
     type: 3}
-  SlowPrefab: {fileID: 6930467623156951726, guid: a221500b49a3086489d8bccae169d25b,
-    type: 3}
-  SpeedBoostPrefab: {fileID: 6930467623156951726, guid: 178cb5d1ce2640c4d93776443db28198,
-    type: 3}
-  ShieldBreakPrefab: {fileID: 6930467623156951726, guid: 7becc9d3f966e4f479bcfafcc2a0535d,
-    type: 3}
-  NbRessource: 10
-  StartEnemySpawnFrequency: 10
-  TimeOfFirstSpawnEnemy: 10
-  PowerUpSpawnFrequency: 10
-  PowerUpDeletionTime: 5
+  _powerUpPrefabs:
+  - {fileID: 6930467623156951726, guid: 7becc9d3f966e4f479bcfafcc2a0535d, type: 3}
+  - {fileID: 6930467623156951726, guid: a221500b49a3086489d8bccae169d25b, type: 3}
+  - {fileID: 6930467623156951726, guid: 178cb5d1ce2640c4d93776443db28198, type: 3}
+  _basesPosition:
+  - {x: 3, y: 0, z: -3}
+  - {x: -3, y: 0, z: 3}
+  _enemySpawnsPosition: []
+  _powerUpPosition:
+  - {x: -1, y: 0, z: 0}
+  - {x: 1, y: 0, z: 0}
+  _enemySpawnTime: 10
+  _powerUpSpawnTime: 10
+  _powerUpRemoveTime: 5
+  _maxRessource: 10
