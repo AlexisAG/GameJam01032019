@@ -33,7 +33,6 @@ public class Base : MonoBehaviour
     private void Start() 
     {
         _gm = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
-
     }
 
     private void Update() 

@@ -1,70 +1,75 @@
-﻿using System.Collections;
+﻿using AgToolkit.Core.GameModes;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float m_enemySpeedMultiplier;
+    [SerializeField]
+    private float _enemySpeedMultiplier;
+    [SerializeField]
+    private float _damage = .05f;
+    [SerializeField]
+    private GameObject _effect;
 
-    private BoxCollider m_boxCollider;
-    private Vector3 m_walkingDirection;
-    private bool m_isMoving;
-    private Collider m_colider;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        m_isMoving = false;
-        GetComponent<Animator>().SetBool("isGonaExplose", false);
-
-        m_boxCollider = GetComponent<BoxCollider>();
-        m_boxCollider.isTrigger = true;
-        m_walkingDirection = transform.right;
-        StartMoving();
-    }
+    private Base _target;
+    private Animator _animator;
+    private Vector3 _walkingDirection;
+    private SoloGameMode _gameMode;
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (m_isMoving)
+        if (_gameMode.GameIsOver)
         {
-            transform.SetPositionAndRotation(transform.position + (m_walkingDirection * m_enemySpeedMultiplier* Time.deltaTime), transform.rotation);
+            Disable();
         }
-            
-    }
 
-    public void StartMoving()
-    {
-        m_isMoving = true;
+        transform.SetPositionAndRotation(transform.position + (_walkingDirection * _enemySpeedMultiplier * Time.deltaTime), transform.rotation);  
     }
 
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.gameObject.GetComponent<Base>() != null)
+        if (other.gameObject.GetComponentInParent<Base>() == _target)
         {
-            m_colider = other;
-            m_isMoving = false;
-            GetComponent<Animator>()?.SetBool("isGonaExplose", true);
+            _animator.SetBool("isGonaExplose", true);
             RegisterManager.Instance.GetGameObjectInstance("SlimeSE")?.GetComponent<AudioSource>()?.Play();
+            ExplosionFinish();
         }
         else if(other.gameObject.GetComponent<Mine>() != null)
         {
-            Debug.LogWarning("Mine dected");
-            m_isMoving = false;
-            GetComponent<Animator>().SetBool("isGonaExplose", true);
+            _animator.SetBool("isGonaExplose", true);
             other.GetComponent<Mine>().MakeExplosionEffect();
-            Destroy(other.gameObject);
+            MapManager.Instance.RemoveGameObjectOnTheGrid((int)other.transform.localPosition.x, (int)other.transform.localPosition.z, MapManager.TypeObject.e_Mine);
             RegisterManager.Instance.GetGameObjectInstance("MineSE")?.GetComponent<AudioSource>()?.Play();
-
+            Disable();
         }
+    }
+
+    private void Disable()
+    {
+        _effect.SetActive(false);
+        gameObject.SetActive(false);
+    }
+
+    public void Init(Base baseRef)
+    {
+        _target = baseRef;
+        _animator = GetComponent<Animator>();
+        _animator.SetBool("isGonaExplose", false);
+        _walkingDirection = Vector3.Normalize(baseRef.transform.position - transform.position);
+        _gameMode = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
+        _effect.SetActive(true);
+
+        //Look at base & add -90f to fix animation
+        transform.LookAt(_target.transform.position);
+        transform.Rotate(0f, -90f, 0f);
     }
 
     public void ExplosionFinish()
     {
-        if(m_colider != null)
-            m_colider.gameObject.GetComponent<Base>()?.TakeOfLifeTime(3.0f);
-
-        Destroy(this.gameObject);
+        _target.TakeOfPourcentOfLifeTime(_damage);
+        Disable();
     }
 }

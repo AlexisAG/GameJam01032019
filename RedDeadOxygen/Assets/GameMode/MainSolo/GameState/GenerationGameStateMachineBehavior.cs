@@ -9,7 +9,6 @@ public class GenerationGameStateMachineBehavior : GameStateMachineBehaviour<Gene
 {
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {
-        MapManager.Instance.ClearGrid();
         CoroutineManager.Instance.StartCoroutine(MapManager.Instance.InitMap());
         GameManager.Instance.GetCurrentGameMode<SoloGameMode>().GameIsOver = false;
     }

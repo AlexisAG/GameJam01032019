@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
   
         _mapLimit = new Vector4(minX, maxX, minY, maxY);
 
-        //TIMER
+        //TIMERS
         UnityEvent mineEvent = new UnityEvent(); 
         UnityEvent powerUpEvent = new UnityEvent(); 
         UnityEvent speedEvent = new UnityEvent();
@@ -70,13 +70,9 @@ public class Player : MonoBehaviour
            _actualSpeed = _averageSpeed;
         });
 
-        _mineTimer = new Timer("mine", _cooldownMine, mineEvent);
-        _powerUpTimer = new Timer("powerUp", _PowerUpCooldownTimer, powerUpEvent);
-        _speedTimer = new Timer("speedEffect", _PowerUpCooldownTimer, speedEvent);
-
-        TimerManager.Instance.Register(_mineTimer);
-        TimerManager.Instance.Register(_powerUpTimer);
-        TimerManager.Instance.Register(_speedTimer);
+        _mineTimer = new Timer($"mine_{m_joystickNumber}", _cooldownMine, mineEvent);
+        _powerUpTimer = new Timer($"powerUp_{m_joystickNumber}", _PowerUpCooldownTimer, powerUpEvent);
+        _speedTimer = new Timer($"speedEffect_{m_joystickNumber}", _PowerUpCooldownTimer, speedEvent);
     }
 
     private void OnTriggerEnter(Collider other)
