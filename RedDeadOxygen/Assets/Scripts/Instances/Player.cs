@@ -82,8 +82,8 @@ public class Player : MonoBehaviour
             if (!other.GetComponent<Ressource>().IsUsed && _Ressources.Count < 5)
             {
                 Ressource ressource = other.GetComponent<Ressource>();
-                ressource.IsPick(this);
                 _Ressources.Add(ressource);
+                ressource.IsPick(this);
                 RegisterManager.Instance.GetGameObjectInstance("ResourcesSE")?.GetComponent<AudioSource>()?.Play();
             }
         }
@@ -236,9 +236,18 @@ public class Player : MonoBehaviour
                 Destroy(m_mine);
 
             m_mine = Instantiate<GameObject>(_minePrefab, transform.position, Quaternion.Euler(-90f,0f,0f), MapManager.Instance.transform);
-            MapManager.Instance.AddGameObjectOnTheGrid(Mathf.FloorToInt(transform.localPosition.x), Mathf.FloorToInt(transform.localPosition.z), m_mine, MapManager.TypeObject.e_Mine);
-            m_mine.GetComponent<Mine>().m_PlayerTag = tag;
-            m_isCarryingMine = false;
+            m_mine.SetActive(false);
+
+            if (MapManager.Instance.AddGameObjectOnTheGrid(Mathf.FloorToInt(transform.localPosition.x), Mathf.FloorToInt(transform.localPosition.z), m_mine, MapManager.TypeObject.e_Mine, false))
+            {
+                m_mine.GetComponent<Mine>().m_PlayerTag = tag;
+                m_isCarryingMine = false;
+                m_mine.SetActive(true);
+            }
+            else
+            {
+                Destroy(m_mine);
+            }
         }
     }
 }

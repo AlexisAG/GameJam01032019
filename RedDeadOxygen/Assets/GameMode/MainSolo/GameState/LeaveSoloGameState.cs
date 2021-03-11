@@ -9,8 +9,8 @@ public class LeaveSoloGameState : ExitGameStateMachineBehaviour
 {
     public override void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        Destroy(MapManager.Instance.gameObject);
         PoolManager.Instance.DestroyPool("Ressource");
+        Destroy(MapManager.Instance.gameObject);
         base.OnStateEnter(animator, animatorStateInfo, layerIndex);
     }
 }

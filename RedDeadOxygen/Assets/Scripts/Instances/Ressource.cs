@@ -13,20 +13,19 @@ public class Ressource : MonoBehaviour, Pickup
     private Player _player;
     private Animator _animator;
     private Vector2Int _position;
-    public bool IsUsed { get; private set; }
-
+    public bool IsUsed { get; private set; } = false;
 
     private void Awake() 
     {
-        IsUsed = false;
         _animator = GetComponent<Animator>();
     }
 
     #region PickupInterface
     public void Activate()
     {
-        _player.PlayerBase.AddRessourceToBase(_power);
+        _player?.PlayerBase?.AddRessourceToBase(_power);
         MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y, MapManager.TypeObject.e_Ressource);
+        Respawn();
     }
 
     public void IsPick(Player playerRef)

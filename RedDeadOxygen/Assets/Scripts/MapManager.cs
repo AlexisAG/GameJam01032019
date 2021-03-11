@@ -346,7 +346,14 @@ public class MapManager : Singleton<MapManager>
             case TypeObject.e_Base:
                 break;
             case TypeObject.e_Ressource:
-                _grid[x, z].GameObjectRef.GetComponent<Ressource>()?.Respawn();
+
+                Ressource r = _grid[x, z].GameObjectRef.GetComponent<Ressource>();
+
+                if (r != null && !r.IsUsed)
+                {
+                    _grid[x, z].GameObjectRef.GetComponent<Ressource>()?.Respawn();
+                }
+
                 break;
             case TypeObject.e_None:
             case TypeObject.e_Mine:
