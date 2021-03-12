@@ -29,6 +29,8 @@ public class Base : MonoBehaviour
     private SoloGameMode _gm = null;
 
     public List<Player> Players { get; private set; } = new List<Player>();
+    public int BaseIndex => _baseIndex;
+    public Color Color { get; private set; }
 
     private void Start() 
     {
@@ -70,7 +72,7 @@ public class Base : MonoBehaviour
             Quaternion.identity, 
             MapManager.Instance.gameObject.transform).GetComponent<Player>();
 
-        p.transform.GetChild(0).GetComponent<Renderer>().material.color = _baseIndex == 0 ? Color.magenta : Color.cyan;
+        p.transform.GetChild(0).GetComponent<Renderer>().material.color = Color;
         p.Init(index, this);
         Players.Add(p);
     }
@@ -134,7 +136,6 @@ public class Base : MonoBehaviour
     {
         if (m_LifeTime <= 0) 
         {
-            Debug.Log("Fin de Game");
             FinishGame();
         }
     }
@@ -142,6 +143,7 @@ public class Base : MonoBehaviour
     public void Init(int baseIndex, GameObject playerPrefab, int nbPlayer = 1) 
     {
         _baseIndex = baseIndex;
+        Color = _baseIndex == 0 ? Color.magenta : Color.cyan;
 
         for (int i = 0; i < nbPlayer; i++)
         {
@@ -186,34 +188,6 @@ public class Base : MonoBehaviour
 
     private void FinishGame()
     {
-
-        //TODO GAMEMODE CREATE A GAMESTATE FOR ENDMENU
-
-
-        /*if(!GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish)
-        {
-            GetEventManager().GetComponent<EndGameMenu>().m_IsGameFinish = true;
-            string l_WinnerName = "Le vainqueur est : \n";
-            Color col = new Color();
-
-            switch (m_PlayerTag)
-            {
-                case "Player 0":
-                    l_WinnerName += "Player 2";
-                    col = Color.cyan;
-                    break;
-                case "Player 1":
-                    l_WinnerName += "Player 1";
-                    col = Color.magenta;
-                    break;
-            }
-
-
-            GameObject.Find("EndScreen").GetComponentInChildren<Text>().text = l_WinnerName;
-            GameObject.Find("EndScreen").GetComponentInChildren<Text>().color = col;
-            GameObject.Find("EndScreen").transform.GetChild(1).gameObject.SetActive(true);
-            GameObject.Find("EndScreen").transform.GetChild(2).gameObject.SetActive(true);
-            GameObject.Find("EndScreen").transform.GetChild(2).gameObject.GetComponent<Button>().Select();*/
         _gm.GameIsOver = true;
         _gm?.GetComponent<Animator>().SetTrigger(_gm?.EndTrigger);
     }
