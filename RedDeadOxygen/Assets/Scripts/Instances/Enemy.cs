@@ -10,7 +10,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _damage = .05f;
     [SerializeField]
-    private GameObject _effect;
+    private string _animatorBool = "isGonaExplose";
+    [SerializeField]
+    private TrailRenderer _effect;
 
     private Base _target;
     private Animator _animator;
@@ -33,13 +35,13 @@ public class Enemy : MonoBehaviour
 
         if (other.gameObject.GetComponentInParent<Base>() == _target)
         {
-            _animator.SetBool("isGonaExplose", true);
+            _animator.SetBool(_animatorBool, true);
             RegisterManager.Instance.GetGameObjectInstance("SlimeSE")?.GetComponent<AudioSource>()?.Play();
             ExplosionFinish();
         }
         else if(other.gameObject.GetComponent<Mine>() != null)
         {
-            _animator.SetBool("isGonaExplose", true);
+            _animator.SetBool(_animatorBool, true);
             other.GetComponent<Mine>().MakeExplosionEffect();
             RegisterManager.Instance.GetGameObjectInstance("MineSE")?.GetComponent<AudioSource>()?.Play();
             Disable();
@@ -48,7 +50,7 @@ public class Enemy : MonoBehaviour
 
     private void Disable()
     {
-        _effect.SetActive(false);
+        _effect.Clear();
         gameObject.SetActive(false);
     }
 
@@ -56,10 +58,9 @@ public class Enemy : MonoBehaviour
     {
         _target = baseRef;
         _animator = GetComponent<Animator>();
-        _animator.SetBool("isGonaExplose", false);
+        _animator.SetBool(_animatorBool, false);
         _walkingDirection = Vector3.Normalize(baseRef.transform.position - transform.position);
         _gameMode = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
-        _effect.SetActive(true);
 
         //Look at base & add -90f to fix animation
         transform.LookAt(_target.transform.position);

@@ -214,7 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemySpeedMultiplier: 2.75
   _damage: 0.1
-  _effect: {fileID: 5880919014548608169}
+  _effect: {fileID: 2628599541624225544}
 --- !u!1 &8316161831849012399
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,15 +390,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f68da3e14fa81e47b3d0ce964e5127b, type: 3}
---- !u!1 &5880919014548608169 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4605476784081819487, guid: 0f68da3e14fa81e47b3d0ce964e5127b,
-    type: 3}
-  m_PrefabInstance: {fileID: 7959206432237405174}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8404253078417695080 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1933504053255479966, guid: 0f68da3e14fa81e47b3d0ce964e5127b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7959206432237405174}
+  m_PrefabAsset: {fileID: 0}
+--- !u!96 &2628599541624225544 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 5336309603511041278, guid: 0f68da3e14fa81e47b3d0ce964e5127b,
     type: 3}
   m_PrefabInstance: {fileID: 7959206432237405174}
   m_PrefabAsset: {fileID: 0}
