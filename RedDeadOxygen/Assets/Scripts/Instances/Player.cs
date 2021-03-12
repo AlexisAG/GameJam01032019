@@ -213,7 +213,7 @@ public class Player : MonoBehaviour
 
     public int GetNbOfRessources()
     {
-        return _Ressources.Count - 1;
+        return _Ressources.Count;
     }
 
     public void ApplySpeedEffect(float effect)

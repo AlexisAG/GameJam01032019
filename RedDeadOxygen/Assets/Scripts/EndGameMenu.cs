@@ -23,7 +23,8 @@ public class EndGameMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        Base b = MapManager.Instance.Bases.First<Base>((temp) => temp.GetCurrentLife() > 0f);
+        _gm = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
+        Base b = MapManager.Instance.Bases.First<Base>((temp) => temp.BaseIndex != _gm.LooserTeamIndex);
         _winner.text = $"Vainqueur: Équipe {b.BaseIndex + 1} !";
         _winner.color = b.Color;
     }

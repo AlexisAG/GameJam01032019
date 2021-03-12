@@ -155,8 +155,8 @@ public class MapManager : Singleton<MapManager>
             return;
         }
 
-        RemoveGameObjectOnTheGrid((int)_powerUpPosition[0].x, (int)_powerUpPosition[0].z, TypeObject.e_PowerUp);
-        RemoveGameObjectOnTheGrid((int)_powerUpPosition[1].x, (int)_powerUpPosition[1].z, TypeObject.e_PowerUp);
+        RemoveGameObjectOnTheGrid((int)_powerUpPosition[0].x, (int)_powerUpPosition[0].z);
+        RemoveGameObjectOnTheGrid((int)_powerUpPosition[1].x, (int)_powerUpPosition[1].z);
         TimerManager.Instance.StartTimer(_powerUpSpawnTimer);
     }
 
@@ -257,7 +257,6 @@ public class MapManager : Singleton<MapManager>
     }
     #endregion
 
-    // Public method for add an object into the grid
     public IEnumerator InitMap() 
     {
         // Init pool
@@ -267,7 +266,7 @@ public class MapManager : Singleton<MapManager>
         }
         if (!PoolManager.Instance.PoolExists(_enemyPrefab.name)) 
         {
-            yield return PoolManager.Instance.CreatePool(new PoolData(_enemyPrefab.name, _enemyPrefab, 20, true));
+            yield return PoolManager.Instance.CreatePool(new PoolData(_enemyPrefab.name, _enemyPrefab, 5, true));
         }
 
         // Get GameMode
@@ -304,6 +303,7 @@ public class MapManager : Singleton<MapManager>
 
     }
 
+    // Public method for add an object into the grid
     public bool AddGameObjectOnTheGrid(int x, int y, GameObject obj, TypeObject type, bool replace = true)
     {
         ConvertUnityPositionToCordinate(ref x, ref y);
@@ -316,30 +316,22 @@ public class MapManager : Singleton<MapManager>
         {
             Debug.LogWarning(_grid[x, y].GameObjectRef.name);
 
-            switch (_grid[x, y].TypeRef) {
-                case TypeObject.e_Ressource:
-                    RemoveGameObjectOnTheGrid(x, y, TypeObject.e_Ressource);
-                    break;
-
-                case TypeObject.e_Mine:
-                    RemoveGameObjectOnTheGrid(x, y, TypeObject.e_Mine);
-                    break;
-
-                default:
-
-                    break;
+            if (_grid[x, y].TypeRef != TypeObject.e_Base)
+            {
+                RemoveGameObjectOnTheGrid(x, y);
             }
+
         }
 
         _grid[x, y] = new GameObjectGrid(obj, type, x, y);
         return true;
     }
 
-    public void RemoveGameObjectOnTheGrid(int x, int z, TypeObject type)
+    public void RemoveGameObjectOnTheGrid(int x, int z)
     {
         ConvertUnityPositionToCordinate(ref x, ref z);
 
-        if (_grid.Length <= 0 || _grid[x, z] == null) return;
+        if (_grid.Length <= 0 || x > GridSize.x  || z > GridSize.y|| _grid[x, z] == null) return;
 
         switch (_grid[x, z].TypeRef)
         {
@@ -362,7 +354,6 @@ public class MapManager : Singleton<MapManager>
                 GameObject.Destroy(_grid[x, z].GameObjectRef);
                 break;
         }
-
 
         _grid[x, z] = null;
     }

@@ -489,6 +489,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb0d3d8b2f283154081de60b94a4c5ad, type: 3}
+--- !u!114 &45599676 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2190865753734838125, guid: cb0d3d8b2f283154081de60b94a4c5ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 45599675}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb9955b12763334ead045b8292012b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &53343621 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: a3bd1d6d8569a554da679e2a9c174847,
@@ -2019,6 +2031,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     _endGameMenu: {fileID: 5620473201144516360}
+    _gameUi: {fileID: 45599676}
 --- !u!1001 &448702378
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6745,7 +6758,7 @@ PrefabInstance:
     - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
         type: 3}
       propertyPath: _enemySpawnTime
-      value: 3
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
         type: 3}
@@ -6837,7 +6850,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map_Plane
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8276557465923217241, guid: 44aea50cb71f5194fb3ff5d4c1a415cc, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 44aea50cb71f5194fb3ff5d4c1a415cc, type: 3}
 --- !u!4 &8169818733868150848 stripped
 Transform:

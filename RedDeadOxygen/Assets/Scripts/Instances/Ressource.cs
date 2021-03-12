@@ -24,7 +24,7 @@ public class Ressource : MonoBehaviour, Pickup
     public void Activate()
     {
         _player?.PlayerBase?.AddRessourceToBase(_power);
-        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y, MapManager.TypeObject.e_Ressource);
+        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y);
         Respawn();
     }
 

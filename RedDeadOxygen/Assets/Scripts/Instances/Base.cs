@@ -127,7 +127,7 @@ public class Base : MonoBehaviour
             if (!l_CurrentPosInRangeOfDome.Contains(l_vec))
             {
                 _posInRangeOfDome.RemoveAt(i);
-                MapManager.Instance.RemoveGameObjectOnTheGrid(l_vec.x, l_vec.y, MapManager.TypeObject.e_Base);
+                MapManager.Instance.RemoveGameObjectOnTheGrid(l_vec.x, l_vec.y);
             }
         }
     }
@@ -188,7 +188,10 @@ public class Base : MonoBehaviour
 
     private void FinishGame()
     {
+        if (_gm.GameIsOver) return;
+
         _gm.GameIsOver = true;
+        _gm.LooserTeamIndex = BaseIndex;
         _gm?.GetComponent<Animator>().SetTrigger(_gm?.EndTrigger);
     }
 

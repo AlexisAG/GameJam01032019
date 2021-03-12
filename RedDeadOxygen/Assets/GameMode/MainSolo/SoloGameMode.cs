@@ -15,5 +15,6 @@ public class SoloGameMode : GameMode
     public string ExitSoloTrigger => _exitSoloTrigger;
     public string GenerationTrigger => _generationTrigger;
     public string EndTrigger => _endTrigger;
+    public int LooserTeamIndex { get; set; }
     public bool GameIsOver { get; set; } = false;
 }
