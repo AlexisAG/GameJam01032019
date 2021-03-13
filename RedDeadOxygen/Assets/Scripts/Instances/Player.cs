@@ -128,10 +128,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (GameManager.Instance.GetCurrentGameMode<SoloGameMode>()?.GameIsOver ?? true) return;
-        if (!(gameObject.tag == "Player " + m_joystickNumber)) return;
-
-        MoveWithController(m_joystickNumber);
+        if (!IsPlayable()) return;
 
         if (Input.GetButton("Fire_P" + m_joystickNumber))
             PutTheMine();
@@ -167,17 +164,28 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (!IsPlayable()) return;
+        MoveWithController(m_joystickNumber);
+    }
+
+    private bool IsPlayable()
+    {
+        if (GameManager.Instance.GetCurrentGameMode<SoloGameMode>()?.GameIsOver ?? true) return false;
+        if (!(gameObject.tag == "Player " + m_joystickNumber)) return false;
+
+        return true;
+    }
+
     private void MoveWithController(float p_joystickNumber)
     {
         //get controller axis
-        Vector2 l_controllerAxis = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber), -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber));
-        l_controllerAxis.Normalize();
-
-        //Movement vector
-        Vector3 l_movement = new Vector3((l_controllerAxis.x * _actualSpeed), 0.0f, (l_controllerAxis.y * _actualSpeed)) * Time.deltaTime ;
+        Vector3 input = new Vector3(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber), 0f, -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber));
+        input.Normalize();
 
         //New position
-        Vector3 l_newPos = m_rb.position + l_movement;
+        Vector3 l_newPos = m_rb.position + input * Time.deltaTime * _actualSpeed;
 
         //Check if player is in bounds
         l_newPos.x = Mathf.Clamp(l_newPos.x, _mapLimit.x, _mapLimit.y);
@@ -186,9 +194,9 @@ public class Player : MonoBehaviour
         //Move player to the new position
         m_rb.MovePosition(l_newPos);
 
-        if(l_movement.x != 0 && l_movement.z != 0)
+        if(input.x != 0 && input.z != 0)
         {
-            float radius = Mathf.Atan2(l_movement.x, l_movement.z);
+            float radius = Mathf.Atan2(input.x, input.z);
             radius = (radius * 180f) / Mathf.PI;
             m_rb.MoveRotation(Quaternion.Euler(0, radius, 0));
         }

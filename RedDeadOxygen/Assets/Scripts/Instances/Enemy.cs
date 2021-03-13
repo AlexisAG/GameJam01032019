@@ -20,14 +20,14 @@ public class Enemy : MonoBehaviour
     private SoloGameMode _gameMode;
 
     // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
         if (_gameMode.GameIsOver)
         {
             Disable();
         }
 
-        transform.SetPositionAndRotation(transform.position + (_walkingDirection * _enemySpeedMultiplier * Time.deltaTime), transform.rotation);  
+        transform.SetPositionAndRotation(transform.position + _walkingDirection * Time.deltaTime * _enemySpeedMultiplier, transform.rotation);  
     }
 
     private void OnTriggerEnter(Collider other)

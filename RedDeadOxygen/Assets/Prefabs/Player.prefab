@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c5d78220291ec40a4dfb7dcdb9e438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _averageSpeed: 20
+  _averageSpeed: 6
   _cooldownMine: 5
   _PowerUpCooldownTimer: 5
   _minePrefab: {fileID: 1732381903405346695, guid: 2a2dd2770fee0bb4ca6bb7d8730557fd,
