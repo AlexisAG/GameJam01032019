@@ -316,15 +316,43 @@ public class MapManager : Singleton<MapManager>
         {
             Debug.LogWarning(_grid[x, y].GameObjectRef.name);
 
-            if (_grid[x, y].TypeRef != TypeObject.e_Base)
+            if (_grid[x, y].TypeRef != TypeObject.e_Base && _grid[x, y].TypeRef != TypeObject.e_PowerUp)
             {
-                RemoveGameObjectOnTheGrid(x, y);
+                RemoveGameObjectOnTheGrid(_grid[x, y]);
             }
 
         }
 
         _grid[x, y] = new GameObjectGrid(obj, type, x, y);
         return true;
+    }
+
+    private void RemoveGameObjectOnTheGrid(GameObjectGrid go)
+    {
+        switch (go.TypeRef)
+        {
+            case TypeObject.e_Base:
+                break;
+            case TypeObject.e_Ressource:
+
+                Ressource r = go.GameObjectRef.GetComponent<Ressource>();
+
+                if (r != null && !r.IsUsed)
+                {
+                    r.Respawn();
+                }
+
+                break;
+
+            case TypeObject.e_None:
+            case TypeObject.e_Mine:
+            case TypeObject.e_PowerUp:
+            default:
+                GameObject.Destroy(go.GameObjectRef);
+                break;
+        }
+
+        _grid[go.PositionOnGrid.x, go.PositionOnGrid.y] = null;
     }
 
     public void RemoveGameObjectOnTheGrid(int x, int z)
@@ -343,7 +371,7 @@ public class MapManager : Singleton<MapManager>
 
                 if (r != null && !r.IsUsed)
                 {
-                    _grid[x, z].GameObjectRef.GetComponent<Ressource>()?.Respawn();
+                    r.Respawn();
                 }
 
                 break;

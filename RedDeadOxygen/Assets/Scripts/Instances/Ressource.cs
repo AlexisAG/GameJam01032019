@@ -24,7 +24,6 @@ public class Ressource : MonoBehaviour, Pickup
     public void Activate()
     {
         _player?.PlayerBase?.AddRessourceToBase(_power);
-        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y);
         Respawn();
     }
 
@@ -36,6 +35,7 @@ public class Ressource : MonoBehaviour, Pickup
         transform.localPosition = _offsetOnPick;
         transform.localRotation = Quaternion.identity;
         _animator.enabled = false;
+        MapManager.Instance.RemoveGameObjectOnTheGrid(_position.x, _position.y);
     }
     #endregion
 
