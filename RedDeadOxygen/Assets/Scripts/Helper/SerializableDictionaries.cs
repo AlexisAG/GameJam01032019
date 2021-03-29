@@ -12,9 +12,22 @@ public class StringGameObjectDictionary : SerializableDictionary<string, GameObj
 {
 }
 
+[Serializable]
+public class Vector3Vector3Dictionary : SerializableDictionary<Vector3, Vector3>
+{
+}
+
 #if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(StringGameObjectDictionary))]
 public class StringGameObjectDictionaryDrawer : SerializableDictionaryPropertyDrawer
+{
+
+}
+#endif
+
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(Vector3Vector3Dictionary))]
+public class Vector3Vector3DictionaryDrawer : SerializableDictionaryPropertyDrawer
 {
 
 }
