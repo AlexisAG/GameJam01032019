@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     private float _currentMaxForceSpeed = 4.0f;
 
     public bool PowerUpCooldown = false;
+    public bool IsFrozen { get; set; } = false;
     public Base PlayerBase { get; private set; }
     public GameObject MinePrefab => _minePrefab;
 
@@ -198,6 +199,8 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         if (!IsPlayable()) return;
+        if (IsFrozen) return;
+
 
         switch (_movementCategory)
         {
