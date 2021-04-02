@@ -50,6 +50,8 @@ public class MapManager : Singleton<MapManager>
     private float _powerUpSpawnTime = 10f;
     [SerializeField]
     private float _powerUpRemoveTime = 5f;
+    [SerializeField]
+    private float _mapEventTime = 20f;
 
     [Header("Properties")]
     [SerializeField]
@@ -67,6 +69,7 @@ public class MapManager : Singleton<MapManager>
     private Timer _enemySpawnTimer;
     private Timer _powerUpSpawnTimer;
     private Timer _powerUpDeleteTimer;
+    private Timer _mapEventTimer;
     private SoloGameMode _gameMode;
     private GameObjectGrid[,] _grid = new GameObjectGrid[0,0];
     private List<MapEventData> _mapEventDatas = new List<MapEventData>();
@@ -143,7 +146,8 @@ public class MapManager : Singleton<MapManager>
         Bases.Add(base2);
         _nbPlayers = 2;
     }
-    
+
+    #region TimerCallback
     private void SpawnPowerups()
     {
         if (_gameMode.GameIsOver)
@@ -204,6 +208,14 @@ public class MapManager : Singleton<MapManager>
 
         TimerManager.Instance.StartTimer(_enemySpawnTimer);
     }
+
+    private void ActivateMapEvent()
+    {
+        MapEvent temp = GameObject.Instantiate(_mapEventPrefab, transform).GetComponent<MapEvent>();
+        temp.Init(_mapEventDatas[Random.Range(0, _mapEventDatas.Count)]);
+        TimerManager.Instance.StartTimer(_mapEventTimer);
+    }
+    #endregion
 
     #region CoordinationConverter
     private void ConvertUnityPositionToCordinate(ref int x, ref int y) 
@@ -313,25 +325,25 @@ public class MapManager : Singleton<MapManager>
         UnityEvent spawnEnemyEvent = new UnityEvent();
         UnityEvent spawnPowerUpEvent = new UnityEvent();
         UnityEvent deletePowerUpEvent = new UnityEvent();
+        UnityEvent mapEventTimerEvent = new UnityEvent();
         spawnEnemyEvent.AddListener(SpawnEnemy);
         spawnPowerUpEvent.AddListener(SpawnPowerups);
         deletePowerUpEvent.AddListener(DeletePowerups);
+        mapEventTimerEvent.AddListener(ActivateMapEvent);
 
         _enemySpawnTimer = new Timer("enemySpawn", _enemySpawnTime, spawnEnemyEvent);
         _powerUpSpawnTimer = new Timer("powerUpSpawn", _powerUpSpawnTime, spawnPowerUpEvent);
         _powerUpDeleteTimer = new Timer("powerUpDelete", _powerUpRemoveTime, deletePowerUpEvent);
+        _mapEventTimer = new Timer("mapEvent", _mapEventTime, mapEventTimerEvent);
 
         // Start timer (not _powerUpDeleteTimer)
         TimerManager.Instance.StartTimer(_enemySpawnTimer);
         TimerManager.Instance.StartTimer(_powerUpSpawnTimer);
-
+        TimerManager.Instance.StartTimer(_mapEventTimer);
+            
         // Init bases & resources
         InitBase();
         InitRessources();
-
-        //todo delete this
-        MapEvent e = GameObject.Instantiate(_mapEventPrefab, transform).GetComponent<MapEvent>();
-        e.Init(_mapEventDatas.FindLast(ev => ev.Id == "storm_classic"));
     }
 
     // Public method for add an object into the grid

@@ -18,7 +18,10 @@ public class MapEvent : MonoBehaviour
 
     private void OnDestroy()
     {
-        Finish();
+        if (!_isShutingDown)
+        {
+            Finish();
+        }
     }
 
     private void Update()
@@ -90,7 +93,7 @@ public class MapEvent : MonoBehaviour
             GameObject.Destroy(item);
         }
 
-        Destroy(this); // Can Delete MapManager, check it
+        Destroy(gameObject); // Can Delete MapManager, check it
     }
 
     public void Init(MapEventData data)

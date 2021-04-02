@@ -6758,6 +6758,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
         type: 3}
+      propertyPath: _mapEventTime
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
+        type: 3}
       propertyPath: _enemySpawnTime
       value: 2.5
       objectReference: {fileID: 0}
