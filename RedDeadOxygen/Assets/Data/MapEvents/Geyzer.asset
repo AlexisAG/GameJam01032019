@@ -19,5 +19,8 @@ MonoBehaviour:
   _lifeTime: 6
   _moveTime: -1
   _prefab: {fileID: 0}
-  _positions: []
-  _directions: []
+  _positionsDirections:
+    _Keys:
+    - {x: 0, y: 0, z: 0}
+    _Values:
+    - {x: 0, y: 0, z: 0}

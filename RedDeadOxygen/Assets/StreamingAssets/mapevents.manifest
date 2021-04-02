@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 3872823959
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3e4915a9a4f61618d49c4303bf43b455
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0d22394b8aa9533e953b642b506fcd66
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 63f4834cd3c1e944ba40d0a40f4919d0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 96dd52e6dc9ca4548b8f2f5bfd3eef21, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Data/MapEvents/Storm.asset
+- Assets/Data/MapEvents/Geyzer.asset
+- Assets/Data/MapEvents/Tornado.asset
+- Assets/Data/MapEvents/Meteor.asset
+Dependencies: []
