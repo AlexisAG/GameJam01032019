@@ -31,6 +31,8 @@ public class MapEvent : MonoBehaviour
 
     private IEnumerator Move()
     {
+        if (_isMoving || _isShutingDown) yield break;
+
         float t = 0f;
         List<Vector3> positions = _gameObjects.Keys.Select(item => item.transform.localPosition).ToList();
 
@@ -42,7 +44,7 @@ public class MapEvent : MonoBehaviour
             for (int i = 0; i < _gameObjects.Keys.Count; i++)
             {
                 GameObject item = _gameObjects.Keys.ElementAt(i);
-                item.transform.position = Vector3.Lerp(positions[i], positions[i] + _gameObjects[item], t/_data.MoveTime);
+                item.transform.localPosition = Vector3.Lerp(positions[i], positions[i] + _gameObjects[item], t/_data.MoveTime);
 
                 if (_players.ContainsKey(item))
                 {
@@ -121,6 +123,8 @@ public class MapEvent : MonoBehaviour
 
             _gameObjects.Add(item, _data.PositionsDirections[pos]);
         }
+
+        TimerManager.Instance.StartTimer(_lifeTime);
     }
 
     public void PlayerCollision(Player p, GameObject child)
