@@ -23,7 +23,7 @@ public class MapEvent : MonoBehaviour
 
     private void Update()
     {
-        if (!_isMoving && _data.MoveTime > 0)
+        if (!_isMoving && _data.MoveTime > 0 && !_isShutingDown)
         {
             CoroutineManager.Instance.StartCoroutine(Move());
         }
@@ -117,6 +117,7 @@ public class MapEvent : MonoBehaviour
             GameObject item = GameObject.Instantiate(_data.Prefab, MapManager.Instance.transform);
             item.transform.rotation = Quaternion.identity;
             item.transform.localPosition = pos;
+            item.GetComponent<MapEventInstance>().Parent = this;
 
             _gameObjects.Add(item, _data.PositionsDirections[pos]);
         }

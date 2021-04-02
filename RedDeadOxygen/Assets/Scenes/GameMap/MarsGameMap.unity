@@ -6763,6 +6763,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
         type: 3}
+      propertyPath: _mapEventPrefab
+      value: 
+      objectReference: {fileID: 4477819261608779497, guid: 5e7eed40765820f4bb9a22af2a3078e8,
+        type: 3}
+    - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
+        type: 3}
+      propertyPath: _assetBundleMapEvent
+      value: mapevents
+      objectReference: {fileID: 0}
+    - target: {fileID: 8276557465923217221, guid: 44aea50cb71f5194fb3ff5d4c1a415cc,
+        type: 3}
       propertyPath: _enemySpawnsPosition.Array.size
       value: 2
       objectReference: {fileID: 0}
