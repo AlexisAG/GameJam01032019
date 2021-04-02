@@ -16,8 +16,11 @@ MonoBehaviour:
   _freezePlayer: 1
   _hookPlayer: 0
   _damage: 0.33
-  _lifeTime: 0
-  _moveTime: 0
-  _prefab: {fileID: 0}
-  _positions: []
-  _directions: []
+  _lifeTime: 10
+  _moveTime: 1
+  _prefab: {fileID: 6874729858783191630, guid: a05d43fc3d09d1e47a4af12168ad3c84, type: 3}
+  _positionsDirections:
+    _Keys:
+    - {x: 0, y: 2, z: 5}
+    _Values:
+    - {x: -0.15, y: -0.5, z: -0.25}

@@ -18,7 +18,7 @@ MonoBehaviour:
   _damage: 0
   _lifeTime: 6
   _moveTime: -1
-  _prefab: {fileID: 0}
+  _prefab: {fileID: 6874729858783191630, guid: 5d7abffc15b59a44c8358454d8d67821, type: 3}
   _positionsDirections:
     _Keys:
     - {x: 0, y: 0, z: 0}
