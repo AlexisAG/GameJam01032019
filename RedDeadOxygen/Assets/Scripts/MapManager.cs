@@ -1,4 +1,5 @@
-﻿using AgToolkit.AgToolkit.Core.Singleton;
+﻿using AgToolkit.AgToolkit.Core.DataSystem;
+using AgToolkit.AgToolkit.Core.Singleton;
 using AgToolkit.AgToolkit.Core.Timer;
 using AgToolkit.Core.GameModes;
 using AgToolkit.Core.Pool;
@@ -30,6 +31,8 @@ public class MapManager : Singleton<MapManager>
     [FormerlySerializedAs("LurePrefab")]
     private GameObject _lurePrefab;
     [SerializeField]
+    private GameObject _mapEventPrefab;
+    [SerializeField]
     private List<GameObject> _powerUpPrefabs = new List<GameObject>();
 
     [Header("Positions")]
@@ -51,13 +54,16 @@ public class MapManager : Singleton<MapManager>
     [Header("Divers")]
     [SerializeField]
     private int _maxRessource = 10;
+    [SerializeField]
+    private string _assetBundleMapEvent;
 
-    private GameObjectGrid[,] _grid = new GameObjectGrid[0,0];
+    private int _nbPlayers;
     private Timer _enemySpawnTimer;
     private Timer _powerUpSpawnTimer;
     private Timer _powerUpDeleteTimer;
     private SoloGameMode _gameMode;
-    private int _nbPlayers;
+    private GameObjectGrid[,] _grid = new GameObjectGrid[0,0];
+    private List<MapEventData> _mapEventDatas = new List<MapEventData>();
 
     public List<Base> Bases { get; private set; } = new List<Base>();
     public Vector2Int GridSize { get; private set; } = Vector2Int.zero;
@@ -259,6 +265,9 @@ public class MapManager : Singleton<MapManager>
 
     public IEnumerator InitMap() 
     {
+        // Get GameMode
+        _gameMode = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
+
         // Init pool
         if (!PoolManager.Instance.PoolExists(_ressourcePrefab.name)) 
         {
@@ -269,8 +278,11 @@ public class MapManager : Singleton<MapManager>
             yield return PoolManager.Instance.CreatePool(new PoolData(_enemyPrefab.name, _enemyPrefab, 5, true));
         }
 
-        // Get GameMode
-        _gameMode = GameManager.Instance.GetCurrentGameMode<SoloGameMode>();
+        // Load AssetBundle
+        if (_gameMode.SpecialMode)
+        {
+            yield return DataSystem.LoadLocalBundleAsync<MapEventData>(_assetBundleMapEvent, data => _mapEventDatas = data);
+        }
 
         ClearGrid();
         yield return null;
@@ -301,6 +313,9 @@ public class MapManager : Singleton<MapManager>
         InitBase();
         InitRessources();
 
+        //todo delete this
+        MapEvent e = GameObject.Instantiate(_mapEventPrefab, transform).GetComponent<MapEvent>();
+        e.Init(_mapEventDatas.FindLast(ev => ev.Id == "storm_classic"));
     }
 
     // Public method for add an object into the grid
