@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63f4834cd3c1e944ba40d0a40f4919d0, type: 3}
-  m_Name: Tornado
+  m_Name: Meteor
   m_EditorClassIdentifier: 
-  _id: tornado_classic
-  _type: 3
+  _id: meteor_classic
+  _type: 1
   _freezePlayer: 1
-  _hookPlayer: 1
-  _damage: 0.1
-  _lifeTime: 5
+  _hookPlayer: 0
+  _damage: 0.33
+  _lifeTime: 10
   _moveTime: 1
-  _prefab: {fileID: 6874729858783191630, guid: 2c90e34e831eddb419b6855db804725c, type: 3}
+  _prefab: {fileID: 6874729858783191630, guid: a05d43fc3d09d1e47a4af12168ad3c84, type: 3}
   _positionsDirections:
     _Keys:
-    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 10, z: 5}
     _Values:
-    - {x: -0.5, y: 0, z: 0}
+    - {x: -0.25, y: -1, z: -0.5}

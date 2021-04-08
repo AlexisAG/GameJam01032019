@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Geyzer
   m_EditorClassIdentifier: 
   _id: geyzer_classic
+  _type: 2
   _freezePlayer: 1
   _hookPlayer: 0
   _damage: 0

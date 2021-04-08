@@ -4,8 +4,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "RDO/MapEvent", fileName = "NewMapEvent")]
 public class MapEventData : ScriptableObject
 {
+    public enum MapEventType
+    {
+        e_Storm,
+        e_Meteor,
+        e_Geyzer,
+        e_Tornado
+    }
+
     [SerializeField]
     private string _id;
+    [SerializeField]
+    private MapEventType _type;
     [SerializeField]
     private bool _freezePlayer;
     [SerializeField]
@@ -29,4 +39,5 @@ public class MapEventData : ScriptableObject
     public float MoveTime => _moveTime;
     public GameObject Prefab => _prefab;
     public Vector3Vector3Dictionary PositionsDirections => _positionsDirections;
+    public MapEventType Type => _type;
 }

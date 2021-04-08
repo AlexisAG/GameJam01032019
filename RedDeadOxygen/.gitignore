@@ -67,8 +67,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
 # Temporary auto-generated Android Assets
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
+/[Aa]ssets/[Ss]treamingAssets
 
 Assets/AgToolkit.core
 Assets/AgToolkit.core.meta
@@ -76,4 +75,3 @@ Logs/Packages-Update.log
 Packages/manifest.json
 Packages/packages-lock.json
 ProjectSettings/ProjectVersion.txt
-
