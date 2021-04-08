@@ -120,11 +120,13 @@ public class MapEvent : MonoBehaviour
         {
             Vector3 pos = _data.PositionsDirections.Keys.ElementAt(i);
             GameObject item = GameObject.Instantiate(_data.Prefab, MapManager.Instance.transform);
+            item.SetActive(false);
             item.transform.rotation = Quaternion.identity;
             item.transform.localPosition = pos;
             item.GetComponent<MapEventInstance>().Parent = this;
 
             _gameObjects.Add(item, _data.PositionsDirections[pos]);
+            item.SetActive(true);
         }
 
         TimerManager.Instance.StartTimer(_lifeTime);
