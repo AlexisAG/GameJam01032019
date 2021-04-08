@@ -5,6 +5,7 @@ using AgToolkit.Core.GameModes;
 using AgToolkit.Core.Pool;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -60,6 +61,7 @@ public class MapManager : Singleton<MapManager>
     private string _assetBundleMapEvent;
 
     private int _nbPlayers;
+    private MapEventData _lastMapEventData;
     private Timer _enemySpawnTimer;
     private Timer _powerUpSpawnTimer;
     private Timer _powerUpDeleteTimer;
@@ -195,8 +197,10 @@ public class MapManager : Singleton<MapManager>
 
     private void ActivateMapEvent()
     {
+        List<MapEventData> filter = _lastMapEventData != null ? _mapEventDatas.Where(data => data.Type != _lastMapEventData.Type).ToList() : _mapEventDatas;
+        _lastMapEventData = filter[Random.Range(0, filter.Count)];
         MapEvent temp = GameObject.Instantiate(_mapEventPrefab, transform).GetComponent<MapEvent>();
-        temp.Init(_mapEventDatas[Random.Range(0, _mapEventDatas.Count)]);
+        temp.Init(_lastMapEventData);
         TimerManager.Instance.StartTimer(_mapEventTimer);
     }
     #endregion
@@ -291,7 +295,7 @@ public class MapManager : Singleton<MapManager>
         }
 
         // Load AssetBundle
-        if (_gameMode.SpecialMode)
+        if (_gameMode.SpecialMode && _mapEventDatas.Count <= 0)
         {
             yield return DataSystem.LoadLocalBundleAsync<MapEventData>(_assetBundleMapEvent, data => _mapEventDatas = data);
         }
