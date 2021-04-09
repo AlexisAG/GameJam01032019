@@ -32,9 +32,21 @@ public class Player : MonoBehaviour
     private Timer _speedTimer;
     private List<Ressource> _Ressources = new List<Ressource>();
 
+    private MovementCategory _movementCategory = MovementCategory.e_ForceBased;
+    private float _wallElasticity = 0f;
+
+    Vector2 movement, movementOrder;
+    float _maxForceSpeed = 4.0f, _currentMaxForceSpeed = 4.0f;
+
     public bool PowerUpCooldown = false;
     public Base PlayerBase { get; private set; }
     public GameObject MinePrefab => _minePrefab;
+
+    public enum MovementCategory
+    {
+        e_Basic,
+        e_ForceBased
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -56,6 +68,22 @@ public class Player : MonoBehaviour
   
         _mapLimit = new Vector4(minX, maxX, minY, maxY);
 
+        //MAP PROPERTY
+        switch (MapManager.Instance.MapProperty)
+        {
+            case MapManager.MapProperties.e_Ice:
+                _movementCategory = MovementCategory.e_ForceBased;
+                _averageSpeed /= 2;
+                _actualSpeed = _averageSpeed;
+                _wallElasticity = MapManager.Instance.WallElasticity;
+                break;
+            case MapManager.MapProperties.e_Basic:
+            default:
+                _movementCategory = MovementCategory.e_Basic;
+                _wallElasticity = 0f;
+                break;
+        }
+
         //TIMERS
         UnityEvent mineEvent = new UnityEvent(); 
         UnityEvent powerUpEvent = new UnityEvent(); 
@@ -68,6 +96,7 @@ public class Player : MonoBehaviour
            _slowEffect.Stop(true);
            _speedEffect.Stop(true);
            _actualSpeed = _averageSpeed;
+           _currentMaxForceSpeed = _maxForceSpeed;
         });
 
         _mineTimer = new Timer($"mine_{m_joystickNumber}", _cooldownMine, mineEvent);
@@ -167,7 +196,18 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         if (!IsPlayable()) return;
-        MoveWithController(m_joystickNumber);
+        switch (_movementCategory)
+        {
+            case MovementCategory.e_Basic:
+                MoveWithController(m_joystickNumber);
+                break;
+            case MovementCategory.e_ForceBased:
+                MoveWithControllerBasedOnForce(m_joystickNumber);
+                break;
+            default:
+                MoveWithController(m_joystickNumber);
+                break;
+        }        
     }
 
     private bool IsPlayable()
@@ -178,28 +218,83 @@ public class Player : MonoBehaviour
         return true;
     }
 
+    private void MoveAndRotatePlayer(Vector3 _position, Vector2 _forwardVector)
+    {
+        //Move player to the new position
+        m_rb.MovePosition(_position);
+
+        if (_forwardVector.x != 0 && _forwardVector.y != 0)
+        {
+            float radius = Mathf.Atan2(_forwardVector.x, _forwardVector.y);
+            radius = (radius * 180f) / Mathf.PI;
+            m_rb.MoveRotation(Quaternion.Euler(0, radius, 0));
+        }
+    }
+
     private void MoveWithController(float p_joystickNumber)
     {
         //get controller axis
-        Vector3 input = new Vector3(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber), 0f, -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber));
+        Vector2 input = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber), -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber));
         input.Normalize();
 
         //New position
-        Vector3 l_newPos = m_rb.position + input * Time.deltaTime * _actualSpeed;
+        Vector3 l_newPos = m_rb.position + new Vector3(input.x, 0f, input.y) * Time.fixedDeltaTime * _actualSpeed;
 
         //Check if player is in bounds
         l_newPos.x = Mathf.Clamp(l_newPos.x, _mapLimit.x, _mapLimit.y);
         l_newPos.z = Mathf.Clamp(l_newPos.z, _mapLimit.z, _mapLimit.w);
 
         //Move player to the new position
-        m_rb.MovePosition(l_newPos);
+        MoveAndRotatePlayer(l_newPos, input);
+    }
 
-        if(input.x != 0 && input.z != 0)
+    private void MoveWithControllerBasedOnForce(float p_joystickNumber)
+    {
+        //get controller axis
+        movementOrder = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber) * _currentMaxForceSpeed, -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber) * _currentMaxForceSpeed);
+
+        //Executing order
+        if (movement.y < movementOrder.y)
         {
-            float radius = Mathf.Atan2(input.x, input.z);
-            radius = (radius * 180f) / Mathf.PI;
-            m_rb.MoveRotation(Quaternion.Euler(0, radius, 0));
+            movement.y += _actualSpeed * Time.fixedDeltaTime;
         }
+        if (movement.y > movementOrder.y)
+        {
+            movement.y -= _actualSpeed * Time.fixedDeltaTime;
+        }
+        if (movement.x < movementOrder.x)
+        {
+            movement.x += _actualSpeed * Time.fixedDeltaTime;
+        }
+        if (movement.x > movementOrder.x)
+        {
+            movement.x -= _actualSpeed * Time.fixedDeltaTime;
+        }
+
+        //Updating the position
+        
+
+        //New position
+        Vector3 l_newPos = m_rb.position + new Vector3(movement.x, 0, movement.y) * _actualSpeed * Time.fixedDeltaTime;
+        // To debug
+        //Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + new Vector3(movement.x, 0, movement.y), Color.black, 0.1f,false);
+
+        //Check if player is in bounds
+        float clampResult = Mathf.Clamp(l_newPos.x, _mapLimit.x, _mapLimit.y);
+        if (clampResult != l_newPos.x)
+        {
+            l_newPos.x = clampResult;
+            movement.x *= -_wallElasticity;
+        }
+        clampResult = Mathf.Clamp(l_newPos.z, _mapLimit.z, _mapLimit.w);
+        if (clampResult != l_newPos.z)
+        {
+            l_newPos.z = clampResult;
+            movement.y *= -_wallElasticity;
+        }
+
+        //Move player to the new position
+        MoveAndRotatePlayer(l_newPos, movementOrder);
     }
 
     public void Init(int index, Base b)
@@ -227,6 +322,7 @@ public class Player : MonoBehaviour
     public void ApplySpeedEffect(float effect)
     {
         _actualSpeed *= effect;
+        _currentMaxForceSpeed *= effect;
         TimerManager.Instance.StartTimer(_speedTimer);
     }
 
