@@ -12,16 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f4834cd3c1e944ba40d0a40f4919d0, type: 3}
   m_Name: Meteor
   m_EditorClassIdentifier: 
-  _id: meteor_classic
+  _id: meteor_player_left
   _type: 1
   _freezePlayer: 1
   _hookPlayer: 0
   _damage: 0.33
   _lifeTime: 10
-  _moveTime: 1
+  _moveTime: 2
   _prefab: {fileID: 6874729858783191630, guid: a05d43fc3d09d1e47a4af12168ad3c84, type: 3}
   _positionsDirections:
     _Keys:
-    - {x: 0, y: 10, z: 5}
+    - {x: -2, y: 20, z: -3}
+    - {x: -2, y: 20, z: -5}
+    - {x: -2, y: 20, z: 0}
+    - {x: 0, y: 20, z: -3}
     _Values:
-    - {x: -0.25, y: -1, z: -0.5}
+    - {x: 1, y: -4, z: 0}
+    - {x: 1, y: -4, z: 0}
+    - {x: 1, y: -4, z: 0}
+    - {x: 1, y: -4, z: 0}

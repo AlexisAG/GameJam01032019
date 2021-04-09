@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Storm 1
   m_EditorClassIdentifier: 
   _id: storm_classic_left
+  _type: 0
   _freezePlayer: 1
   _hookPlayer: 0
-  _damage: 0.01
+  _damage: 0.075
   _lifeTime: 10
   _moveTime: 3
   _prefab: {fileID: 6874729858783191630, guid: 87122c78e8596f548938a29e883ad598, type: 3}

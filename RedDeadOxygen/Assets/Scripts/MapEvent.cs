@@ -1,4 +1,5 @@
 using AgToolkit.AgToolkit.Core.Timer;
+using AgToolkit.Core.GameModes;
 using AgToolkit.Core.Helper;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,11 @@ public class MapEvent : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.GetCurrentGameMode<SoloGameMode>()?.GameIsOver ?? false)
+        {
+            Finish();
+        }
+
         if (!_isMoving && _data.MoveTime > 0 && !_isShutingDown)
         {
             CoroutineManager.Instance.StartCoroutine(Move());
