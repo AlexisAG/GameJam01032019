@@ -213,6 +213,8 @@ public class MapManager : Singleton<MapManager>
 
     private void ActivateMapEvent()
     {
+        if (!_gameMode.SpecialMode || _gameMode.GameIsOver) return;
+
         List<MapEventData> filter = _lastMapEventData != null ? _mapEventDatas.Where(data => data.Type != _lastMapEventData.Type).ToList() : _mapEventDatas;
         _lastMapEventData = filter[Random.Range(0, filter.Count)];
         MapEvent temp = GameObject.Instantiate(_mapEventPrefab, transform).GetComponent<MapEvent>();
@@ -470,6 +472,7 @@ public class MapManager : Singleton<MapManager>
         TimerManager.Instance.RemoveTimer(_enemySpawnTimer);
         TimerManager.Instance.RemoveTimer(_powerUpDeleteTimer);
         TimerManager.Instance.RemoveTimer(_powerUpSpawnTimer);
+        TimerManager.Instance.RemoveTimer(_mapEventTimer);
         Bases.Clear();
     }
     

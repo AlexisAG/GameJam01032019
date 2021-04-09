@@ -79,7 +79,7 @@ public class MapEvent : MonoBehaviour
     {
         //todo unsubscribe timer, destroy gamesObjects, freedom player
         _isShutingDown = true;
-        TimerManager.Instance.RemoveTimer(_lifeTime);
+        TimerManager.Instance?.RemoveTimer(_lifeTime);
 
         for (int i = 0; i < _gameObjects.Keys.Count; i++)
         {
