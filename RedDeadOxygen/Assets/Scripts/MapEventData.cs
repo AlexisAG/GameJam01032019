@@ -24,7 +24,7 @@ public class MapEventData : ScriptableObject
     private float _damage;
     [SerializeField]
     private float _lifeTime;
-    [SerializeField]
+    [SerializeField, Min(2f)]
     private float _moveTime;
     [SerializeField]
     private GameObject _prefab;

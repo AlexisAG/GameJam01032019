@@ -315,6 +315,7 @@ public class MapManager : Singleton<MapManager>
         // Load AssetBundle
         if (_gameMode.SpecialMode && _mapEventDatas.Count <= 0)
         {
+            DataSystem.UnloadAssetBundle(_assetBundleMapEvent);
             yield return DataSystem.LoadLocalBundleAsync<MapEventData>(_assetBundleMapEvent, data => _mapEventDatas = data);
         }
 
