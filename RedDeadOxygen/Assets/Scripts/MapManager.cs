@@ -48,6 +48,12 @@ public class MapManager : Singleton<MapManager>
     [SerializeField]
     private float _powerUpRemoveTime = 5f;
 
+    [Header("Properties")]
+    [SerializeField]
+    private MapProperties _mapProperty = MapProperties.e_Basic;
+    [SerializeField]
+    private float _wallElasticity = .5f;
+
     [Header("Divers")]
     [SerializeField]
     private int _maxRessource = 10;
@@ -62,6 +68,9 @@ public class MapManager : Singleton<MapManager>
     public List<Base> Bases { get; private set; } = new List<Base>();
     public Vector2Int GridSize { get; private set; } = Vector2Int.zero;
 
+    public MapProperties MapProperty => _mapProperty;
+    public float WallElasticity => _wallElasticity;
+
     public enum TypeObject
     {
         e_None,
@@ -70,6 +79,13 @@ public class MapManager : Singleton<MapManager>
         e_Ressource,
         e_PowerUp
     }
+
+    public enum MapProperties
+    {
+        e_Basic,
+        e_Ice
+    }
+
     private class GameObjectGrid
     {
         public GameObject GameObjectRef { get; private set; }
