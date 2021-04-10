@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 425421183}
   - component: {fileID: 425421182}
   - component: {fileID: 425421184}
+  - component: {fileID: 425421185}
   m_Layer: 0
   m_Name: GameMode
   m_TagString: Untagged
@@ -267,8 +268,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: {fileID: 11400000, guid: 788f506ec6f39e744b511d4e94eaf648, type: 2}
+  _instructionTrigger: Instruction
   _soloTrigger: StartSolo
   _multiTrigger: StartMulti
+--- !u!114 &425421185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425421181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 778657936e6362f4aaa8a84f87f544b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    _ui: {fileID: 1115072287}
 --- !u!1 &443168456
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,6 +470,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &490469524
 Canvas:
   m_ObjectHideFlags: 0
@@ -714,6 +731,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &1115072290
 Canvas:
   m_ObjectHideFlags: 0
@@ -1052,6 +1070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -1500,6 +1519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -1632,6 +1652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
