@@ -7,34 +7,38 @@ using AgToolkit.Core.GameModes;
 
 public class MainMenu : MonoBehaviour
 {
+    private MainMenuGameMode _gameMode;
 
     public Canvas m_mainMenuCanvas;
-    public Canvas m_instructionsCanvas;
     public Button m_Play, m_Back;
 
     // Start is called before the first frame update
     void Start()
     {
         Cursor.visible = false;
+        _gameMode = GameManager.Instance.GetCurrentGameMode<MainMenuGameMode>();
         m_Play.Select();
     }
 
     public void StartGame()
     {
-        Time.timeScale = 1;
-        MainMenuGameMode gameMode = GameManager.Instance.GetCurrentGameMode<MainMenuGameMode>();
-        gameMode?.GetComponent<Animator>()?.SetTrigger(gameMode.SoloTrigger);
+        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.SoloTrigger);
     }
 
     public void GoToInstructions(bool value)
     {
-        m_instructionsCanvas.gameObject.SetActive(value);
         m_mainMenuCanvas.gameObject.SetActive(!value);
 
         if (value)
+        {
+            _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.InstructionTrigger);
             m_Back.Select();
+        }
         else
+        {
+
             m_Play.Select();
+        }
 
     }
 }
