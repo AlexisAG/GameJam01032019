@@ -7,38 +7,59 @@ using AgToolkit.Core.GameModes;
 
 public class MainMenu : MonoBehaviour
 {
-    private MainMenuGameMode _gameMode;
+    [SerializeField]
+    private Button _gameOption;
+    [SerializeField]
+    private Button _backInstruction;
+    [SerializeField]
+    private Button _backPlayerOption;
+    [SerializeField]
+    private Button _backGameOption;
 
-    public Canvas m_mainMenuCanvas;
-    public Button m_Play, m_Back;
+    private MainMenuGameMode _gameMode;
 
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.visible = false;
         _gameMode = GameManager.Instance.GetCurrentGameMode<MainMenuGameMode>();
-        m_Play.Select();
+        _gameOption.Select();
     }
 
-    public void StartGame()
+    public void GoToMainMenu()
     {
-        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.SoloTrigger);
+        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.MainMenuTrigger);
+        _gameOption.Select();
     }
 
-    public void GoToInstructions(bool value)
+    public void GoToGameOption()
     {
-        m_mainMenuCanvas.gameObject.SetActive(!value);
+        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.GameOptionTrigger);
+        _backGameOption.Select();
+    }
 
-        if (value)
-        {
-            _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.InstructionTrigger);
-            m_Back.Select();
-        }
-        else
-        {
+    public void GoToPlayerOption()
+    {
+        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.PlayerOptionTrigger);
+        _backPlayerOption.Select();
+    }
 
-            m_Play.Select();
-        }
+    public void GoToInstructions()
+    {
+       _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.InstructionTrigger);
+       _backInstruction.Select();
+    }
 
+    public void Exit()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
+    }
+
+    public void StartGame(bool isOnline)
+    {
+        _gameMode?.GetComponent<Animator>()?.SetTrigger(isOnline ? _gameMode.MultiTrigger : _gameMode.SoloTrigger);
     }
 }
