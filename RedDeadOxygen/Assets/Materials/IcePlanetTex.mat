@@ -10,7 +10,7 @@ Material:
   m_Name: IcePlanetTex
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION
-  m_LightmapFlags: 1
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 3b68f1cda37c0f1419e2932a3b04e92f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 68a1dd9164d03eb4a819647060a8e2a9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -74,6 +74,6 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.2216981, g: 0.6607657, b: 1, a: 1}
-    - _EmissionColor: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
+    - _Color: {r: 0.4962086, g: 0.540644, b: 0.5754717, a: 1}
+    - _EmissionColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
   m_BuildTextureStacks: []
