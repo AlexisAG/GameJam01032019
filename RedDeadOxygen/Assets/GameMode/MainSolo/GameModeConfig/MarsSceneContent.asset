@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db94fe14226add3438fa79914c12cd17, type: 3}
-  m_Name: MainSceneContent
+  m_Name: MarsSceneContent
   m_EditorClassIdentifier: 
   LoadingScene:
     _sceneAsset: {fileID: 0}
     _scenePath: 
   ContentScenes:
   - _sceneAsset: {fileID: 102900000, guid: 41b9c82262be7264d801ddb95031b137, type: 3}
-    _scenePath: Assets/Scenes/GameMap.unity
+    _scenePath: Assets/Scenes/GameMap/MarsGameMap.unity
   LightingScene:
     _sceneAsset: {fileID: 0}
     _scenePath: 
