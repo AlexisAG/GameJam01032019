@@ -1290,6 +1290,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &262182180
@@ -1968,7 +1969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a461fc4170fc34391c495832bec7cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: {fileID: 11400000, guid: 6ed98696a8f567243ade7aef691795e5, type: 2}
+  _id: {fileID: 11400000, guid: 383987b4c88d3c048ac1b88e493e094e, type: 2}
   _exitSoloTrigger: ExitSolo
   _generationTrigger: Generate
   _endTrigger: EndGame

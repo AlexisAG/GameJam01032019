@@ -2029,7 +2029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a461fc4170fc34391c495832bec7cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: {fileID: 11400000, guid: 6ed98696a8f567243ade7aef691795e5, type: 2}
+  _id: {fileID: 11400000, guid: 24e22deef900a4d4898f7eb493f80983, type: 2}
   _exitSoloTrigger: ExitSolo
   _generationTrigger: Generate
   _endTrigger: EndGame
