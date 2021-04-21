@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using AgToolkit.Core.GameModes;
+using AgToolkit.Core.Helper;
 
 public class MainMenu : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class MainMenu : MonoBehaviour
     private Button _backGameOption;
 
     private MainMenuGameMode _gameMode;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +50,13 @@ public class MainMenu : MonoBehaviour
        _backInstruction.Select();
     }
 
+    public void SetMapToLoad(MapItem scene)
+    {
+        if (_gameMode == null) return;
+
+        PartyManager.Instance.GameModeToLoad = scene.Enum;
+    }
+
     public void Exit()
     {
         #if UNITY_EDITOR
@@ -58,8 +66,10 @@ public class MainMenu : MonoBehaviour
         #endif
     }
 
-    public void StartGame(bool isOnline)
+    public void StartGame(bool isClassic)
     {
-        _gameMode?.GetComponent<Animator>()?.SetTrigger(isOnline ? _gameMode.MultiTrigger : _gameMode.SoloTrigger);
+        if (_gameMode == null) return;
+
+        _gameMode.GetComponent<Animator>()?.SetTrigger(_gameMode.SoloTrigger);
     }
 }
