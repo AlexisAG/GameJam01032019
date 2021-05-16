@@ -1,4 +1,6 @@
 using AgToolkit.Core.GameModes.GameStates;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InstructionGameStateMachineBehavior : GameStateMachineBehaviour<InstructionData>
