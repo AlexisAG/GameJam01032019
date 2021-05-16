@@ -214,10 +214,7 @@ GameObject:
   - component: {fileID: 425421183}
   - component: {fileID: 425421182}
   - component: {fileID: 425421184}
-  - component: {fileID: 425421188}
   - component: {fileID: 425421185}
-  - component: {fileID: 425421187}
-  - component: {fileID: 425421186}
   m_Layer: 0
   m_Name: GameMode
   m_TagString: Untagged
@@ -271,10 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: {fileID: 11400000, guid: 788f506ec6f39e744b511d4e94eaf648, type: 2}
-  _mainMenuTrigger: MainMenu
   _instructionTrigger: Instruction
-  _playerOptionTrigger: PlayerOption
-  _gameOptionTrigger: GameOption
   _soloTrigger: StartSolo
   _multiTrigger: StartMulti
 --- !u!114 &425421185
@@ -291,48 +285,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     _ui: {fileID: 1115072287}
---- !u!114 &425421186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 425421181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b920e134281af1c46a0b27b48c662730, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data:
-    _ui: {fileID: 0}
---- !u!114 &425421187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 425421181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d47e5907923d41e4aaf26dc613b24363, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data:
-    _ui: {fileID: 0}
---- !u!114 &425421188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 425421181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e0443ee43d2dd04eb015c72066e09de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data:
-    _ui: {fileID: 490469521}
 --- !u!1 &443168456
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,6 +622,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_mainMenuCanvas: {fileID: 490469524}
+  m_instructionsCanvas: {fileID: 1115072290}
   m_Play: {fileID: 2064684307}
   m_Back: {fileID: 1333398193}
 --- !u!114 &787240125
