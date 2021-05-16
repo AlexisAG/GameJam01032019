@@ -7,59 +7,38 @@ using AgToolkit.Core.GameModes;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField]
-    private Button _gameOption;
-    [SerializeField]
-    private Button _backInstruction;
-    [SerializeField]
-    private Button _backPlayerOption;
-    [SerializeField]
-    private Button _backGameOption;
-
     private MainMenuGameMode _gameMode;
+
+    public Canvas m_mainMenuCanvas;
+    public Button m_Play, m_Back;
 
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = false;
         _gameMode = GameManager.Instance.GetCurrentGameMode<MainMenuGameMode>();
-        _gameOption.Select();
+        m_Play.Select();
     }
 
-    public void GoToMainMenu()
+    public void StartGame()
     {
-        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.MainMenuTrigger);
-        _gameOption.Select();
+        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.SoloTrigger);
     }
 
-    public void GoToGameOption()
+    public void GoToInstructions(bool value)
     {
-        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.GameOptionTrigger);
-        _backGameOption.Select();
-    }
+        m_mainMenuCanvas.gameObject.SetActive(!value);
 
-    public void GoToPlayerOption()
-    {
-        _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.PlayerOptionTrigger);
-        _backPlayerOption.Select();
-    }
+        if (value)
+        {
+            _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.InstructionTrigger);
+            m_Back.Select();
+        }
+        else
+        {
 
-    public void GoToInstructions()
-    {
-       _gameMode?.GetComponent<Animator>()?.SetTrigger(_gameMode.InstructionTrigger);
-       _backInstruction.Select();
-    }
+            m_Play.Select();
+        }
 
-    public void Exit()
-    {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
-            Application.Quit();
-        #endif
-    }
-
-    public void StartGame(bool isOnline)
-    {
-        _gameMode?.GetComponent<Animator>()?.SetTrigger(isOnline ? _gameMode.MultiTrigger : _gameMode.SoloTrigger);
     }
 }
