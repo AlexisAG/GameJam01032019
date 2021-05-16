@@ -35,8 +35,10 @@ public class Player : MonoBehaviour
     private MovementCategory _movementCategory = MovementCategory.e_ForceBased;
     private float _wallElasticity = 0f;
 
-    Vector2 movement, movementOrder;
-    float _maxForceSpeed = 4.0f, _currentMaxForceSpeed = 4.0f;
+    private Vector2 _movement;
+    private Vector2 _movementOrder;
+    private float _maxForceSpeed = 4.0f;
+    private float _currentMaxForceSpeed = 4.0f;
 
     public bool PowerUpCooldown = false;
     public Base PlayerBase { get; private set; }
@@ -196,14 +198,13 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         if (!IsPlayable()) return;
+
         switch (_movementCategory)
         {
-            case MovementCategory.e_Basic:
-                MoveWithController(m_joystickNumber);
-                break;
             case MovementCategory.e_ForceBased:
                 MoveWithControllerBasedOnForce(m_joystickNumber);
                 break;
+            case MovementCategory.e_Basic:
             default:
                 MoveWithController(m_joystickNumber);
                 break;
@@ -251,31 +252,31 @@ public class Player : MonoBehaviour
     private void MoveWithControllerBasedOnForce(float p_joystickNumber)
     {
         //get controller axis
-        movementOrder = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber) * _currentMaxForceSpeed, -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber) * _currentMaxForceSpeed);
+        _movementOrder = new Vector2(Input.GetAxis("LeftJoystickX_P" + p_joystickNumber) * _currentMaxForceSpeed, -Input.GetAxis("LeftJoystickY_P" + p_joystickNumber) * _currentMaxForceSpeed);
 
         //Executing order
-        if (movement.y < movementOrder.y)
+        if (_movement.y < _movementOrder.y)
         {
-            movement.y += _actualSpeed * Time.fixedDeltaTime;
+            _movement.y += _actualSpeed * Time.fixedDeltaTime;
         }
-        if (movement.y > movementOrder.y)
+        if (_movement.y > _movementOrder.y)
         {
-            movement.y -= _actualSpeed * Time.fixedDeltaTime;
+            _movement.y -= _actualSpeed * Time.fixedDeltaTime;
         }
-        if (movement.x < movementOrder.x)
+        if (_movement.x < _movementOrder.x)
         {
-            movement.x += _actualSpeed * Time.fixedDeltaTime;
+            _movement.x += _actualSpeed * Time.fixedDeltaTime;
         }
-        if (movement.x > movementOrder.x)
+        if (_movement.x > _movementOrder.x)
         {
-            movement.x -= _actualSpeed * Time.fixedDeltaTime;
+            _movement.x -= _actualSpeed * Time.fixedDeltaTime;
         }
 
         //Updating the position
         
 
         //New position
-        Vector3 l_newPos = m_rb.position + new Vector3(movement.x, 0, movement.y) * _actualSpeed * Time.fixedDeltaTime;
+        Vector3 l_newPos = m_rb.position + new Vector3(_movement.x, 0, _movement.y) * _actualSpeed * Time.fixedDeltaTime;
         // To debug
         //Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + new Vector3(movement.x, 0, movement.y), Color.black, 0.1f,false);
 
@@ -284,17 +285,17 @@ public class Player : MonoBehaviour
         if (clampResult != l_newPos.x)
         {
             l_newPos.x = clampResult;
-            movement.x *= -_wallElasticity;
+            _movement.x *= -_wallElasticity;
         }
         clampResult = Mathf.Clamp(l_newPos.z, _mapLimit.z, _mapLimit.w);
         if (clampResult != l_newPos.z)
         {
             l_newPos.z = clampResult;
-            movement.y *= -_wallElasticity;
+            _movement.y *= -_wallElasticity;
         }
 
         //Move player to the new position
-        MoveAndRotatePlayer(l_newPos, movementOrder);
+        MoveAndRotatePlayer(l_newPos, _movementOrder);
     }
 
     public void Init(int index, Base b)
