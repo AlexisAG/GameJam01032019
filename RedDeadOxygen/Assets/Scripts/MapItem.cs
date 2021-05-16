@@ -5,7 +5,7 @@ using UnityEngine;
 public class MapItem : ScriptableObject
 {
     [SerializeField]
-    private EnumGameMode _enum;
+    private EnumGameMode _map;
 
-    public EnumGameMode Enum => _enum;
+    public EnumGameMode Map => _map;
 }

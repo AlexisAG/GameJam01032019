@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b55b9c4a13690104394de11ae27a40bf, type: 3}
   m_Name: Europe
   m_EditorClassIdentifier: 
-  _enum: {fileID: 11400000, guid: 24e22deef900a4d4898f7eb493f80983, type: 2}
+  _map: {fileID: 11400000, guid: 24e22deef900a4d4898f7eb493f80983, type: 2}
