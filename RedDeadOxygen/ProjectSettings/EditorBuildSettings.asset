@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 036c5ceeb64368243a41f6c0c1b0f8c9
   - enabled: 1
-    path: Assets/Scenes/GameMap/MarsGameMap.unity
+    path: Assets/Scenes/GameMap.unity
     guid: 41b9c82262be7264d801ddb95031b137
   m_configObjects: {}
