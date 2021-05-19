@@ -213,7 +213,7 @@ public class MapManager : Singleton<MapManager>
 
     private void ActivateMapEvent()
     {
-        if (!_gameMode.SpecialMode || _gameMode.GameIsOver) return;
+        if (PartyManager.Instance.IsClassic || _gameMode.GameIsOver) return;
 
         List<MapEventData> filter = _lastMapEventData != null ? _mapEventDatas.Where(data => data.Type != _lastMapEventData.Type).ToList() : _mapEventDatas;
         _lastMapEventData = filter[Random.Range(0, filter.Count)];
@@ -313,10 +313,10 @@ public class MapManager : Singleton<MapManager>
         }
 
         // Load AssetBundle
-        if (_gameMode.SpecialMode && _mapEventDatas.Count <= 0)
+        if (!PartyManager.Instance.IsClassic && _mapEventDatas.Count <= 0)
         {
             DataSystem.UnloadAssetBundle(_assetBundleMapEvent);
-            yield return DataSystem.LoadLocalBundleAsync<MapEventData>(_assetBundleMapEvent, data => _mapEventDatas = data);
+            yield return DataSystem.LoadLocalBundleAsync<MapEventData>(_assetBundleMapEvent, data => { _mapEventDatas = data; Debug.Log($"TEEEEEEEEEST -> {PartyManager.Instance.IsClassic} | {data.Count}"); });
         }
 
         ClearGrid();

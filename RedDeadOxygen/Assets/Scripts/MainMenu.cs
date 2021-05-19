@@ -70,6 +70,7 @@ public class MainMenu : MonoBehaviour
     {
         if (_gameMode == null) return;
 
+        PartyManager.Instance.StartParty(isClassic);
         _gameMode.GetComponent<Animator>()?.SetTrigger(_gameMode.SoloTrigger);
     }
 }
