@@ -1,8 +1,8 @@
 ﻿using AgToolkit.AgToolkit.Core.DataSystem;
-using AgToolkit.AgToolkit.Core.Singleton;
-using AgToolkit.AgToolkit.Core.Timer;
+using AgToolkit.Core.DesignPattern.Singleton;
+using AgToolkit.Core.Helper.Timer;
 using AgToolkit.Core.GameModes;
-using AgToolkit.Core.Pool;
+using AgToolkit.Core.DesignPattern.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -316,7 +316,7 @@ public class MapManager : Singleton<MapManager>
         if (!PartyManager.Instance.IsClassic && _mapEventDatas.Count <= 0)
         {
             DataSystem.UnloadAssetBundle(_assetBundleMapEvent);
-            yield return DataSystem.LoadLocalBundleAsync<MapEventData>(_assetBundleMapEvent, data => { _mapEventDatas = data; Debug.Log($"TEEEEEEEEEST -> {PartyManager.Instance.IsClassic} | {data.Count}"); });
+            yield return DataSystem.LoadLocalBundleAsync<MapEventData>(_assetBundleMapEvent, data => _mapEventDatas = data);
         }
 
         ClearGrid();

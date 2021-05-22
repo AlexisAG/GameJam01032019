@@ -1,9 +1,5 @@
 using AgToolkit.AgToolkit.Core.GameModes;
-using AgToolkit.AgToolkit.Core.Singleton;
-using AgToolkit.Core.GameModes;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using AgToolkit.Core.DesignPattern.Singleton;
 
 public class PartyManager : Singleton<PartyManager>
 {

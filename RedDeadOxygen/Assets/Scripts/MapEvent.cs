@@ -1,4 +1,4 @@
-using AgToolkit.AgToolkit.Core.Timer;
+using AgToolkit.Core.Helper.Timer;
 using AgToolkit.Core.GameModes;
 using AgToolkit.Core.Helper;
 using System.Collections;
