@@ -1,9 +1,8 @@
 ﻿using AgToolkit.Core.GameModes;
-using AgToolkit.Core.Helper;
+using AgToolkit.Core.Managers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Base : MonoBehaviour
 {

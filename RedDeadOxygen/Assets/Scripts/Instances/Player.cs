@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using AgToolkit.Core.Helper.Timer;
+using AgToolkit.Core.Managers;
 using UnityEngine.Events;
 using AgToolkit.Core.GameModes;
 

@@ -1,8 +1,6 @@
 ﻿using AgToolkit.Core.GameModes;
 using AgToolkit.Core.GameModes.GameStates;
-using AgToolkit.Core.Helper;
-using System.Collections;
-using System.Collections.Generic;
+using AgToolkit.Core.Managers;
 using UnityEngine;
 
 public class GenerationGameStateMachineBehavior : GameStateMachineBehaviour<GenerationData>
