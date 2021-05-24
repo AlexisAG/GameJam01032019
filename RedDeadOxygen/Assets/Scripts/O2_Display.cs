@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using AgToolkit.Core.GameModes;
+using AgToolkit.Core.Manager;
 
 public class O2_Display : MonoBehaviour
 {

@@ -1,5 +1,5 @@
-using AgToolkit.Core.GameModes;
-using AgToolkit.Core.GameModes.GameStates; 
+using AgToolkit.Core.GameMode;
+using AgToolkit.Core.Manager;
 using UnityEngine; 
  
 public class StartPartyGameStateMachineBehavior : GameStateMachineBehaviour<StartPartyData> 

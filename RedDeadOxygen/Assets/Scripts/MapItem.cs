@@ -1,4 +1,4 @@
-﻿using AgToolkit.AgToolkit.Core.GameModes;
+﻿using AgToolkit.Core.GameMode;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "RDO/MapItem", fileName = "NewMapItem")]

@@ -1,5 +1,5 @@
-﻿using AgToolkit.Core.GameModes;
-using AgToolkit.Core.Managers;
+﻿using AgToolkit.Core.GameMode;
+using AgToolkit.Core.Manager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

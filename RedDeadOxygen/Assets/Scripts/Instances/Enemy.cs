@@ -1,6 +1,4 @@
-﻿using AgToolkit.Core.GameModes;
-using System.Collections;
-using System.Collections.Generic;
+﻿using AgToolkit.Core.Manager;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour

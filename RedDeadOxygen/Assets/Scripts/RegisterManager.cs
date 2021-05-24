@@ -1,4 +1,4 @@
-﻿using AgToolkit.Core.DesignPattern.Singleton;
+﻿using AgToolkit.Core.DesignPattern;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

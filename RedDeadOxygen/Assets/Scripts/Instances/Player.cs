@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using AgToolkit.Core.Managers;
+using AgToolkit.Core.Manager;
 using UnityEngine.Events;
-using AgToolkit.Core.GameModes;
+using AgToolkit.Core.GameMode;
 
 public class Player : MonoBehaviour
 {

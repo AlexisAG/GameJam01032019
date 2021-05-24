@@ -1,10 +1,6 @@
-﻿using AgToolkit.Core.GameModes;
-using AgToolkit.Core.Loader;
-using System.Collections;
-using System.Collections.Generic;
+﻿using AgToolkit.Core.Manager;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EndGameMenu : MonoBehaviour
