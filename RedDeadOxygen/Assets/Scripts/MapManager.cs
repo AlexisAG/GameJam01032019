@@ -1,6 +1,5 @@
 ﻿using AgToolkit.Core.DesignPattern;
 using AgToolkit.Core.Manager;
-using AgToolkit.Core.DesignPattern.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -311,7 +310,7 @@ public class MapManager : Singleton<MapManager>
             yield return PoolManager.Instance.CreatePool(new PoolData(_enemyPrefab.name, _enemyPrefab, 5, true));
         }
 
-        // Load AssetBundle
+        // Load AssetBundle TODO: Use BundleManager
         if (!PartyManager.Instance.IsClassic && _mapEventDatas.Count <= 0)
         {
             DataSystem.UnloadAssetBundle(_assetBundleMapEvent);

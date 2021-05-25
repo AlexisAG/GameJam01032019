@@ -1,7 +1,6 @@
 ﻿using AgToolkit.Core.GameMode;
-using AgToolkit.Core.DesignPattern.Pool;
-using System.Collections;
-using System.Collections.Generic;
+using AgToolkit.Core.Manager;
+using AgToolkit.Core.Misc;
 using UnityEngine;
 
 // Todo: Create proper GameState with GameData and Add Pool name as data instead of hard string
