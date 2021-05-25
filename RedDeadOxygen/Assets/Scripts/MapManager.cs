@@ -1,7 +1,5 @@
-﻿using AgToolkit.AgToolkit.Core.DataSystem;
-using AgToolkit.Core.DesignPattern;
+﻿using AgToolkit.Core.DesignPattern;
 using AgToolkit.Core.Manager;
-using AgToolkit.Core.GameMode;
 using AgToolkit.Core.DesignPattern.Pool;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using AgToolkit.Core.DataSystem;
 
 public class MapManager : Singleton<MapManager>
 {
